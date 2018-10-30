@@ -1,2 +1,3 @@
-# sirs_monitoring_and_intrusion_recovery_distributed
-Distributed application with focus on monitoring and intrusion recovery
+# SIRS Monitoring and Intrusion Recovery of Network Infrastructures
+
+
