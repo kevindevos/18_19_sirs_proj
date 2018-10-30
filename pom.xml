@@ -27,6 +27,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+		<wsdl.dir></wsdl.dir>
 	</properties>
 
 	<build>
@@ -101,7 +102,6 @@
 	<modules>
 		<module>webinterface</module>
 		<module>kerby-lib</module>
-		<module>kerby-ws-cli</module>
         <module>app-ws</module>
 		<module>app-ws-cli</module>
         <module>ws-handlers</module>

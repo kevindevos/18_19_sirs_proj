@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app-ws/app-ws.iml" filepath="$PROJECT_DIR$/app-ws/app-ws.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-ws-cli/app-ws-cli.iml" filepath="$PROJECT_DIR$/app-ws-cli/app-ws-cli.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kerby-lib/kerby-lib.iml" filepath="$PROJECT_DIR$/kerby-lib/kerby-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kerby-ws-cli/kerby-ws-cli.iml" filepath="$PROJECT_DIR$/kerby-ws-cli/kerby-ws-cli.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project.iml" filepath="$PROJECT_DIR$/project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webinterface/webinterface.iml" filepath="$PROJECT_DIR$/webinterface/webinterface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ws-handlers/ws-handlers.iml" filepath="$PROJECT_DIR$/ws-handlers/ws-handlers.iml" />
+    </modules>
+  </component>
+</project>
