@@ -10,4 +10,4 @@ cd kerbist
 mvn clean install -DskipTests
 ```
 
-This places the required dependencies in the local maven .m2 repository to be imported from into other maven projects.
+This places the required dependencies in the local maven .m2 repository.
