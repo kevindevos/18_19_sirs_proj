@@ -8,7 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="app-ws" />
         <module name="app-ws-cli" />
-        <module name="kerby-lib" />
         <module name="kerby-ws-cli" />
         <module name="webinterface" />
         <module name="ws-handlers" />
