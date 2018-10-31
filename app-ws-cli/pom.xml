@@ -14,6 +14,17 @@
     <groupId>app-ws-cli</groupId>
     <artifactId>app-ws-cli</artifactId>
 
+    <properties>
+        <wsdl.directory>${basedir}/../binas-ws/src/main/resources</wsdl.directory>
+        <wsdl.filename>binas.wsdl</wsdl.filename>
+
+        <mainclass>org.binas.ws.cli.BinasClientApp</mainclass>
+
+        <group.id>A58</group.id>
+        <ws.url>http://localhost:8080/app-ws/endpoint</ws.url>
+        <station.ws.name>${group.id}_Station</station.ws.name>
+
+    </properties>
 
     <dependencies>
         <dependency>

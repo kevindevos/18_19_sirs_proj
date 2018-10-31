@@ -1,0 +1,11 @@
+sirs/app/ws/TestClear.class
+sirs/app/ws/App.class
+sirs/app/ws/ObjectFactory.class
+sirs/app/ws/AppPortImpl.class
+sirs/app/ws/package-info.class
+sirs/app/ws/TestPingResponse.class
+sirs/app/ws/AppPortType.class
+sirs/app/ws/AppEndpointManager.class
+sirs/app/ws/AppService.class
+sirs/app/ws/TestClearResponse.class
+sirs/app/ws/TestPing.class
