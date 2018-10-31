@@ -25,7 +25,12 @@ Running an application server:
 
 ```
 cd source/app-ws-cli
-mvn exec:java -Dws.i=1
+mvn exec:java
+```
+To run multiple application servers, for each server, add -Dws.i=<number between 0 and 9>
+
+```
+mvn exec:java -Dws.i=4
 ```
 
 Running spring boot web server:
