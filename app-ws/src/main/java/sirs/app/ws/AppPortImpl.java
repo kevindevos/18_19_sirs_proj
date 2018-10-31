@@ -51,7 +51,7 @@ public class AppPortImpl implements AppPortType {
     @Override
     public String testPing(String inputMessage) {
         System.out.println("Server received message: " + inputMessage);
-        return null;
+        return "app-ws says hi!";
     }
 
 
