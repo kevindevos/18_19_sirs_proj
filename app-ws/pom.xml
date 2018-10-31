@@ -16,8 +16,11 @@
     <properties>
         <mainclass>sirs.app.ws.App</mainclass>
 
-        <ws.name>app_ws</ws.name>
-        <ws.url>http://localhost:8080/app-ws/endpoint</ws.url>
+        <ws.i>1</ws.i>
+        <ws.host>localhost</ws.host>
+        <ws.name>app_ws${ws.i}</ws.name>
+        <ws.port>808${ws.i}</ws.port>
+        <ws.url>http://${ws.host}:${ws.port}/app-ws/endpoint</ws.url>
     </properties>
 
     <dependencies>

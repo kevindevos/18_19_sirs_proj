@@ -21,7 +21,7 @@
         <mainclass>sirs.app.ws.cli.AppClientApp</mainclass>
 
         <group.id>A58</group.id>
-        <ws.url>http://localhost:8080/app-ws/endpoint</ws.url>
+        <ws.url>http://localhost:8081/app-ws/endpoint</ws.url>
 
     </properties>
 

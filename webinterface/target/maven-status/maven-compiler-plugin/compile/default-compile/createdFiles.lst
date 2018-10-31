@@ -1,0 +1,5 @@
+services/local/dataobjects/UserData.class
+sirs/webinterface/domain/User.class
+sirs/webinterface/presentation/LoginController.class
+sirs/webinterface/Application.class
+sirs/webinterface/exception/AppClientException.class
