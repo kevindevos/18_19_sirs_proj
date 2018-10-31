@@ -8,10 +8,9 @@ import javax.jws.WebService;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
+
+
 @HandlerChain(file = "/app-ws_handler-chain.xml")
 @WebService(
         endpointInterface = "sirs.app.ws.AppPortType",
@@ -51,13 +50,10 @@ public class AppPortImpl implements AppPortType {
 
     @Override
     public String testPing(String inputMessage) {
+        System.out.println("Server received message: " + inputMessage);
         return null;
     }
 
-    @Override
-    public void testClear() {
-
-    }
 
 
     // Auxiliary operations --------------------------------------------------
