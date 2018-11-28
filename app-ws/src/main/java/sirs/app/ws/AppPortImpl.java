@@ -2,6 +2,8 @@ package sirs.app.ws;
 
 
 import pt.ulisboa.tecnico.sdis.kerby.SecurityHelper;
+import sirs.app.domain.Note;
+import sirs.app.domain.NotesManager;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
@@ -56,9 +58,13 @@ public class AppPortImpl implements AppPortType {
     }
 
     @Override
-    public NoteView getNoteByName(String inputMessage){
-        // TODO
-        return null;
+    public NoteView getNoteByName(String noteName) throws NoteNotFound_Exception{
+        Note note = NotesManager.getInstance().getNoteByName(noteName);
+        if(note != null){
+            return note.toView();
+        }else{
+            throw new NoteNotFound_Exception("", null);
+        }
     }
 
 

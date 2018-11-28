@@ -1,4 +1,6 @@
-package sirs.webinterface.domain;
+package sirs.app.domain;
+
+import sirs.app.ws.NoteView;
 
 /**
  * A note that a user can create, and it's owner can access
@@ -36,5 +38,14 @@ public class Note {
 
     public void setName(String aName){
         name = aName;
+    }
+
+    public NoteView toView(){
+        NoteView noteView = new NoteView();
+        noteView.setName(name);
+        noteView.setContent(content);
+        noteView.setOwner(owner);
+
+        return noteView;
     }
 }

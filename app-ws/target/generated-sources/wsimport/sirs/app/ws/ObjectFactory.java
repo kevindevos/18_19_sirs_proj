@@ -24,6 +24,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _NoteNotFound_QNAME = new QName("http://ws.app.sirs/", "NoteNotFound");
     private final static QName _TestPingResponse_QNAME = new QName("http://ws.app.sirs/", "testPingResponse");
     private final static QName _TestPing_QNAME = new QName("http://ws.app.sirs/", "testPing");
     private final static QName _NoteView_QNAME = new QName("http://ws.app.sirs/", "noteView");
@@ -35,6 +36,14 @@ public class ObjectFactory {
      * 
      */
     public ObjectFactory() {
+    }
+
+    /**
+     * Create an instance of {@link NoteNotFound }
+     * 
+     */
+    public NoteNotFound createNoteNotFound() {
+        return new NoteNotFound();
     }
 
     /**
@@ -75,6 +84,15 @@ public class ObjectFactory {
      */
     public GetNoteByNameResponse createGetNoteByNameResponse() {
         return new GetNoteByNameResponse();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NoteNotFound }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "NoteNotFound")
+    public JAXBElement<NoteNotFound> createNoteNotFound(NoteNotFound value) {
+        return new JAXBElement<NoteNotFound>(_NoteNotFound_QNAME, NoteNotFound.class, null, value);
     }
 
     /**

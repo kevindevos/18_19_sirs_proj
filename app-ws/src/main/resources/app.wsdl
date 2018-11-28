@@ -34,7 +34,7 @@
 
             <xs:complexType name="getNoteByName">
                 <xs:sequence>
-                    <xs:element name="input_message" type="xs:string"/>
+                    <xs:element name="noteName" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:element name="getNoteByName" type="tns:getNoteByName" />
@@ -45,6 +45,13 @@
                 </xs:sequence>
             </xs:complexType>
             <xs:element name="getNoteByNameResponse" type="tns:getNoteByNameResponse" />
+
+            <xs:complexType name="NoteNotFound">
+                <xs:sequence>
+                    <xs:element name="message" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="NoteNotFound" type="tns:NoteNotFound" />
         </xs:schema>
     </types>
 
@@ -54,6 +61,10 @@
     </message>
     <message name="getNoteByNameResponse">
         <part name="parameters" element="tns:getNoteByNameResponse" />
+    </message>
+
+    <message name="NoteNotFound">
+        <part name="fault" element="tns:NoteNotFound" />
     </message>
 
 
@@ -70,20 +81,21 @@
     <!-- Port Type (Interface) -->
     <portType name="AppPortType">
 
-
         <operation name="testPing">
-            <input wsam:Action="http://ws.station.binas.org/Station/testPingRequest"
+            <input wsam:Action="http://ws.app.sirs/app-ws/testPingRequest"
                    message="tns:testPing" />
-            <output wsam:Action="http://ws.station.binas.org/Station/testPingResponse"
+            <output wsam:Action="http://ws.app.sirs/app-ws/testPingResponse"
                     message="tns:testPingResponse" />
         </operation>
 
 
         <operation name="getNoteByName">
-            <input wsam:Action="http://ws.station.binas.org/Station/getNoteByNameRequest"
+            <input wsam:Action="http://ws.app.sirs/app-ws/getNoteByNameRequest"
                    message="tns:getNoteByName" />
-            <output wsam:Action="http://ws.station.binas.org/Station/getNoteByNameResponse"
+            <output wsam:Action="http://ws.app.sirs/app-ws/getNoteByNameResponse"
                     message="tns:getNoteByNameResponse" />
+            <fault message="tns:NoteNotFound" name="NoteNotFound"
+                   wsam:Action="http://ws.app.sirs/app-ws/getNoteByName/Fault/NoteNotFound" />
         </operation>
 
 
@@ -114,6 +126,9 @@
             <output>
                 <soap:body use="literal" />
             </output>
+            <fault name="NoteNotFound">
+                <soap:fault name="NoteNotFound" use="literal" />
+            </fault>
         </operation>
 
     </binding>

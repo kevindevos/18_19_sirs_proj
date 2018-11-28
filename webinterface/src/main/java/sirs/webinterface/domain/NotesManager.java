@@ -1,25 +1,35 @@
 package sirs.webinterface.domain;
 
 
+import sirs.app.ws.NoteNotFound_Exception;
+import sirs.app.ws.NoteView;
 import sirs.app.ws.cli.AppClient;
+import sirs.webinterface.exception.NoteNotFoundException;
 
 import java.util.List;
 
 /**
- * Manages user notes by querying AppServers that store these notes
+ *  Query the servers for specific notes
  */
 public class NotesManager {
     private NotesManager(){
     }
 
-    public Note findNoteByName(String noteName){
+    public NoteView askForNoteByName(String noteName, String username) throws NoteNotFoundException{
         List<AppClient> connections = ConnectionManager.getInstance().createConnectionsWithAllAppServers();
 
         for(AppClient appClient : connections){
-            // appClient.getNoteByName(noteName)
+            try{
+                NoteView noteView = appClient.getNoteByName(noteName);
+                if(noteView.getOwner().equals(username)){
+                    return noteView;
+                }
+            } catch(NoteNotFound_Exception e){
+                continue;
+            }
         }
 
-        return null;
+        throw new NoteNotFoundException("");
     }
 
     private static class SingletonHolder {

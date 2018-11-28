@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="input_message" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="noteName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,35 +28,35 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getNoteByName", propOrder = {
-    "inputMessage"
+    "noteName"
 })
 public class GetNoteByName {
 
-    @XmlElement(name = "input_message", required = true)
-    protected String inputMessage;
+    @XmlElement(required = true)
+    protected String noteName;
 
     /**
-     * Gets the value of the inputMessage property.
+     * Gets the value of the noteName property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getInputMessage() {
-        return inputMessage;
+    public String getNoteName() {
+        return noteName;
     }
 
     /**
-     * Sets the value of the inputMessage property.
+     * Sets the value of the noteName property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setInputMessage(String value) {
-        this.inputMessage = value;
+    public void setNoteName(String value) {
+        this.noteName = value;
     }
 
 }

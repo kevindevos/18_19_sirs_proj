@@ -7,6 +7,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.Action;
+import javax.xml.ws.FaultAction;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
@@ -34,24 +35,29 @@ public interface AppPortType {
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "testPing", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestPing")
     @ResponseWrapper(localName = "testPingResponse", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestPingResponse")
-    @Action(input = "http://ws.station.binas.org/Station/testPingRequest", output = "http://ws.station.binas.org/Station/testPingResponse")
+    @Action(input = "http://ws.app.sirs/app-ws/testPingRequest", output = "http://ws.app.sirs/app-ws/testPingResponse")
     public String testPing(
         @WebParam(name = "input_message", targetNamespace = "")
         String inputMessage);
 
     /**
      * 
-     * @param inputMessage
+     * @param noteName
      * @return
      *     returns sirs.app.ws.NoteView
+     * @throws NoteNotFound_Exception
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "getNoteByName", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.GetNoteByName")
     @ResponseWrapper(localName = "getNoteByNameResponse", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.GetNoteByNameResponse")
-    @Action(input = "http://ws.station.binas.org/Station/getNoteByNameRequest", output = "http://ws.station.binas.org/Station/getNoteByNameResponse")
+    @Action(input = "http://ws.app.sirs/app-ws/getNoteByNameRequest", output = "http://ws.app.sirs/app-ws/getNoteByNameResponse", fault = {
+        @FaultAction(className = NoteNotFound_Exception.class, value = "http://ws.app.sirs/app-ws/getNoteByName/Fault/NoteNotFound")
+    })
     public NoteView getNoteByName(
-        @WebParam(name = "input_message", targetNamespace = "")
-        String inputMessage);
+        @WebParam(name = "noteName", targetNamespace = "")
+        String noteName)
+        throws NoteNotFound_Exception
+    ;
 
 }

@@ -3,6 +3,7 @@ package sirs.app.ws.cli;
 
 import sirs.app.ws.AppPortType;
 import sirs.app.ws.AppService;
+import sirs.app.ws.NoteNotFound_Exception;
 import sirs.app.ws.NoteView;
 
 import javax.xml.ws.AsyncHandler;
@@ -79,15 +80,9 @@ public class AppClient implements AppPortType {
 	}
 
     @Override
-    public NoteView getNoteByName(String inputMessage){
-        return null;
+    public NoteView getNoteByName(String noteName) throws NoteNotFound_Exception{
+	    return port.getNoteByName(noteName);
     }
-
-
-    // remote invocation methods ----------------------------------------------
-
-
-	// test control operations ------------------------------------------------
 
 
 
