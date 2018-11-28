@@ -74,9 +74,7 @@ public class AppPortImpl implements AppPortType {
      */
     @Override
     public void updateNote(NoteView noteView) throws NotAllowed_Exception{
-        NotesManager notesManager = NotesManager.getInstance();
-
-        Note note = notesManager.getNoteByName(noteView.getName());
+        Note note = NotesManager.getInstance().getNoteByName(noteView.getName());
         if(note != null ){
             // update contents if same owner
             if(note.getOwner().equals(noteView.getOwner())){
@@ -86,19 +84,27 @@ public class AppPortImpl implements AppPortType {
             }
         }else{
             Note newNote = new Note(noteView.getName(), noteView.getContent(), noteView.getOwner());
-            notesManager.addNote(newNote);
+            NotesManager.getInstance().addNote(newNote);
         }
 
     }
 
+    /**
+     * Clear server data for testing
+     */
     @Override
     public void testClear(){
-
+        NotesManager.getInstance().clearNotes();
     }
 
+    /**
+     * Setup the server for testing
+     */
     @Override
-    public void testInit(int userInitialPoints){
-
+    public void testInit(){
+        // Add a simple note for testing purposes
+        Note testNote = new Note("TEST_NOTE", "TEST_NOTE_CONTENT", "TEST_USER");
+        NotesManager.getInstance().addNote(testNote);
     }
 
 

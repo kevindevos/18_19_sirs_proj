@@ -33,6 +33,10 @@ public class NotesManager {
         notes.remove(note);
     }
 
+    public void clearNotes(){
+        notes.clear();
+    }
+
     public void addNote(Note note){
         notes.add(note);
     }

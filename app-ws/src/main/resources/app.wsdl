@@ -58,9 +58,6 @@
             <xs:element name="updateNoteResponse" type="tns:updateNoteResponse" />
 
             <xs:complexType name="test_init">
-                <xs:sequence>
-                    <xs:element name="user_initial_points" type="xs:int" />
-                </xs:sequence>
             </xs:complexType>
             <xs:element name="test_init" type="tns:test_init" />
 

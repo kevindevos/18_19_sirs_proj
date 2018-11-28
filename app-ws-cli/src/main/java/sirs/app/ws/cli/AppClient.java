@@ -88,12 +88,12 @@ public class AppClient implements AppPortType {
 
     @Override
     public void testClear(){
-
+        port.testClear();
     }
 
     @Override
-    public void testInit(int userInitialPoints){
-
+    public void testInit(){
+        port.testInit();
     }
 
 
