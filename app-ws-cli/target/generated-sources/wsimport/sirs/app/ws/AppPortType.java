@@ -60,4 +60,21 @@ public interface AppPortType {
         throws NoteNotFound_Exception
     ;
 
+    /**
+     * 
+     * @param noteView
+     * @throws NotAllowed_Exception
+     */
+    @WebMethod
+    @RequestWrapper(localName = "updateNote", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.UpdateNote")
+    @ResponseWrapper(localName = "updateNoteResponse", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.UpdateNoteResponse")
+    @Action(input = "http://ws.app.sirs/app-ws/updateNote", output = "http://ws.app.sirs/app-ws/updateNoteResponse", fault = {
+        @FaultAction(className = NotAllowed_Exception.class, value = "http://ws.app.sirs/app-ws/getNoteByName/Fault/NotAllowed")
+    })
+    public void updateNote(
+        @WebParam(name = "noteView", targetNamespace = "")
+        NoteView noteView)
+        throws NotAllowed_Exception
+    ;
+
 }

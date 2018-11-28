@@ -1,10 +1,7 @@
 package sirs.app.ws.cli;
 
 
-import sirs.app.ws.AppPortType;
-import sirs.app.ws.AppService;
-import sirs.app.ws.NoteNotFound_Exception;
-import sirs.app.ws.NoteView;
+import sirs.app.ws.*;
 
 import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.BindingProvider;
@@ -84,6 +81,10 @@ public class AppClient implements AppPortType {
 	    return port.getNoteByName(noteName);
     }
 
+    @Override
+    public void updateNote(NoteView noteView) throws NotAllowed_Exception{
+        port.updateNote(noteView);
+    }
 
 
 }

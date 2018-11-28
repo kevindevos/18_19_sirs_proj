@@ -67,17 +67,15 @@ public class AppPortImpl implements AppPortType {
         }
     }
 
-
-    // Auxiliary operations --------------------------------------------------
-
-
-
-
-    // View helpers ----------------------------------------------------------
-
-
-
-    // Exception helpers -----------------------------------------------------
+    /**
+     * Add if not exist, update if exists, or throw exception if not allowed
+     * @param noteView data object of the note to update
+     * @throws NotAllowed_Exception
+     */
+    @Override
+    public void updateNote(NoteView noteView) throws NotAllowed_Exception{
+        //TODO
+    }
 
 
 }

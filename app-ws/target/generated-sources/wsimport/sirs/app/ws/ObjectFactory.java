@@ -25,11 +25,14 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _NoteNotFound_QNAME = new QName("http://ws.app.sirs/", "NoteNotFound");
+    private final static QName _UpdateNote_QNAME = new QName("http://ws.app.sirs/", "updateNote");
+    private final static QName _UpdateNoteResponse_QNAME = new QName("http://ws.app.sirs/", "updateNoteResponse");
     private final static QName _TestPingResponse_QNAME = new QName("http://ws.app.sirs/", "testPingResponse");
     private final static QName _TestPing_QNAME = new QName("http://ws.app.sirs/", "testPing");
     private final static QName _NoteView_QNAME = new QName("http://ws.app.sirs/", "noteView");
     private final static QName _GetNoteByName_QNAME = new QName("http://ws.app.sirs/", "getNoteByName");
     private final static QName _GetNoteByNameResponse_QNAME = new QName("http://ws.app.sirs/", "getNoteByNameResponse");
+    private final static QName _NotAllowed_QNAME = new QName("http://ws.app.sirs/", "NotAllowed");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: sirs.app.ws
@@ -44,6 +47,22 @@ public class ObjectFactory {
      */
     public NoteNotFound createNoteNotFound() {
         return new NoteNotFound();
+    }
+
+    /**
+     * Create an instance of {@link UpdateNote }
+     * 
+     */
+    public UpdateNote createUpdateNote() {
+        return new UpdateNote();
+    }
+
+    /**
+     * Create an instance of {@link UpdateNoteResponse }
+     * 
+     */
+    public UpdateNoteResponse createUpdateNoteResponse() {
+        return new UpdateNoteResponse();
     }
 
     /**
@@ -87,12 +106,38 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link NotAllowed }
+     * 
+     */
+    public NotAllowed createNotAllowed() {
+        return new NotAllowed();
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link NoteNotFound }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "NoteNotFound")
     public JAXBElement<NoteNotFound> createNoteNotFound(NoteNotFound value) {
         return new JAXBElement<NoteNotFound>(_NoteNotFound_QNAME, NoteNotFound.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateNote }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "updateNote")
+    public JAXBElement<UpdateNote> createUpdateNote(UpdateNote value) {
+        return new JAXBElement<UpdateNote>(_UpdateNote_QNAME, UpdateNote.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateNoteResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "updateNoteResponse")
+    public JAXBElement<UpdateNoteResponse> createUpdateNoteResponse(UpdateNoteResponse value) {
+        return new JAXBElement<UpdateNoteResponse>(_UpdateNoteResponse_QNAME, UpdateNoteResponse.class, null, value);
     }
 
     /**
@@ -138,6 +183,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "getNoteByNameResponse")
     public JAXBElement<GetNoteByNameResponse> createGetNoteByNameResponse(GetNoteByNameResponse value) {
         return new JAXBElement<GetNoteByNameResponse>(_GetNoteByNameResponse_QNAME, GetNoteByNameResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NotAllowed }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "NotAllowed")
+    public JAXBElement<NotAllowed> createNotAllowed(NotAllowed value) {
+        return new JAXBElement<NotAllowed>(_NotAllowed_QNAME, NotAllowed.class, null, value);
     }
 
 }
