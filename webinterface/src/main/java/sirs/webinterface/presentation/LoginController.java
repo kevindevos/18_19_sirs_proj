@@ -34,12 +34,15 @@ public class LoginController {
 
         logger.info(logString);
 
+        /*
+
         try {
             AppClient appClient = new AppClient("http://localhost:8081/app-ws/endpoint");
             appClient.testPing(logString);
         } catch (AppClientException e) {
             e.printStackTrace();
         }
+        */
 
         return "redirect:/login";
 

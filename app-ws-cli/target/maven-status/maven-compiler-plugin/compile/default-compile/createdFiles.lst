@@ -1,9 +1,0 @@
-sirs/app/ws/package-info.class
-sirs/app/ws/TestPingResponse.class
-sirs/app/ws/AppPortType.class
-sirs/app/ws/cli/AppClient.class
-sirs/app/ws/cli/AppClientApp.class
-sirs/app/ws/AppService.class
-sirs/app/ws/cli/AppClientException.class
-sirs/app/ws/ObjectFactory.class
-sirs/app/ws/TestPing.class

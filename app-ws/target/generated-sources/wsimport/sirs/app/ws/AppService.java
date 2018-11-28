@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "AppService", targetNamespace = "http://ws.app.sirs/", wsdlLocation = "file:/media/kevin/Storage/UniversityAndGoogleDrive/University/IST/Mestrado/2018_2019_Ano3IST_Sem1/SIRS/sirs_project/app-ws/src/main/resources/app.wsdl")
+@WebServiceClient(name = "AppService", targetNamespace = "http://ws.app.sirs/", wsdlLocation = "file:/Users/kevindevos/Documents/sirs_monitoring_and_intrusion_recovery_distributed/app-ws/src/main/resources/app.wsdl")
 public class AppService
     extends Service
 {
@@ -30,7 +30,7 @@ public class AppService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/media/kevin/Storage/UniversityAndGoogleDrive/University/IST/Mestrado/2018_2019_Ano3IST_Sem1/SIRS/sirs_project/app-ws/src/main/resources/app.wsdl");
+            url = new URL("file:/Users/kevindevos/Documents/sirs_monitoring_and_intrusion_recovery_distributed/app-ws/src/main/resources/app.wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

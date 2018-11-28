@@ -51,12 +51,10 @@ public class AppClient implements AppPortType {
 	}
 
 	/** constructor with provided web service URL */
-	public AppClient(String wsURL) throws AppClientException {
+	public AppClient(String wsURL){
 		this.wsURL = wsURL;
 		createStub();
 	}
-
-
 
 	/** Stub creation and configuration */
 	private void createStub() {
