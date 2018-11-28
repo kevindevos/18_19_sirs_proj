@@ -86,5 +86,15 @@ public class AppClient implements AppPortType {
         port.updateNote(noteView);
     }
 
+    @Override
+    public void testClear(){
+
+    }
+
+    @Override
+    public void testInit(int userInitialPoints){
+
+    }
+
 
 }

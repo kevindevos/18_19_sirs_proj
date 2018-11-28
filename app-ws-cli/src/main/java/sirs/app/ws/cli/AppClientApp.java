@@ -1,6 +1,8 @@
 package sirs.app.ws.cli;
 
-/** 
+import sirs.app.ws.NoteView;
+
+/**
  * Client application. 
  * 
  * Looks for Apps using UDDI and arguments provided in pom.xml
@@ -24,7 +26,9 @@ public class AppClientApp {
 		client = new AppClient(wsURL);
 
 		System.out.println("Invoke ping()...");
-		String result = client.testPing("Client says hello!");
+		NoteView noteView = new NoteView();
+		noteView.setName("helloName");
+		client.updateNote(noteView);
 		//System.out.print("Result: ");
 		//7System.out.println(result);
 	}

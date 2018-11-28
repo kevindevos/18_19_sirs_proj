@@ -77,4 +77,25 @@ public interface AppPortType {
         throws NotAllowed_Exception
     ;
 
+    /**
+     * 
+     */
+    @WebMethod(operationName = "test_clear")
+    @RequestWrapper(localName = "test_clear", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestClear")
+    @ResponseWrapper(localName = "test_clearResponse", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestClearResponse")
+    @Action(input = "http://ws.app.sirs/app-ws/test_clearRequest", output = "http://ws.app.sirs/app-ws/test_clearResponse")
+    public void testClear();
+
+    /**
+     * 
+     * @param userInitialPoints
+     */
+    @WebMethod(operationName = "test_init")
+    @RequestWrapper(localName = "test_init", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestInit")
+    @ResponseWrapper(localName = "test_initResponse", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestInitResponse")
+    @Action(input = "http://ws.app.sirs/app-ws/test_initRequest", output = "http://ws.app.sirs/app-ws/test_initResponse")
+    public void testInit(
+        @WebParam(name = "user_initial_points", targetNamespace = "")
+        int userInitialPoints);
+
 }

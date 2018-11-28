@@ -68,13 +68,37 @@ public class AppPortImpl implements AppPortType {
     }
 
     /**
-     * Add if not exist, update if exists, or throw exception if not allowed
+     * Add if not exist, update if exists and if has permissions, or throw exception if not allowed
      * @param noteView data object of the note to update
      * @throws NotAllowed_Exception
      */
     @Override
     public void updateNote(NoteView noteView) throws NotAllowed_Exception{
-        //TODO
+        NotesManager notesManager = NotesManager.getInstance();
+
+        Note note = notesManager.getNoteByName(noteView.getName());
+        if(note != null ){
+            // update contents if same owner
+            if(note.getOwner().equals(noteView.getOwner())){
+                note.setContent(noteView.getContent());
+            }else{
+                throw new NotAllowed_Exception("", null);
+            }
+        }else{
+            Note newNote = new Note(noteView.getName(), noteView.getContent(), noteView.getOwner());
+            notesManager.addNote(newNote);
+        }
+
+    }
+
+    @Override
+    public void testClear(){
+
+    }
+
+    @Override
+    public void testInit(int userInitialPoints){
+
     }
 
 

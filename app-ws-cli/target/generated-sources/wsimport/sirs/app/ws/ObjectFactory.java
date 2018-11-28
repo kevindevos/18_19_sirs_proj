@@ -26,13 +26,17 @@ public class ObjectFactory {
 
     private final static QName _NoteNotFound_QNAME = new QName("http://ws.app.sirs/", "NoteNotFound");
     private final static QName _UpdateNote_QNAME = new QName("http://ws.app.sirs/", "updateNote");
-    private final static QName _UpdateNoteResponse_QNAME = new QName("http://ws.app.sirs/", "updateNoteResponse");
+    private final static QName _TestClear_QNAME = new QName("http://ws.app.sirs/", "test_clear");
     private final static QName _TestPingResponse_QNAME = new QName("http://ws.app.sirs/", "testPingResponse");
     private final static QName _TestPing_QNAME = new QName("http://ws.app.sirs/", "testPing");
     private final static QName _NoteView_QNAME = new QName("http://ws.app.sirs/", "noteView");
     private final static QName _GetNoteByName_QNAME = new QName("http://ws.app.sirs/", "getNoteByName");
-    private final static QName _GetNoteByNameResponse_QNAME = new QName("http://ws.app.sirs/", "getNoteByNameResponse");
     private final static QName _NotAllowed_QNAME = new QName("http://ws.app.sirs/", "NotAllowed");
+    private final static QName _UpdateNoteResponse_QNAME = new QName("http://ws.app.sirs/", "updateNoteResponse");
+    private final static QName _TestInitResponse_QNAME = new QName("http://ws.app.sirs/", "test_initResponse");
+    private final static QName _TestClearResponse_QNAME = new QName("http://ws.app.sirs/", "test_clearResponse");
+    private final static QName _GetNoteByNameResponse_QNAME = new QName("http://ws.app.sirs/", "getNoteByNameResponse");
+    private final static QName _TestInit_QNAME = new QName("http://ws.app.sirs/", "test_init");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: sirs.app.ws
@@ -58,11 +62,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UpdateNoteResponse }
+     * Create an instance of {@link TestClear }
      * 
      */
-    public UpdateNoteResponse createUpdateNoteResponse() {
-        return new UpdateNoteResponse();
+    public TestClear createTestClear() {
+        return new TestClear();
     }
 
     /**
@@ -98,6 +102,38 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link NotAllowed }
+     * 
+     */
+    public NotAllowed createNotAllowed() {
+        return new NotAllowed();
+    }
+
+    /**
+     * Create an instance of {@link UpdateNoteResponse }
+     * 
+     */
+    public UpdateNoteResponse createUpdateNoteResponse() {
+        return new UpdateNoteResponse();
+    }
+
+    /**
+     * Create an instance of {@link TestInitResponse }
+     * 
+     */
+    public TestInitResponse createTestInitResponse() {
+        return new TestInitResponse();
+    }
+
+    /**
+     * Create an instance of {@link TestClearResponse }
+     * 
+     */
+    public TestClearResponse createTestClearResponse() {
+        return new TestClearResponse();
+    }
+
+    /**
      * Create an instance of {@link GetNoteByNameResponse }
      * 
      */
@@ -106,11 +142,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link NotAllowed }
+     * Create an instance of {@link TestInit }
      * 
      */
-    public NotAllowed createNotAllowed() {
-        return new NotAllowed();
+    public TestInit createTestInit() {
+        return new TestInit();
     }
 
     /**
@@ -132,12 +168,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateNoteResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link TestClear }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "updateNoteResponse")
-    public JAXBElement<UpdateNoteResponse> createUpdateNoteResponse(UpdateNoteResponse value) {
-        return new JAXBElement<UpdateNoteResponse>(_UpdateNoteResponse_QNAME, UpdateNoteResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "test_clear")
+    public JAXBElement<TestClear> createTestClear(TestClear value) {
+        return new JAXBElement<TestClear>(_TestClear_QNAME, TestClear.class, null, value);
     }
 
     /**
@@ -177,6 +213,42 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NotAllowed }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "NotAllowed")
+    public JAXBElement<NotAllowed> createNotAllowed(NotAllowed value) {
+        return new JAXBElement<NotAllowed>(_NotAllowed_QNAME, NotAllowed.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link UpdateNoteResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "updateNoteResponse")
+    public JAXBElement<UpdateNoteResponse> createUpdateNoteResponse(UpdateNoteResponse value) {
+        return new JAXBElement<UpdateNoteResponse>(_UpdateNoteResponse_QNAME, UpdateNoteResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link TestInitResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "test_initResponse")
+    public JAXBElement<TestInitResponse> createTestInitResponse(TestInitResponse value) {
+        return new JAXBElement<TestInitResponse>(_TestInitResponse_QNAME, TestInitResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link TestClearResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "test_clearResponse")
+    public JAXBElement<TestClearResponse> createTestClearResponse(TestClearResponse value) {
+        return new JAXBElement<TestClearResponse>(_TestClearResponse_QNAME, TestClearResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetNoteByNameResponse }{@code >}}
      * 
      */
@@ -186,12 +258,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link NotAllowed }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link TestInit }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "NotAllowed")
-    public JAXBElement<NotAllowed> createNotAllowed(NotAllowed value) {
-        return new JAXBElement<NotAllowed>(_NotAllowed_QNAME, NotAllowed.class, null, value);
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "test_init")
+    public JAXBElement<TestInit> createTestInit(TestInit value) {
+        return new JAXBElement<TestInit>(_TestInit_QNAME, TestInit.class, null, value);
     }
 
 }

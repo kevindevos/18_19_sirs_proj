@@ -11,6 +11,13 @@
 
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <groupId>app-ws-cli</groupId>
     <artifactId>app-ws-cli</artifactId>
 

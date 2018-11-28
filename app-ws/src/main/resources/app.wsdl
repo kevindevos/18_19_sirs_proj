@@ -57,6 +57,30 @@
             </xs:complexType>
             <xs:element name="updateNoteResponse" type="tns:updateNoteResponse" />
 
+            <xs:complexType name="test_init">
+                <xs:sequence>
+                    <xs:element name="user_initial_points" type="xs:int" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="test_init" type="tns:test_init" />
+
+            <xs:complexType name="test_initResponse">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_initResponse" type="tns:test_initResponse" />
+
+
+            <xs:complexType name="test_clear">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_clear" type="tns:test_clear" />
+
+            <xs:complexType name="test_clearResponse">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_clearResponse" type="tns:test_clearResponse" />
+
+
             <xs:complexType name="NoteNotFound">
                 <xs:sequence>
                     <xs:element name="message" type="xs:string" minOccurs="0" />
@@ -96,7 +120,6 @@
         <part name="fault" element="tns:NotAllowed" />
     </message>
 
-
     <message name="testPing">
         <part name="parameters" element="tns:testPing" />
     </message>
@@ -104,12 +127,23 @@
         <part name="parameters" element="tns:testPingResponse" />
     </message>
 
+    <message name="test_clear">
+        <part name="parameters" element="tns:test_clear"/>
+    </message>
+    <message name="test_clearResponse">
+        <part name="parameters" element="tns:test_clearResponse"/>
+    </message>
 
+    <message name="test_init">
+        <part name="parameters" element="tns:test_init"/>
+    </message>
+    <message name="test_initResponse">
+        <part name="parameters" element="tns:test_initResponse"/>
+    </message>
 
 
     <!-- Port Type (Interface) -->
     <portType name="AppPortType">
-
         <operation name="testPing">
             <input wsam:Action="http://ws.app.sirs/app-ws/testPingRequest"
                    message="tns:testPing" />
@@ -135,6 +169,16 @@
                     message="tns:updateNoteResponse" />
             <fault message="tns:NotAllowed" name="NotAllowed"
                    wsam:Action="http://ws.app.sirs/app-ws/getNoteByName/Fault/NotAllowed" />
+        </operation>
+
+        <operation name="test_clear">
+            <input wsam:Action="http://ws.app.sirs/app-ws/test_clearRequest" message="tns:test_clear"/>
+            <output wsam:Action="http://ws.app.sirs/app-ws/test_clearResponse" message="tns:test_clearResponse"/>
+        </operation>
+
+        <operation name="test_init">
+            <input wsam:Action="http://ws.app.sirs/app-ws/test_initRequest" message="tns:test_init"/>
+            <output wsam:Action="http://ws.app.sirs/app-ws/test_initResponse" message="tns:test_initResponse"/>
         </operation>
 
 
@@ -182,7 +226,28 @@
             </fault>
         </operation>
 
+        <operation name="test_clear">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="test_init">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+
     </binding>
+
 
     <!-- Service -->
     <service name="AppService">

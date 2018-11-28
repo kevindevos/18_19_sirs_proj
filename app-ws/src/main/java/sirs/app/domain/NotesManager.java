@@ -1,6 +1,8 @@
 package sirs.app.domain;
 
 
+import sirs.app.ws.NoteView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,11 @@ public class NotesManager {
     private NotesManager(){
     }
 
+    /**
+     * Get a note searching by name
+     * @param noteName note's name
+     * @return Note obj
+     */
     public Note getNoteByName(String noteName){
         for(Note note : notes){
             if(note.getName().equals(noteName)){
@@ -20,6 +27,14 @@ public class NotesManager {
             }
         }
         return null;
+    }
+
+    public void removeNote(Note note){
+        notes.remove(note);
+    }
+
+    public void addNote(Note note){
+        notes.add(note);
     }
 
     private static class SingletonHolder {
