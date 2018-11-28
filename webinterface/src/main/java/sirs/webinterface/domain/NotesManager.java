@@ -4,6 +4,7 @@ package sirs.webinterface.domain;
 import sirs.app.ws.NoteNotFound_Exception;
 import sirs.app.ws.NoteView;
 import sirs.app.ws.cli.AppClient;
+import sirs.app.ws.cli.AppClientConnectionManager;
 import sirs.webinterface.exception.NoteNotFoundException;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class NotesManager {
     }
 
     public NoteView askForNoteByName(String noteName, String username) throws NoteNotFoundException{
-        List<AppClient> connections = ConnectionManager.getInstance().createConnectionsWithAllAppServers();
+        List<AppClient> connections = AppClientConnectionManager.getInstance().connectWithAllAppServers();
 
         for(AppClient appClient : connections){
             try{

@@ -26,11 +26,9 @@ public class AppClientApp {
 		client = new AppClient(wsURL);
 
 		System.out.println("Invoke ping()...");
-		NoteView noteView = new NoteView();
-		noteView.setName("helloName");
-		client.updateNote(noteView);
-		//System.out.print("Result: ");
-		//7System.out.println(result);
+		String result = client.testPing("Ping message");
+		System.out.print("Result: ");
+		System.out.println(result);
 	}
 
 }

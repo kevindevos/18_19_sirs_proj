@@ -1,20 +1,23 @@
-package sirs.webinterface.domain;
-
-import sirs.app.ws.cli.AppClient;
-import sirs.webinterface.exception.ConnectionException;
-
+package sirs.app.ws.cli;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-
-public class ConnectionManager {
+public class AppClientConnectionManager {
     private List<String> appServerWsUrls;
 
-    private ConnectionManager(){
+    private AppClientConnectionManager(){
         appServerWsUrls = new ArrayList<>();
+    }
+
+    private static class SingletonHolder {
+        private static final AppClientConnectionManager INSTANCE = new AppClientConnectionManager();
+    }
+
+    public static synchronized AppClientConnectionManager getInstance(){
+        return AppClientConnectionManager.SingletonHolder.INSTANCE;
     }
 
     // default list of servers ( bootstrapping )
@@ -31,7 +34,7 @@ public class ConnectionManager {
      * Create a connection with a random server in appServerWsUrls
      * @return AppClient instance
      */
-    public AppClient createConnectionWithRandomAppServer(){
+    public AppClient connectToRandomAppServer(){
         int rand = ThreadLocalRandom.current().nextInt(0, appServerWsUrls.size());
         return new AppClient(appServerWsUrls.get(rand));
     }
@@ -40,7 +43,7 @@ public class ConnectionManager {
      * Create a list of connections with all App servers
      * @return List<AppClient>
      */
-    public List<AppClient> createConnectionsWithAllAppServers(){
+    public List<AppClient> connectWithAllAppServers(){
         List<AppClient> connections = new ArrayList<>();
 
         for(String wsUrl : appServerWsUrls){
@@ -54,7 +57,7 @@ public class ConnectionManager {
      * Create a connection with a specific WsUrl, the url must be in appServerWsUrls
      * @return AppClient instance
      */
-    public AppClient createConnectionToAppServer(String wsUrl) throws ConnectionException{
+    public AppClient connectToAppServer(String wsUrl) throws ConnectionException{
         if(appServerExists(wsUrl)){
             return new AppClient(wsUrl);
         } else {
@@ -66,13 +69,6 @@ public class ConnectionManager {
         return appServerWsUrls.contains(wsUrl);
     }
 
-    private static class SingletonHolder {
-        private static final ConnectionManager INSTANCE = new ConnectionManager();
-    }
-
-    public static synchronized ConnectionManager getInstance(){
-        return ConnectionManager.SingletonHolder.INSTANCE;
-    }
 
     public String buildWsUrl(String host, String port){
         return "http://"+host+":"+port+"/app-ws/endpoint";

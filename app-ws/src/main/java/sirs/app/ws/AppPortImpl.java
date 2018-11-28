@@ -59,6 +59,7 @@ public class AppPortImpl implements AppPortType {
 
     @Override
     public NoteView getNoteByName(String noteName) throws NoteNotFound_Exception{
+        System.out.println("getNoteByName");
         Note note = NotesManager.getInstance().getNoteByName(noteName);
         if(note != null){
             return note.toView();
@@ -74,6 +75,7 @@ public class AppPortImpl implements AppPortType {
      */
     @Override
     public void updateNote(NoteView noteView) throws NotAllowed_Exception{
+        System.out.println("updateNote");
         Note note = NotesManager.getInstance().getNoteByName(noteView.getName());
         if(note != null ){
             // update contents if same owner

@@ -3,11 +3,8 @@ package sirs.app.ws.cli;
 
 import sirs.app.ws.*;
 
-import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Response;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
@@ -24,12 +21,6 @@ public class AppClient implements AppPortType {
 
 	/** WS port (port type is the interface, port is the implementation) */
 	AppPortType port = null;
-
-	/** UDDI server URL */
-	private String uddiURL = null;
-
-	/** WS name */
-	private String wsName = null;
 
 	/** WS end point address */
 	private String wsURL = null; // default value is defined inside WSDL
