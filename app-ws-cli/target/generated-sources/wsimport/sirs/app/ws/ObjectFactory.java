@@ -24,22 +24,17 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _TestPing_QNAME = new QName("http://ws.app.sirs/", "test_ping");
-    private final static QName _TestPingResponse_QNAME = new QName("http://ws.app.sirs/", "test_ping_response");
+    private final static QName _TestPingResponse_QNAME = new QName("http://ws.app.sirs/", "testPingResponse");
+    private final static QName _TestPing_QNAME = new QName("http://ws.app.sirs/", "testPing");
+    private final static QName _NoteView_QNAME = new QName("http://ws.app.sirs/", "noteView");
+    private final static QName _GetNoteByName_QNAME = new QName("http://ws.app.sirs/", "getNoteByName");
+    private final static QName _GetNoteByNameResponse_QNAME = new QName("http://ws.app.sirs/", "getNoteByNameResponse");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: sirs.app.ws
      * 
      */
     public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link TestPing }
-     * 
-     */
-    public TestPing createTestPing() {
-        return new TestPing();
     }
 
     /**
@@ -51,21 +46,80 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link TestPing }{@code >}}
+     * Create an instance of {@link TestPing }
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "test_ping")
-    public JAXBElement<TestPing> createTestPing(TestPing value) {
-        return new JAXBElement<TestPing>(_TestPing_QNAME, TestPing.class, null, value);
+    public TestPing createTestPing() {
+        return new TestPing();
+    }
+
+    /**
+     * Create an instance of {@link NoteView }
+     * 
+     */
+    public NoteView createNoteView() {
+        return new NoteView();
+    }
+
+    /**
+     * Create an instance of {@link GetNoteByName }
+     * 
+     */
+    public GetNoteByName createGetNoteByName() {
+        return new GetNoteByName();
+    }
+
+    /**
+     * Create an instance of {@link GetNoteByNameResponse }
+     * 
+     */
+    public GetNoteByNameResponse createGetNoteByNameResponse() {
+        return new GetNoteByNameResponse();
     }
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TestPingResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "test_ping_response")
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "testPingResponse")
     public JAXBElement<TestPingResponse> createTestPingResponse(TestPingResponse value) {
         return new JAXBElement<TestPingResponse>(_TestPingResponse_QNAME, TestPingResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link TestPing }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "testPing")
+    public JAXBElement<TestPing> createTestPing(TestPing value) {
+        return new JAXBElement<TestPing>(_TestPing_QNAME, TestPing.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link NoteView }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "noteView")
+    public JAXBElement<NoteView> createNoteView(NoteView value) {
+        return new JAXBElement<NoteView>(_NoteView_QNAME, NoteView.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetNoteByName }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "getNoteByName")
+    public JAXBElement<GetNoteByName> createGetNoteByName(GetNoteByName value) {
+        return new JAXBElement<GetNoteByName>(_GetNoteByName_QNAME, GetNoteByName.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetNoteByNameResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://ws.app.sirs/", name = "getNoteByNameResponse")
+    public JAXBElement<GetNoteByNameResponse> createGetNoteByNameResponse(GetNoteByNameResponse value) {
+        return new JAXBElement<GetNoteByNameResponse>(_GetNoteByNameResponse_QNAME, GetNoteByNameResponse.class, null, value);
     }
 
 }

@@ -30,12 +30,27 @@ public interface AppPortType {
      * @return
      *     returns java.lang.String
      */
-    @WebMethod(operationName = "test_ping")
+    @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "test_ping", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestPing")
-    @ResponseWrapper(localName = "test_ping_response", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestPingResponse")
-    @Action(input = "http://ws.station.binas.org/Station/test_ping_request", output = "http://ws.station.binas.org/Station/test_ping_response")
+    @RequestWrapper(localName = "testPing", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestPing")
+    @ResponseWrapper(localName = "testPingResponse", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.TestPingResponse")
+    @Action(input = "http://ws.station.binas.org/Station/testPingRequest", output = "http://ws.station.binas.org/Station/testPingResponse")
     public String testPing(
+        @WebParam(name = "input_message", targetNamespace = "")
+        String inputMessage);
+
+    /**
+     * 
+     * @param inputMessage
+     * @return
+     *     returns sirs.app.ws.NoteView
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getNoteByName", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.GetNoteByName")
+    @ResponseWrapper(localName = "getNoteByNameResponse", targetNamespace = "http://ws.app.sirs/", className = "sirs.app.ws.GetNoteByNameResponse")
+    @Action(input = "http://ws.station.binas.org/Station/getNoteByNameRequest", output = "http://ws.station.binas.org/Station/getNoteByNameResponse")
+    public NoteView getNoteByName(
         @WebParam(name = "input_message", targetNamespace = "")
         String inputMessage);
 

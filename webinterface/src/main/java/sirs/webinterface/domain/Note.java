@@ -6,9 +6,9 @@ package sirs.webinterface.domain;
 public class Note {
     private String name;
     private String content;
-    private User owner;
+    private String owner; // owner username
 
-    public Note(String name, String content, User owner){
+    public Note(String name, String content, String owner){
         this.name = name;
         this.content = content;
         this.owner = owner;
@@ -22,11 +22,11 @@ public class Note {
         content = aContent;
     }
 
-    public User getOwner(){
+    public String getOwner(){
         return owner;
     }
 
-    public void setOwner(User aOwner){
+    public void setOwner(String aOwner){
         owner = aOwner;
     }
 

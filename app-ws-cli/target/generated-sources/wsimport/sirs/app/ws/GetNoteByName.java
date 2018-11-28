@@ -8,16 +8,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for testPing complex type.
+ * <p>Java class for getNoteByName complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="testPing">
+ * &lt;complexType name="getNoteByName">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="input_message" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="input_message" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,12 +27,12 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "testPing", propOrder = {
+@XmlType(name = "getNoteByName", propOrder = {
     "inputMessage"
 })
-public class TestPing {
+public class GetNoteByName {
 
-    @XmlElement(name = "input_message")
+    @XmlElement(name = "input_message", required = true)
     protected String inputMessage;
 
     /**

@@ -3,6 +3,7 @@ package sirs.app.ws.cli;
 
 import sirs.app.ws.AppPortType;
 import sirs.app.ws.AppService;
+import sirs.app.ws.NoteView;
 
 import javax.xml.ws.AsyncHandler;
 import javax.xml.ws.BindingProvider;
@@ -77,8 +78,13 @@ public class AppClient implements AppPortType {
 		return port.testPing(inputMessage);
 	}
 
+    @Override
+    public NoteView getNoteByName(String inputMessage){
+        return null;
+    }
 
-	// remote invocation methods ----------------------------------------------
+
+    // remote invocation methods ----------------------------------------------
 
 
 	// test control operations ------------------------------------------------

@@ -5,6 +5,7 @@ import pt.ulisboa.tecnico.sdis.kerby.SecurityHelper;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import javax.xml.ws.Holder;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -54,6 +55,11 @@ public class AppPortImpl implements AppPortType {
         return "app-ws says hi!";
     }
 
+    @Override
+    public NoteView getNoteByName(String inputMessage){
+        // TODO
+        return null;
+    }
 
 
     // Auxiliary operations --------------------------------------------------

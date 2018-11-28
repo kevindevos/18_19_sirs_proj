@@ -7,40 +7,61 @@
     <types>
         <xs:schema targetNamespace="http://ws.app.sirs/" version="1.0">
 
-            <!-- main service operations data types -->
-
-
-            <!-- test control operations data types -->
-
-            <xs:complexType name="test_ping">
+            <xs:complexType name="noteView">
                 <xs:sequence>
-                    <xs:element name="input_message" type="xs:string"
-                                minOccurs="0" />
+                    <xs:element name="name" type="xs:string"/>
+                    <xs:element name="content" type="xs:string" />
+                    <xs:element name="owner" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:element name="test_ping" type="tns:test_ping" />
+            <xs:element name="noteView" type="tns:noteView" />
 
-            <xs:complexType name="test_ping_response">
+
+            <xs:complexType name="testPing">
+                <xs:sequence>
+                    <xs:element name="input_message" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="testPing" type="tns:testPing" />
+
+            <xs:complexType name="testPingResponse">
                 <xs:sequence>
                     <xs:element name="return" type="xs:string" minOccurs="0" />
                 </xs:sequence>
             </xs:complexType>
-            <xs:element name="test_ping_response" type="tns:test_ping_response" />
+            <xs:element name="testPingResponse" type="tns:testPingResponse" />
 
+
+            <xs:complexType name="getNoteByName">
+                <xs:sequence>
+                    <xs:element name="input_message" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getNoteByName" type="tns:getNoteByName" />
+
+            <xs:complexType name="getNoteByNameResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="tns:noteView"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getNoteByNameResponse" type="tns:getNoteByNameResponse" />
         </xs:schema>
     </types>
 
     <!-- Messages (use elements defined in the schema) -->
-
-    <!-- main service messages -->
-
-
-    <!-- test control messages -->
-    <message name="test_ping">
-        <part name="parameters" element="tns:test_ping" />
+    <message name="getNoteByName">
+        <part name="parameters" element="tns:getNoteByName" />
     </message>
-    <message name="test_ping_response">
-        <part name="parameters" element="tns:test_ping_response" />
+    <message name="getNoteByNameResponse">
+        <part name="parameters" element="tns:getNoteByNameResponse" />
+    </message>
+
+
+    <message name="testPing">
+        <part name="parameters" element="tns:testPing" />
+    </message>
+    <message name="testPingResponse">
+        <part name="parameters" element="tns:testPingResponse" />
     </message>
 
 
@@ -48,15 +69,21 @@
 
     <!-- Port Type (Interface) -->
     <portType name="AppPortType">
-        <!-- main service operations -->
 
 
-        <!-- test control operations -->
-        <operation name="test_ping">
-            <input wsam:Action="http://ws.station.binas.org/Station/test_ping_request"
-                   message="tns:test_ping" />
-            <output wsam:Action="http://ws.station.binas.org/Station/test_ping_response"
-                    message="tns:test_ping_response" />
+        <operation name="testPing">
+            <input wsam:Action="http://ws.station.binas.org/Station/testPingRequest"
+                   message="tns:testPing" />
+            <output wsam:Action="http://ws.station.binas.org/Station/testPingResponse"
+                    message="tns:testPingResponse" />
+        </operation>
+
+
+        <operation name="getNoteByName">
+            <input wsam:Action="http://ws.station.binas.org/Station/getNoteByNameRequest"
+                   message="tns:getNoteByName" />
+            <output wsam:Action="http://ws.station.binas.org/Station/getNoteByNameResponse"
+                    message="tns:getNoteByNameResponse" />
         </operation>
 
 
@@ -68,11 +95,8 @@
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http"
                       style="document" />
 
-        <!-- main service operations -->
 
-
-        <!-- test control operations -->
-        <operation name="test_ping">
+        <operation name="testPing">
             <soap:operation soapAction="" />
             <input>
                 <soap:body use="literal" />
@@ -82,7 +106,15 @@
             </output>
         </operation>
 
-
+        <operation name="getNoteByName">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
 
     </binding>
 
