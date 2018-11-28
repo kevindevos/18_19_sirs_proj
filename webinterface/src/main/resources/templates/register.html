@@ -10,10 +10,10 @@
 </head>
 <body>
 	<div class="container">
-		<h3>Login</h3>
+		<h3>Register</h3>
         <br/>
 
-		<form class="form-inline" th:action="@{/login/}" th:object="${user}" method="post">
+		<form class="form-inline" th:action="@{/register/}" th:object="${user}" method="post">
 			<label>Username: </label>
 			<input class="form-control" type="text" th:field="*{username}" />
             <br/><br/>
@@ -23,8 +23,7 @@
             <input class="btn btn-primary" type="submit" value="Submit" />
 		</form>
         <br/><br/>
-        <a href="http://localhost:8184/register" class="btn btn-default" >Register</a>
-
+        <a href="http://localhost:8184/login" class="btn btn-default" >Login</a>
 	</div>
 </body>
 </html>

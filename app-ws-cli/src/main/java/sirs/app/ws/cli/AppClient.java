@@ -4,6 +4,7 @@ package sirs.app.ws.cli;
 import sirs.app.ws.*;
 
 import javax.xml.ws.BindingProvider;
+import java.util.List;
 import java.util.Map;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
@@ -73,6 +74,11 @@ public class AppClient implements AppPortType {
     }
 
     @Override
+    public List<NoteView> getNotesByUser(String username){
+        return port.getNotesByUser(username);
+    }
+
+    @Override
     public void updateNote(NoteView noteView) throws NotAllowed_Exception{
         port.updateNote(noteView);
     }
@@ -86,6 +92,7 @@ public class AppClient implements AppPortType {
     public void testInit(){
         port.testInit();
     }
+
 
 
 }

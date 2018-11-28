@@ -29,6 +29,23 @@ public class NotesManager {
         return null;
     }
 
+    /**
+     * Return a list of notes which user with username is owner of
+     * @param username
+     * @return
+     */
+    public List<Note> getNotesByUser(String username){
+        List<Note> userNotes = new ArrayList<>();
+
+        for(Note note : notes){
+            if(note.getOwner().equals(username)){
+                userNotes.add(note);
+            }
+        }
+
+        return userNotes;
+    }
+
     public void removeNote(Note note){
         notes.remove(note);
     }

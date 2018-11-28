@@ -3,9 +3,10 @@
 <definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
              xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://ws.app.sirs/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              targetNamespace="http://ws.app.sirs/" name="AppWebService">
     <types>
-        <xs:schema targetNamespace="http://ws.app.sirs/" version="1.0">
+        <xs:schema targetNamespace="http://ws.app.sirs/" version="1.0" attributeFormDefault="qualified" elementFormDefault="qualified">
 
             <xs:complexType name="noteView">
                 <xs:sequence>
@@ -45,6 +46,21 @@
                 </xs:sequence>
             </xs:complexType>
             <xs:element name="getNoteByNameResponse" type="tns:getNoteByNameResponse" />
+
+
+            <xs:complexType name="getNotesByUser">
+                <xs:sequence>
+                    <xs:element name="username" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getNotesByUser" type="tns:getNotesByUser" />
+
+            <xs:complexType name="getNotesByUserResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="tns:noteView" maxOccurs="unbounded" minOccurs="0"  nillable="true" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getNotesByUserResponse" type="tns:getNotesByUserResponse" />
 
             <xs:complexType name="updateNote">
                 <xs:sequence>
@@ -102,6 +118,14 @@
         <part name="parameters" element="tns:getNoteByNameResponse" />
     </message>
 
+    <message name="getNotesByUser">
+        <part name="parameters" element="tns:getNotesByUser" />
+    </message>
+    <message name="getNotesByUserResponse">
+        <part name="parameters" element="tns:getNotesByUserResponse" />
+    </message>
+
+
     <message name="updateNote">
         <part name="parameters" element="tns:updateNote" />
     </message>
@@ -158,6 +182,13 @@
                    wsam:Action="http://ws.app.sirs/app-ws/getNoteByName/Fault/NoteNotFound" />
         </operation>
 
+        <operation name="getNotesByUser">
+            <input wsam:Action="http://ws.app.sirs/app-ws/getNotesByUserRequest"
+                   message="tns:getNotesByUser" />
+            <output wsam:Action="http://ws.app.sirs/app-ws/getNotesByUserResponse"
+                    message="tns:getNotesByUserResponse" />
+        </operation>
+
 
         <operation name="updateNote">
             <input wsam:Action="http://ws.app.sirs/app-ws/updateNote"
@@ -208,6 +239,16 @@
             <fault name="NoteNotFound">
                 <soap:fault name="NoteNotFound" use="literal" />
             </fault>
+        </operation>
+
+        <operation name="getNotesByUser">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
         </operation>
 
         <operation name="updateNote">

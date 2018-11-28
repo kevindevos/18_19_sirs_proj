@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Notes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+<script th:src="@{/webjars/jquery/3.1.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+	<div class="container">
+		<h3>Dashboard</h3>
+        <br/>
+        <h3>Notes</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th style="width:70%" >Content</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="note : ${notes}">
+                <td th:text="${note.name}"></td>
+                <td style="width:70%" th:text="${note.content}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <hr/>
+        <br/><br/>
+
+        <form class="form-inline" th:action="@{/dashboard/updateNote/}" th:object="${note}" method="post">
+            <label>Name: </label>
+            <input class="form-control" type="text" th:field="*{name}" />
+            <br/><br/>
+            <label>Content: </label>
+            <textarea rows="4" cols="50" class="form-control" type="text" th:field="*{content}" />
+            <br/><br/>
+            <input class="btn btn-primary" type="submit" value="Submit" />
+        </form>
+	</div>
+</body>
+</html>

@@ -1,20 +1,21 @@
 package sirs.webinterface.domain;
 
 
+import sirs.app.ws.NotAllowed_Exception;
 import sirs.app.ws.NoteNotFound_Exception;
 import sirs.app.ws.NoteView;
 import sirs.app.ws.cli.AppClient;
 import sirs.app.ws.cli.AppClientConnectionManager;
 import sirs.webinterface.exception.NoteNotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *  Query the servers for specific notes
  */
 public class NotesManager {
-    private NotesManager(){
-    }
+    private NotesManager(){ }
 
     public NoteView askForNoteByName(String noteName, String username) throws NoteNotFoundException{
         List<AppClient> connections = AppClientConnectionManager.getInstance().connectWithAllAppServers();
@@ -31,6 +32,26 @@ public class NotesManager {
         }
 
         throw new NoteNotFoundException("");
+    }
+
+    public List<NoteView> askForAllUserNotes(String username){
+        List<AppClient> connections = AppClientConnectionManager.getInstance().connectWithAllAppServers();
+        List<NoteView> notes = new ArrayList<>();
+
+        for(AppClient appClient : connections){
+            notes.addAll(appClient.getNotesByUser(username));
+        }
+
+        return notes;
+    }
+
+    public void updateNote(NoteView noteView){
+        AppClient appClient = AppClientConnectionManager.getInstance().connectToRandomAppServer();
+        try{
+            appClient.updateNote(noteView);
+        } catch(NotAllowed_Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static class SingletonHolder {

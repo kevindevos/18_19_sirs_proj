@@ -22,8 +22,6 @@ public class Monitor {
             String response = appClient.testPing("Monitor Ping");
             if(response == null){
                 return false;
-            }else{
-                System.out.println("server answered with: " + response);
             }
         }
 

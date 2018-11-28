@@ -10,6 +10,7 @@ public class AppClientConnectionManager {
 
     private AppClientConnectionManager(){
         appServerWsUrls = new ArrayList<>();
+        initAppServerWsUrls();
     }
 
     private static class SingletonHolder {
@@ -23,7 +24,7 @@ public class AppClientConnectionManager {
     // default list of servers ( bootstrapping )
     private void initAppServerWsUrls(){
         String defaultHost = "localhost";
-        List<String> defaultPorts = new ArrayList<String>(Arrays.asList("8081","8082","8083"));
+        List<String> defaultPorts = new ArrayList<String>(Arrays.asList("8081"));
 
         for(String port : defaultPorts){
             appServerWsUrls.add(buildWsUrl(defaultHost, port));

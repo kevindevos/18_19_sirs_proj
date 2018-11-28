@@ -8,34 +8,30 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import services.local.dataobjects.UserData;
+import sirs.app.ws.cli.AppClient;
 import sirs.webinterface.domain.User;
 import sirs.webinterface.domain.UsersManager;
 
 @Controller
-@RequestMapping(value = "/login")
-public class LoginController {
-    private static Logger logger = LoggerFactory.getLogger(LoginController.class);
+@RequestMapping(value = "/register")
+public class RegisterController {
+    private static Logger logger = LoggerFactory.getLogger(RegisterController.class);
 
     @RequestMapping(method = RequestMethod.GET)
-    public String loginForm(Model model) {
+    public String registerForm(Model model) {
         model.addAttribute("user", new UserData());
 
-        return "login";
+        return "register";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String loginSubmit(UserData userData) {
-        String logString = "loginSubmit: username:" + userData.getUsername()
-                + ", password: " + userData.getPassword() ;
-
-        User user = UsersManager.getInstance().getUser(userData.getUsername());
-
-        if(user != null && user.getPassword().equals(userData.getPassword())){
-            return "redirect:/dashboard/"+userData.getUsername();
+    public String registerSubmit(UserData userData) {
+        if(!UsersManager.getInstance().userExists(userData.getUsername())){
+            User user = new User(userData.getUsername(), userData.getPassword());
+            UsersManager.getInstance().addUser(user);
         }
 
+        System.out.println("registered User");
         return "redirect:/login";
-
     }
-
 }

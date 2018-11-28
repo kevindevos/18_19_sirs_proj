@@ -7,11 +7,11 @@ import sirs.app.domain.NotesManager;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import javax.xml.ws.Holder;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 @HandlerChain(file = "/app-ws_handler-chain.xml")
@@ -51,11 +51,7 @@ public class AppPortImpl implements AppPortType {
         return null;
     }
 
-    @Override
-    public String testPing(String inputMessage) {
-        System.out.println("Server received message: " + inputMessage);
-        return "app-ws says hi!";
-    }
+
 
     @Override
     public NoteView getNoteByName(String noteName) throws NoteNotFound_Exception{
@@ -67,6 +63,19 @@ public class AppPortImpl implements AppPortType {
             throw new NoteNotFound_Exception("", null);
         }
     }
+
+    @Override
+    public List<NoteView> getNotesByUser(String username){
+        List<Note> notes = NotesManager.getInstance().getNotesByUser(username);
+        List<NoteView> noteViews = new ArrayList<>();
+
+        for(Note note: notes){
+            noteViews.add(note.toView());
+        }
+
+        return noteViews;
+    }
+
 
     /**
      * Add if not exist, update if exists and if has permissions, or throw exception if not allowed
@@ -107,6 +116,12 @@ public class AppPortImpl implements AppPortType {
         // Add a simple note for testing purposes
         Note testNote = new Note("TEST_NOTE", "TEST_NOTE_CONTENT", "TEST_USER");
         NotesManager.getInstance().addNote(testNote);
+    }
+
+    @Override
+    public String testPing(String inputMessage) {
+        System.out.println("Server received message: " + inputMessage);
+        return "hello";
     }
 
 
