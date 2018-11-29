@@ -5,6 +5,7 @@ import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 import java.util.Map;
 
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Holder;
 
 import pt.ulisboa.tecnico.sdis.kerby.BadTicketRequest_Exception;
 import pt.ulisboa.tecnico.sdis.kerby.KerbyPortType;
@@ -109,5 +110,11 @@ public class KerbyClient implements KerbyPortType {
 			throws BadTicketRequest_Exception{
 		return port.requestTicket(client, server, nounce, ticketDuration);
 	}
+
+    @Override
+    public void revokeKey(String keyOwner){
+        port.revokeKey(keyOwner);
+    }
+
 
 }

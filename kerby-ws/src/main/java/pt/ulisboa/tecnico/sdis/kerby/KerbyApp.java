@@ -28,9 +28,9 @@ public class KerbyApp {
 				KerbyManager.getInstance().initSalt(args[2]);
 			else
 				System.out.println("WARNING: Using default Salt from kerby-lib for Key Generation.");
-			
-			KerbyManager.getInstance().initKeys(args[1]);
-						
+
+            KerbyManager.getInstance().setPasswordFilename(args[1]);
+
 			endpoint = new KerbyEndpointManager(wsURL);
 
 		} else if (args.length == 4 || args.length == 5) {
@@ -41,8 +41,6 @@ public class KerbyApp {
 				KerbyManager.getInstance().initSalt(args[4]);
 			else
 				System.out.println("WARNING: Using default Salt from kerby-lib for Key Generation.");
-			
-			KerbyManager.getInstance().initKeys(args[3]);
 			
 			endpoint = new KerbyEndpointManager(uddiURL, wsName, wsURL);
 			endpoint.setVerbose(true);

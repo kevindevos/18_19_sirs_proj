@@ -5,11 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class KerbyManager {
@@ -20,12 +16,18 @@ public class KerbyManager {
 	private static Set<UserNoncePair> previousNonces = Collections.synchronizedSet(new HashSet<UserNoncePair>());
 	private static ConcurrentHashMap<String, Key> knownKeys = new ConcurrentHashMap<String, Key>();
 	private static String salt;
+
+	private String passwordFilename;
 	
 	// Singleton -------------------------------------------------------------
 	private KerbyManager() {
 	}
 
-	/**
+    public void setPasswordFilename(String pwFileName){
+	    passwordFilename = pwFileName;
+    }
+
+    /**
 	 * SingletonHolder is loaded on the first execution of Singleton.getInstance()
 	 * or the first access to SingletonHolder.INSTANCE, not before.
 	 */
@@ -58,7 +60,6 @@ public class KerbyManager {
 				throw new BadTicketRequestException("Repeated Nonce, possible Replay Attack.");
 		}
 		
-		
 		try {
 			/* Get Previously Generated Client and Server Keys */
 			Key clientKey = knownKeys.get(client);
@@ -80,8 +81,6 @@ public class KerbyManager {
 			response.setTicket(cipheredTicket);
 			response.setSessionKey(cipheredSessionKey);
 			
-			
-			
 			return response;
 			
 		} catch (NoSuchAlgorithmException e) {
@@ -101,26 +100,6 @@ public class KerbyManager {
 			salt = line;
 	}
 	
-	/** Reads Passwords from the given file, generates all keys and stores them in memory. */
-	public void initKeys(String passwordFilename) throws Exception {
-		InputStream inputStream = KerbyManager.class.getResourceAsStream(passwordFilename);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-		String line;
-		while((line = reader.readLine()) != null) {
-			line = line.trim();
-			if(line.startsWith("#") || !line.contains(","))
-				continue;
-			String[] values = line.split(",");
-			Key key;
-			if(salt == null) {
-				key = SecurityHelper.generateKeyFromPassword(values[1]);
-			} else {
-				key = SecurityHelper.generateKeyFromPassword(values[1], salt);
-			}
-			knownKeys.put(values[0], key);
-		}
-	}
-	
 	private Ticket createTicket(String client, String server, int ticketDuration, Key clientServerKey) {
 		final Calendar calendar = Calendar.getInstance();
 		final Date t1 = calendar.getTime();
@@ -129,5 +108,10 @@ public class KerbyManager {
 		Ticket ticket = new Ticket(client, server, t1, t2, clientServerKey);
 		return ticket;
 	}
-	
+
+	public void revokeKey(String keyOwner){
+	    knownKeys.remove(keyOwner);
+    }
+
+
 }

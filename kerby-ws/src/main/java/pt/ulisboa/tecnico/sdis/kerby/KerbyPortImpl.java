@@ -9,7 +9,7 @@ import javax.jws.WebService;
  *
  */
 @WebService(endpointInterface = "pt.ulisboa.tecnico.sdis.kerby.KerbyPortType",
-wsdlLocation = "KerbyService.wsdl",
+wsdlLocation = "KerbyService_SIRS.wsdl",
 name ="KerbyService",
 portName = "KerbyPort",
 targetNamespace="http://kerby.sdis.tecnico.ulisboa.pt/",
@@ -40,6 +40,11 @@ public class KerbyPortImpl implements KerbyPortType {
 		
 		return result;
 	}
+
+    @Override
+    public void revokeKey(String keyOwner){
+        KerbyManager.getInstance().revokeKey(keyOwner);
+    }
 
 
     // Exception helper -----------------------------------------------------
