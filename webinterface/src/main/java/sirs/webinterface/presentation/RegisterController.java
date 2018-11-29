@@ -7,8 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import services.local.dataobjects.UserData;
-import sirs.app.ws.cli.AppClient;
+import sirs.app.ws.UserView;
 import sirs.webinterface.domain.User;
 import sirs.webinterface.domain.UsersManager;
 
@@ -19,13 +18,13 @@ public class RegisterController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String registerForm(Model model) {
-        model.addAttribute("user", new UserData());
+        model.addAttribute("user", new UserView());
 
         return "register";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String registerSubmit(UserData userData) {
+    public String registerSubmit(UserView userData) {
         if(!UsersManager.getInstance().userExists(userData.getUsername())){
             User user = new User(userData.getUsername(), userData.getPassword());
             UsersManager.getInstance().addUser(user);

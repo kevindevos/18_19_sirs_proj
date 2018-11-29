@@ -17,6 +17,14 @@
             </xs:complexType>
             <xs:element name="noteView" type="tns:noteView" />
 
+            <xs:complexType name="userView">
+                <xs:sequence>
+                    <xs:element name="username" type="xs:string"/>
+                    <xs:element name="password" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="userView" type="tns:userView" />
+
 
             <xs:complexType name="testPing">
                 <xs:sequence>

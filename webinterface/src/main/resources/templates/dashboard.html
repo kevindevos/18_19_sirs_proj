@@ -11,7 +11,16 @@
 <body>
 	<div class="container">
 		<h3>Dashboard</h3>
-        <br/>
+        <h4>Update note</h4>
+        <form class="form-inline" th:action="@{/dashboard/updateNote/}" th:object="${note}" method="post">
+            <label>Name: </label><br/>
+            <input class="form-control" type="text" th:field="*{name}" />
+            <br/><br/>
+            <label>Content: </label><br/>
+            <textarea rows="4" cols="50" class="form-control" type="text" th:field="*{content}" />
+            <br/><br/>
+            <input class="btn btn-primary" type="submit" value="Submit" />
+        </form>
         <h3>Notes</h3>
         <table class="table table-striped">
             <thead>
@@ -30,15 +39,7 @@
         <hr/>
         <br/><br/>
 
-        <form class="form-inline" th:action="@{/dashboard/updateNote/}" th:object="${note}" method="post">
-            <label>Name: </label>
-            <input class="form-control" type="text" th:field="*{name}" />
-            <br/><br/>
-            <label>Content: </label>
-            <textarea rows="4" cols="50" class="form-control" type="text" th:field="*{content}" />
-            <br/><br/>
-            <input class="btn btn-primary" type="submit" value="Submit" />
-        </form>
+
 	</div>
 </body>
 </html>

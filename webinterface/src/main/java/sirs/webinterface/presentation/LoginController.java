@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import services.local.dataobjects.UserData;
+import sirs.app.ws.UserView;
 import sirs.webinterface.domain.User;
 import sirs.webinterface.domain.UsersManager;
 
@@ -18,13 +18,13 @@ public class LoginController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String loginForm(Model model) {
-        model.addAttribute("user", new UserData());
+        model.addAttribute("user", new UserView());
 
         return "login";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String loginSubmit(UserData userData) {
+    public String loginSubmit(UserView userData) {
         String logString = "loginSubmit: username:" + userData.getUsername()
                 + ", password: " + userData.getPassword() ;
 
