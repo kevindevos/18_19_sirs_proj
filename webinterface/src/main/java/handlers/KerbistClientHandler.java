@@ -24,7 +24,6 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
     private static CipheredView ticket;
     private static CipheredView auth;
 
-
     /**
      * Gets the header blocks that can be processed by this Handler instance. If
      * null, processes all.
