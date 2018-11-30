@@ -38,4 +38,8 @@ public class WebInterfaceManager {
         sessionKeyMap.put(targetServerWsURL, sessionKey);
     }
 
+    public boolean sessionKeyExists(String targetServerWsURL){
+        return sessionKeyMap.get(targetServerWsURL) != null;
+    }
+
 }

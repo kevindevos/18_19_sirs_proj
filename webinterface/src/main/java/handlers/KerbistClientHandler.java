@@ -1,15 +1,26 @@
 package handlers;
 
+import org.w3c.dom.Node;
 import pt.ulisboa.tecnico.sdis.kerby.*;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
 import sirs.webinterface.domain.WebInterfaceManager;
 
+import javax.crypto.SecretKey;
+import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
+import javax.xml.soap.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import java.io.StringWriter;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -60,14 +71,35 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
             if(!isTicketValid(endpointAddress)){
                 System.out.println("Requesting new ticket and session key from Kerbi");
                 requestNewTicketAndSessionKey(endpointAddress);
+            }else{
+                initCipheredTicketAndAuth(endpointAddress);
             }
-
-            initCipheredTicketAndAuth();
-
 
             return handleOutboundMessage(smc);
         }else{
             return handleInboundMessage(smc);
+        }
+    }
+
+    private void initCipheredTicketAndAuth(String targetWsUrl){
+        SessionKeyAndTicketView sessionKeyAndTicketView = WebInterfaceManager.ticketCollection.getTicket(WebInterfaceManager.WEB_SERVER_NAME);
+        ticket = sessionKeyAndTicketView.getTicket();
+
+        try{
+            Key webServerKey = SecurityHelper.generateKeyFromPassword(WebInterfaceManager.PASSWORD);
+
+            Key sessionKey = WebInterfaceManager.getInstance().getSessionKey(targetWsUrl);
+            if(sessionKey == null){
+                sessionKey = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), webServerKey).getKeyXY();
+            }
+            auth = new Auth(WebInterfaceManager.WEB_SERVER_NAME, new Date()).cipher(sessionKey);
+
+        } catch(NoSuchAlgorithmException e){
+            e.printStackTrace();
+        } catch(InvalidKeySpecException e){
+            e.printStackTrace();
+        } catch(KerbyException e){
+            e.printStackTrace();
         }
     }
 
@@ -97,9 +129,6 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
             e.printStackTrace();
         }
 
-    }
-
-    private void initCipheredTicketAndAuth(){
     }
 
     private void requestNewTicketAndSessionKey(String serverWsUrl){
@@ -171,6 +200,60 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     private void addTicketAndAuthToMessage(SOAPMessageContext smc){
+        CipherClerk clerk = new CipherClerk();
+        try{
+            // get soap envelope
+            SOAPMessage msg = smc.getMessage();
+            SOAPPart sp = msg.getSOAPPart();
+            SOAPEnvelope se = sp.getEnvelope();
+
+
+            // add header if there is none ( se.getHeader() is null if the header doesn't exist )
+            SOAPHeader sh = se.getHeader();
+            if(sh == null){
+                sh = se.addHeader();
+            }
+
+            // ----------------- TICKET ----------------------
+
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            StringWriter sw = new StringWriter();
+
+            // create xml node
+            Node ticketNode = clerk.cipherToXMLNode(ticket, TICKET_ELEMENT_NAME);
+
+            Name ticketName = se.createName(TICKET_ELEMENT_NAME, "ns1" ,"urn:ticket");
+            SOAPHeaderElement element = sh.addHeaderElement(ticketName);
+
+            // serialize and add to soap message
+            transformer.transform(new DOMSource(ticketNode), new StreamResult(sw));
+            element.addTextNode(sw.toString());
+
+            // -----------------  AUTH  ----------------------
+
+            // create xml node
+            Node authNode = clerk.cipherToXMLNode(auth, AUTH_ELEMENT_NAME);
+
+            Name authName = se.createName(AUTH_ELEMENT_NAME, "ns1" ,"urn:auth");
+            SOAPHeaderElement element2 = sh.addHeaderElement(authName);
+
+            // serialize the auth node and add to soap message
+            sw = new StringWriter();
+            transformer.transform(new DOMSource(authNode), new StreamResult(sw));
+            element2.addTextNode(sw.toString());
+
+
+        } catch(SOAPException e){
+            e.printStackTrace();
+        } catch(JAXBException e){
+            e.printStackTrace();
+        } catch(TransformerConfigurationException e){
+            e.printStackTrace();
+        } catch(TransformerException e){
+            e.printStackTrace();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
