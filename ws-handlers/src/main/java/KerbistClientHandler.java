@@ -29,7 +29,7 @@ import java.util.*;
  *  This SOAP handler intecerpts the remote calls done by binas-ws-cli for authentication,
  *  and creates a KerbyClient to authenticate with the kerby server in RNL
  */
-public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
+public abstract class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
     protected static final String KERBY_WS_URL = "http://localhost:8888/kerby";
     protected static SecureRandom randomGenerator = new SecureRandom();
     protected static final int VALID_DURATION = 30;
@@ -40,14 +40,18 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
     protected static CipheredView ticket;
     protected static CipheredView auth;
 
-    protected static String kerbistClientName;
-    protected static String kerbistClientPassword;
-    protected static String targetWsURL;
-    protected static Key kerbistClientKey;
-    protected static Key kerbistSessionKey;
+    protected String kerbistClientName;
+    protected String kerbistClientPassword;
+    protected String targetWsURL;
+    protected Key kerbistClientKey;
+    protected Key kerbistSessionKey;
+    protected TicketCollection ticketCollection;
+    protected Map<String, Key> sessionKeyMap;
 
-    protected static TicketCollection ticketCollection;
-    protected static Map<String, Key> sessionKeyMap;
+    /**
+     * Sets up variables required for the handler to work
+     */
+    protected abstract void initHandlerVariables();
 
 
     /**
@@ -56,6 +60,10 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
      */
     @Override
     public boolean handleMessage(SOAPMessageContext smc) {
+        /////-------------\\\\\
+        initHandlerVariables();
+        /////-------------\\\\\
+
         Boolean outbound = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
         targetWsURL = (String) smc.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
 
@@ -79,6 +87,7 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
             return handleInboundMessage(smc);
         }
     }
+
 
     private boolean handleInboundMessage(SOAPMessageContext smc){
         return true;

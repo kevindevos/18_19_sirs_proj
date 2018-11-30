@@ -14,7 +14,7 @@ public class WebInterfaceManager {
     public static String PASSWORD;
 
     // Store all session keys for each target server <targetServerName, sessionKey>
-    private Map<String, Key> sessionKeyMap;
+    public static Map<String, Key> sessionKeyMap;
 
 
     private WebInterfaceManager(){
