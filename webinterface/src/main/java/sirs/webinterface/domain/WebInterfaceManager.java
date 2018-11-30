@@ -11,7 +11,7 @@ public class WebInterfaceManager {
     public static TicketCollection ticketCollection;
 
     public static final String WEB_SERVER_NAME = "WEB_SERVER";
-    public static String PASSWORD;
+    public static String privatePassword;
 
     // Store all session keys for each target server <targetServerName, sessionKey>
     public static Map<String, Key> sessionKeyMap;

@@ -5,6 +5,8 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import pt.ulisboa.tecnico.sdis.kerby.*;
+import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
@@ -23,6 +25,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -30,8 +33,11 @@ import java.util.Set;
  *  and creates a KerbyClient to authenticate with the kerby server in RNL
  */
 public abstract class KerbistServerHandler implements SOAPHandler<SOAPMessageContext> {
+    protected static final String KERBY_WS_URL = "http://localhost:8888/kerby";
     private static final String TICKET_ELEMENT_NAME = "ticket";
+    protected static final String AUTH_ELEMENT_NAME = "auth";
 
+    protected String serverName;
     protected String serverPassword;
     protected Key serverKey;
     protected Key sessionKey;
@@ -63,6 +69,10 @@ public abstract class KerbistServerHandler implements SOAPHandler<SOAPMessageCon
         initHandlerVariables();
 
         Boolean outbound = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+
+        if(serverPassword == null){
+            serverPassword = generateSharedPassword();
+        }
 
         serverKey = getServerKey();
 
@@ -194,5 +204,35 @@ public abstract class KerbistServerHandler implements SOAPHandler<SOAPMessageCon
     @Override
     public void close(MessageContext messageContext) {
     }
+
+    /**
+     * Perform a Diffie-Helmann exchange with the kerby server, resulting in a shared password secretly generated
+     * This password can then be used to generate a key with SecurityHelper.generateKeyFromPassword
+     * @return password string
+     */
+    private String generateSharedPassword(){
+        Random rand = new Random();
+        // generate public ints to be shared, base g, and modulus p
+        int g = rand.nextInt(1000);
+        int p = rand.nextInt(100);
+
+        // generate our secret value
+        int webPower = rand.nextInt(100);
+        int webValueToShare = ((int) Math.pow(g, webPower)) % p;
+
+        KerbyClient kerbyClient = null;
+        try{
+            kerbyClient = new KerbyClient(KERBY_WS_URL);
+            int finalValue = kerbyClient.generateDHPassword(serverName, webValueToShare, g, p);
+
+            // actual password in a string format
+            return Integer.toString(finalValue);
+        } catch(KerbyClientException e){
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
 
 }

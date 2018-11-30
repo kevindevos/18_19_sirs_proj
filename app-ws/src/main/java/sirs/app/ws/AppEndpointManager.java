@@ -15,7 +15,7 @@ public class AppEndpointManager {
     }
 
     /** Web Service location to publish */
-    private String wsURL = null;
+    public static String wsURL = null;
 
     /** Port implementation */
     private AppPortImpl portImpl = new AppPortImpl(this);

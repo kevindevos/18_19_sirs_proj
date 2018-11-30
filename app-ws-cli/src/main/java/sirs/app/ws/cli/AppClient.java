@@ -1,9 +1,11 @@
 package sirs.app.ws.cli;
 
 
+import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import sirs.app.ws.*;
 
 import javax.xml.ws.BindingProvider;
+import java.security.Key;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,12 @@ import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
  */
 public class AppClient implements AppPortType {
 
+    // variables for secure channels
+    public static String privatePassword;
+    public static Map<String, Key> sessionKeyMap;
+    // List of valid kerby tickets
+    public static TicketCollection ticketCollection;
+
 	/** WS service */
 	AppService service = null;
 
@@ -24,7 +32,7 @@ public class AppClient implements AppPortType {
 	AppPortType port = null;
 
 	/** WS end point address */
-	private String wsURL = null; // default value is defined inside WSDL
+	public static String wsURL = null; // default value is defined inside WSDL
 
 	public String getWsURL() {
 		return wsURL;

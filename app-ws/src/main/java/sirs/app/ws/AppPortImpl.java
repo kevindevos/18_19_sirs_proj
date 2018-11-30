@@ -1,15 +1,11 @@
 package sirs.app.ws;
 
 
-import pt.ulisboa.tecnico.sdis.kerby.SecurityHelper;
 import sirs.app.domain.Note;
 import sirs.app.domain.NotesManager;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,34 +20,16 @@ import java.util.List;
         serviceName = "AppService"
 )
 public class AppPortImpl implements AppPortType {
-    private static final String VALID_SERVER_PASSWORD = "nhdchdps";
-    public static Key kcsSessionKey;
-    public static Key serverKey;
+    public static String privatePassword;
 
-    public AppPortImpl(){
-        serverKey = generateServerKeyFromPassword();
-    }
+    public AppPortImpl(){}
 
     // end point manager
     private AppEndpointManager endpointManager;
 
     public AppPortImpl(AppEndpointManager endpointManager) {
-        serverKey = generateServerKeyFromPassword();
         this.endpointManager = endpointManager;
     }
-
-    private Key generateServerKeyFromPassword(){
-        try{
-            return SecurityHelper.generateKeyFromPassword(VALID_SERVER_PASSWORD);
-        } catch(NoSuchAlgorithmException e){
-            e.printStackTrace();
-        } catch(InvalidKeySpecException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
 
     @Override
     public NoteView getNoteByName(String noteName) throws NoteNotFound_Exception{
@@ -97,7 +75,6 @@ public class AppPortImpl implements AppPortType {
             Note newNote = new Note(noteView.getName(), noteView.getContent(), noteView.getOwner());
             NotesManager.getInstance().addNote(newNote);
         }
-
     }
 
     /**

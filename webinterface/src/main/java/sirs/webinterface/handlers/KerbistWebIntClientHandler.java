@@ -8,6 +8,7 @@ public class KerbistWebIntClientHandler extends KerbistClientHandler {
     @Override
     protected void initHandlerVariables(){
         kerbistClientName = WebInterfaceManager.WEB_SERVER_NAME;
+        kerbistClientPassword = WebInterfaceManager.privatePassword;
         ticketCollection = WebInterfaceManager.ticketCollection;
         sessionKeyMap = WebInterfaceManager.sessionKeyMap;
     }
