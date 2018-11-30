@@ -7,10 +7,7 @@ import java.util.Map;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
 
-import pt.ulisboa.tecnico.sdis.kerby.BadTicketRequest_Exception;
-import pt.ulisboa.tecnico.sdis.kerby.KerbyPortType;
-import pt.ulisboa.tecnico.sdis.kerby.KerbyService;
-import pt.ulisboa.tecnico.sdis.kerby.SessionKeyAndTicketView;
+import pt.ulisboa.tecnico.sdis.kerby.*;
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 
 /**
@@ -114,6 +111,11 @@ public class KerbyClient implements KerbyPortType {
     @Override
     public void revokeKey(String keyOwner){
         port.revokeKey(keyOwner);
+    }
+
+    @Override
+    public DhView generateDHKey(String value){
+        return null;
     }
 
 

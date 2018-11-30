@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.sdis.kerby;
 
 import javax.jws.WebService;
+import javax.xml.ws.Holder;
 
 /**
  * Kerby Web Service implementation class.
@@ -44,6 +45,11 @@ public class KerbyPortImpl implements KerbyPortType {
     @Override
     public void revokeKey(String keyOwner){
         KerbyManager.getInstance().revokeKey(keyOwner);
+    }
+
+    @Override
+    public DhView generateDHKey(String value){
+        return null;
     }
 
 

@@ -89,9 +89,7 @@ public class KerbyManager {
 			throw new BadTicketRequestException("Error while ciphering.");
 		}
 	}
-	
-	// Helpers -------------------------------------------------------------
-	
+
 	public void initSalt(String saltFilename) throws Exception {
 		InputStream inputStream = KerbyManager.class.getResourceAsStream(saltFilename);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

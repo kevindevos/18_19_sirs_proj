@@ -49,6 +49,14 @@
                     <xs:element minOccurs="0" name="encodedKeyXY" type="xs:base64Binary" />
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="dhView">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="value" type="xs:string" />
+                    <xs:element minOccurs="0" name="key" type="tns:cipheredView" />
+                </xs:sequence>
+            </xs:complexType>
+
+
             <xs:complexType name="requestTicket">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="client" type="xs:string" />
@@ -77,10 +85,24 @@
             <!-- SIRS extra stuff with key generation, revoking etc !-->
             <xs:complexType name="revokeKey">
                 <xs:sequence>
-                    <xs:element name="keyOwner" type="xs:string" />
+                    <xs:element minOccurs="0" name="keyOwner" type="xs:string" />
                 </xs:sequence>
             </xs:complexType>
             <xs:element name="revokeKey" type="tns:revokeKey" />
+
+            <xs:complexType name="generateDHKey">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="value" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="generateDHKey" type="tns:generateDHKey" />
+
+            <xs:complexType name="generateDHKeyResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="dhView" type="tns:dhView" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="generateDHKeyResponse" type="tns:generateDHKeyResponse" />
 
         </xs:schema>
     </types>
@@ -100,6 +122,14 @@
         <part element="tns:revokeKey" name="parameters" />
     </message>
 
+    <message name="generateDHKey">
+        <part element="tns:generateDHKey" name="parameters" />
+    </message>
+
+    <message name="generateDHKeyResponse">
+        <part element="tns:generateDHKeyResponse" name="parameters" />
+    </message>
+
 
 
     <!--  Port type (interface). -->
@@ -114,6 +144,13 @@
         <operation name="revokeKey">
             <input message="tns:revokeKey" wsam:Action="http://kerby.sdis.tecnico.ulisboa.pt/KerbyPortType/revokeKey" />
         </operation>
+
+
+        <operation name="generateDHKey">
+            <input message="tns:generateDHKey" wsam:Action="http://kerby.sdis.tecnico.ulisboa.pt/KerbyPortType/generateDHKey" />
+            <output message="tns:generateDHKeyResponse" wsam:Action="http://kerby.sdis.tecnico.ulisboa.pt/KerbyPortType/generateDHKeyResponse" />
+        </operation>
+
     </portType>
 
     <!--  Binding defines the actual technologies to use. -->
@@ -139,8 +176,15 @@
             </input>
         </operation>
 
-
-
+        <operation name="generateDHKey">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
     </binding>
 
     <!--  Service defines ports. -->
