@@ -60,9 +60,7 @@ public abstract class KerbistClientHandler implements SOAPHandler<SOAPMessageCon
      */
     @Override
     public boolean handleMessage(SOAPMessageContext smc) {
-        /////-------------\\\\\
         initHandlerVariables();
-        /////-------------\\\\\
 
         Boolean outbound = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
         targetWsURL = (String) smc.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
@@ -169,6 +167,9 @@ public abstract class KerbistClientHandler implements SOAPHandler<SOAPMessageCon
 
     }
 
+    /**
+     * Ask kerby for a new ticket and session key to establish a connection wth another server denoted by targetWsURL
+     */
     private void requestNewTicketAndSessionKey(){
         try{
             KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
