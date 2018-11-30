@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -52,13 +53,13 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
         String endpointAddress = (String) smc.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
 
         if(WebInterfaceManager.PASSWORD == null){
-            // TODO perform diffie-helmman and exchange a password
+            WebInterfaceManager.PASSWORD = generateSharedPassword();
         }
 
         if(outbound){
             if(!isTicketValid(endpointAddress)){
                 System.out.println("Requesting new ticket and session key from Kerbi");
-                requestNewTicketAndSessionKey();
+                requestNewTicketAndSessionKey(endpointAddress);
             }
 
             initCipheredTicketAndAuth();
@@ -68,6 +69,34 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
         }else{
             return handleInboundMessage(smc);
         }
+    }
+
+    /**
+     * Perform a Diffie-Helmann exchange with the kerby server, resulting in a shared password secretly generated
+     * This password can then be used to generate a key with SecurityHelper.generateKeyFromPassword
+     * @return password string
+     */
+    private String generateSharedPassword(){
+        Random rand = new Random();
+        // generate public ints to be shared, base g, and modulus p
+        int g = rand.nextInt(1000);
+        int p = rand.nextInt(100);
+
+        // generate our secret value
+        int webPower = rand.nextInt(100);
+        int webValueToShare = ((int) Math.pow(g, webPower)) % p;
+
+        KerbyClient kerbyClient = null;
+        try{
+            kerbyClient = new KerbyClient(KERBY_WS_URL);
+            int finalValue = kerbyClient.generateDHPassword(WebInterfaceManager.WEB_SERVER_NAME, webValueToShare, g, p);
+
+            // actual password in a string format
+            return Integer.toString(finalValue);
+        } catch(KerbyClientException e){
+            e.printStackTrace();
+        }
+
     }
 
     private void initCipheredTicketAndAuth(){
@@ -90,11 +119,11 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
             WebInterfaceManager.ticketCollection.storeTicket(serverWsUrl, sessionKeyAndTicketView, finalValidTime );
 
             // 2. generate a key from the webinterface's private password, to decipher and retrieve the session key
-            Key aliceKey = SecurityHelper.generateKeyFromPassword(WebInterfaceManager.PASSWORD);
+            Key webServerKey = SecurityHelper.generateKeyFromPassword(WebInterfaceManager.PASSWORD);
 
             // NOTE: SessionKey : {Kc.s , n}Kc
             // to get the actual session key, we call getKeyXY
-            Key sessionKey = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), aliceKey).getKeyXY();
+            Key sessionKey = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), webServerKey).getKeyXY();
             WebInterfaceManager.getInstance().addSessionKey(serverWsUrl, sessionKey);
            // TODO MACHandler
 
