@@ -4,9 +4,7 @@ import org.w3c.dom.Node;
 import pt.ulisboa.tecnico.sdis.kerby.*;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
-import sirs.webinterface.domain.WebInterfaceManager;
 
-import javax.crypto.SecretKey;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
@@ -25,34 +23,32 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  *  This SOAP handler intecerpts the remote calls done by binas-ws-cli for authentication,
  *  and creates a KerbyClient to authenticate with the kerby server in RNL
  */
 public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
-    public static final String KERBY_WS_URL = "http://localhost:8888/kerby";
-    private static SecureRandom randomGenerator = new SecureRandom();
-    private static final int VALID_DURATION = 30;
+    protected static final String KERBY_WS_URL = "http://localhost:8888/kerby";
+    protected static SecureRandom randomGenerator = new SecureRandom();
+    protected static final int VALID_DURATION = 30;
 
-    private static final String TICKET_ELEMENT_NAME = "ticket";
-    private static final String AUTH_ELEMENT_NAME = "auth";
+    protected static final String TICKET_ELEMENT_NAME = "ticket";
+    protected static final String AUTH_ELEMENT_NAME = "auth";
 
-    private static CipheredView ticket;
-    private static CipheredView auth;
+    protected static CipheredView ticket;
+    protected static CipheredView auth;
 
-    /**
-     * Gets the header blocks that can be processed by this Handler instance. If
-     * null, processes all.
-     */
-    @Override
-    public Set<QName> getHeaders() {
-        return null;
-    }
+    protected static String kerbistClientName;
+    protected static String kerbistClientPassword;
+    protected static String targetWsURL;
+    protected static Key kerbistClientKey;
+    protected static Key kerbistSessionKey;
+
+    protected static TicketCollection ticketCollection;
+    protected static Map<String, Key> sessionKeyMap;
+
 
     /**
      * The handleMessage method is invoked for normal processing of inbound and
@@ -61,18 +57,21 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
     @Override
     public boolean handleMessage(SOAPMessageContext smc) {
         Boolean outbound = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-        String endpointAddress = (String) smc.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
+        targetWsURL = (String) smc.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
 
-        if(WebInterfaceManager.PASSWORD == null){
-            WebInterfaceManager.PASSWORD = generateSharedPassword();
+        if(kerbistClientPassword == null){
+            kerbistClientPassword = generateSharedPassword();
         }
 
+        kerbistClientKey = getKerbistClientKey();
+        kerbistSessionKey = getSessionKey();
+
         if(outbound){
-            if(!isTicketValid(endpointAddress)){
-                System.out.println("Requesting new ticket and session key from Kerbi");
-                requestNewTicketAndSessionKey(endpointAddress);
+            if(getTicket() == null){
+                requestNewTicketAndSessionKey();
             }else{
-                initCipheredTicketAndAuth(endpointAddress);
+                ticket = getTicket();
+                auth = getAuth();
             }
 
             return handleOutboundMessage(smc);
@@ -81,29 +80,58 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
         }
     }
 
-    private void initCipheredTicketAndAuth(String targetWsUrl){
-        SessionKeyAndTicketView sessionKeyAndTicketView = WebInterfaceManager.ticketCollection.getTicket(WebInterfaceManager.WEB_SERVER_NAME);
-        ticket = sessionKeyAndTicketView.getTicket();
+    private boolean handleInboundMessage(SOAPMessageContext smc){
+        return true;
+    }
 
+    private boolean handleOutboundMessage(SOAPMessageContext smc){
+        addTicketToMessage(smc, ticket);
+        addAuthToMessage(smc, auth);
+
+        return true;
+    }
+
+    private Key getKerbistClientKey(){
         try{
-            Key webServerKey = SecurityHelper.generateKeyFromPassword(WebInterfaceManager.PASSWORD);
-
-            Key sessionKey = WebInterfaceManager.getInstance().getSessionKey(targetWsUrl);
-            if(sessionKey == null){
-                sessionKey = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), webServerKey).getKeyXY();
-            }
-            auth = new Auth(WebInterfaceManager.WEB_SERVER_NAME, new Date()).cipher(sessionKey);
-
+            return SecurityHelper.generateKeyFromPassword(kerbistClientPassword);
         } catch(NoSuchAlgorithmException e){
             e.printStackTrace();
         } catch(InvalidKeySpecException e){
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Key getSessionKey(){
+        SessionKeyAndTicketView sessionKeyAndTicketView = ticketCollection.getTicket(targetWsURL);
+
+        Key key = sessionKeyMap.get(targetWsURL);
+        if(key == null){
+            try{
+                key = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), kerbistSessionKey).getKeyXY();
+            } catch(KerbyException e){
+                e.printStackTrace();
+            }
+        }
+
+        return key;
+    }
+
+    private CipheredView getTicket(){
+        return ticketCollection.getTicket(targetWsURL).getTicket();
+    }
+
+    private CipheredView getAuth(){
+        try{
+            return new Auth(kerbistClientName, new Date()).cipher(getSessionKey());
         } catch(KerbyException e){
             e.printStackTrace();
         }
+
+        return null;
     }
 
-    /**
+     /**
      * Perform a Diffie-Helmann exchange with the kerby server, resulting in a shared password secretly generated
      * This password can then be used to generate a key with SecurityHelper.generateKeyFromPassword
      * @return password string
@@ -121,17 +149,18 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
         KerbyClient kerbyClient = null;
         try{
             kerbyClient = new KerbyClient(KERBY_WS_URL);
-            int finalValue = kerbyClient.generateDHPassword(WebInterfaceManager.WEB_SERVER_NAME, webValueToShare, g, p);
+            int finalValue = kerbyClient.generateDHPassword(kerbistClientName, webValueToShare, g, p);
 
             // actual password in a string format
             return Integer.toString(finalValue);
         } catch(KerbyClientException e){
             e.printStackTrace();
         }
+        return null;
 
     }
 
-    private void requestNewTicketAndSessionKey(String serverWsUrl){
+    private void requestNewTicketAndSessionKey(){
         try{
             KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
 
@@ -139,30 +168,30 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
             long nonce = randomGenerator.nextLong();
 
             // 1. authenticate user and get ticket and session key by requesting a ticket to kerby
-            SessionKeyAndTicketView sessionKeyAndTicketView = kerbyClient.requestTicket(WebInterfaceManager.WEB_SERVER_NAME, serverWsUrl, nonce, VALID_DURATION);
+            SessionKeyAndTicketView sessionKeyAndTicketView = kerbyClient.requestTicket(kerbistClientName, targetWsURL, nonce, VALID_DURATION);
 
             // add to TicketCollection
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.SECOND, VALID_DURATION);
             long finalValidTime = calendar.getTimeInMillis();
-            WebInterfaceManager.ticketCollection.storeTicket(serverWsUrl, sessionKeyAndTicketView, finalValidTime );
+            ticketCollection.storeTicket(targetWsURL, sessionKeyAndTicketView, finalValidTime );
 
             // 2. generate a key from the webinterface's private password, to decipher and retrieve the session key
-            Key webServerKey = SecurityHelper.generateKeyFromPassword(WebInterfaceManager.PASSWORD);
+            Key webServerKey = SecurityHelper.generateKeyFromPassword(kerbistClientPassword);
 
             // NOTE: SessionKey : {Kc.s , n}Kc
             // to get the actual session key, we call getKeyXY
             Key sessionKey = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), webServerKey).getKeyXY();
-            WebInterfaceManager.getInstance().addSessionKey(serverWsUrl, sessionKey);
-           // TODO MACHandler
+            sessionKeyMap.put(targetWsURL, sessionKey);
+            // TODO MACHandler
 
             // 3. save ticket for server
             ticket = sessionKeyAndTicketView.getTicket();
 
             // 4. create authenticator (Auth)
-            Auth authToBeCiphered = new Auth(WebInterfaceManager.WEB_SERVER_NAME, new Date());
+            Auth authToBeCiphered = new Auth(kerbistClientName, new Date());
             // cipher the auth with the session key Kcs
-            auth = authToBeCiphered.cipher(WebInterfaceManager.getInstance().getSessionKey(serverWsUrl));
+            auth = authToBeCiphered.cipher(sessionKeyMap.get(targetWsURL));
 
             System.out.println("requested new ticket and session key");
 
@@ -180,26 +209,45 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
         }
     }
 
-    /**
-     * Check if ticket is valid, note, we use wsurl as the server name aswell
-     * @param wsUrl
-     * @return
-     */
-    private boolean isTicketValid(String wsUrl){
-        return WebInterfaceManager.ticketCollection.getTicket(wsUrl) != null;
+    private void addTicketToMessage(SOAPMessageContext smc, CipheredView ticket){
+        CipherClerk clerk = new CipherClerk();
+        try{
+            // get soap envelope
+            SOAPMessage msg = smc.getMessage();
+            SOAPPart sp = msg.getSOAPPart();
+            SOAPEnvelope se = sp.getEnvelope();
+
+            // add header if there is none ( se.getHeader() is null if the header doesn't exist )
+            SOAPHeader sh = se.getHeader();
+            if(sh == null){
+                sh = se.addHeader();
+            }
+
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            StringWriter sw = new StringWriter();
+
+            // create xml node
+            Node ticketNode = clerk.cipherToXMLNode(ticket, TICKET_ELEMENT_NAME);
+
+            Name ticketName = se.createName(TICKET_ELEMENT_NAME, "ns1", "urn:ticket");
+            SOAPHeaderElement element = sh.addHeaderElement(ticketName);
+
+            // serialize and add to soap message
+            transformer.transform(new DOMSource(ticketNode), new StreamResult(sw));
+            element.addTextNode(sw.toString());
+
+        } catch(SOAPException e){
+            e.printStackTrace();
+        } catch(TransformerConfigurationException e){
+            e.printStackTrace();
+        } catch(TransformerException e){
+            e.printStackTrace();
+        } catch(JAXBException e){
+            e.printStackTrace();
+        }
     }
 
-    private boolean handleInboundMessage(SOAPMessageContext smc){
-        return true;
-    }
-
-    private boolean handleOutboundMessage(SOAPMessageContext smc){
-        addTicketAndAuthToMessage(smc);
-        
-        return true;
-    }
-
-    private void addTicketAndAuthToMessage(SOAPMessageContext smc){
+    private void addAuthToMessage(SOAPMessageContext smc, CipheredView auth){
         CipherClerk clerk = new CipherClerk();
         try{
             // get soap envelope
@@ -214,23 +262,6 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
                 sh = se.addHeader();
             }
 
-            // ----------------- TICKET ----------------------
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            StringWriter sw = new StringWriter();
-
-            // create xml node
-            Node ticketNode = clerk.cipherToXMLNode(ticket, TICKET_ELEMENT_NAME);
-
-            Name ticketName = se.createName(TICKET_ELEMENT_NAME, "ns1" ,"urn:ticket");
-            SOAPHeaderElement element = sh.addHeaderElement(ticketName);
-
-            // serialize and add to soap message
-            transformer.transform(new DOMSource(ticketNode), new StreamResult(sw));
-            element.addTextNode(sw.toString());
-
-            // -----------------  AUTH  ----------------------
-
             // create xml node
             Node authNode = clerk.cipherToXMLNode(auth, AUTH_ELEMENT_NAME);
 
@@ -238,7 +269,9 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
             SOAPHeaderElement element2 = sh.addHeaderElement(authName);
 
             // serialize the auth node and add to soap message
-            sw = new StringWriter();
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            StringWriter sw = new StringWriter();
+
             transformer.transform(new DOMSource(authNode), new StreamResult(sw));
             element2.addTextNode(sw.toString());
 
@@ -256,6 +289,7 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
         }
     }
 
+
     @Override
     public boolean handleFault(SOAPMessageContext context){
         return false;
@@ -266,5 +300,14 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
 
     }
 
+
+    /**
+     * Gets the header blocks that can be processed by this Handler instance. If
+     * null, processes all.
+     */
+    @Override
+    public Set<QName> getHeaders() {
+        return null;
+    }
 
 }
