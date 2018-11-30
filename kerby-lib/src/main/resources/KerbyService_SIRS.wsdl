@@ -51,7 +51,7 @@
             </xs:complexType>
             <xs:complexType name="dhView">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="value" type="xs:string" />
+                    <xs:element minOccurs="0" name="value" type="xs:int" />
                     <xs:element minOccurs="0" name="key" type="tns:cipheredView" />
                 </xs:sequence>
             </xs:complexType>
@@ -92,7 +92,9 @@
 
             <xs:complexType name="generateDHKey">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="value" type="xs:string" />
+                    <xs:element minOccurs="0" name="value" type="xs:int" />
+                    <xs:element minOccurs="0" name="g" type="xs:int" />
+                    <xs:element minOccurs="0" name="p" type="xs:int" />
                 </xs:sequence>
             </xs:complexType>
             <xs:element name="generateDHKey" type="tns:generateDHKey" />

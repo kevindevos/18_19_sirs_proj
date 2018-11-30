@@ -27,6 +27,10 @@ public class KerbyManager {
 	    passwordFilename = pwFileName;
     }
 
+    public void addKnownClientKey(String client, Key key){
+	    knownKeys.put(client, key);
+    }
+
     /**
 	 * SingletonHolder is loaded on the first execution of Singleton.getInstance()
 	 * or the first access to SingletonHolder.INSTANCE, not before.

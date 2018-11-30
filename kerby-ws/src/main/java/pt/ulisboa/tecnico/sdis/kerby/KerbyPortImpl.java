@@ -1,7 +1,9 @@
 package pt.ulisboa.tecnico.sdis.kerby;
 
 import javax.jws.WebService;
-import javax.xml.ws.Holder;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Random;
 
 /**
  * Kerby Web Service implementation class.
@@ -47,10 +49,28 @@ public class KerbyPortImpl implements KerbyPortType {
         KerbyManager.getInstance().revokeKey(keyOwner);
     }
 
-    @Override
-    public DhView generateDHKey(String value){
+    public Integer generateDHKey(String client, Integer value, Integer g, Integer p){
+        Random rand = new Random();
+        int kerbyPower = rand.nextInt(1000);
+
+        int finalValue = ((int) Math.pow(value, kerbyPower)) % p; // final int value
+        String finalPassword = Integer.toString(finalValue);
+
+        try{
+
+            KerbyManager.getInstance().addKnownClientKey(client, SecurityHelper.generateKeyFromPassword(finalPassword));
+        } catch(NoSuchAlgorithmException e){
+            e.printStackTrace();
+        } catch(InvalidKeySpecException e){
+            e.printStackTrace();
+        }
+
+        int kerbyValue = ((int) Math.pow(g, kerbyPower)) % p; // to send back
+
         return null;
     }
+
+
 
 
     // Exception helper -----------------------------------------------------
