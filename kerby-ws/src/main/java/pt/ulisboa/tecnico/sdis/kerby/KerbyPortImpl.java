@@ -49,7 +49,10 @@ public class KerbyPortImpl implements KerbyPortType {
         KerbyManager.getInstance().revokeKey(keyOwner);
     }
 
-    public Integer generateDHKey(String client, Integer value, Integer g, Integer p){
+
+
+    @Override
+    public int generateDHPassword(String client, Integer value, int g, int p){
         Random rand = new Random();
         int kerbyPower = rand.nextInt(1000);
 
@@ -57,7 +60,6 @@ public class KerbyPortImpl implements KerbyPortType {
         String finalPassword = Integer.toString(finalValue);
 
         try{
-
             KerbyManager.getInstance().addKnownClientKey(client, SecurityHelper.generateKeyFromPassword(finalPassword));
         } catch(NoSuchAlgorithmException e){
             e.printStackTrace();
@@ -65,12 +67,8 @@ public class KerbyPortImpl implements KerbyPortType {
             e.printStackTrace();
         }
 
-        int kerbyValue = ((int) Math.pow(g, kerbyPower)) % p; // to send back
-
-        return null;
+        return ((int) Math.pow(g, kerbyPower)) % p; // to send back
     }
-
-
 
 
     // Exception helper -----------------------------------------------------

@@ -18,7 +18,7 @@
         <!-- see parent POM -->
         <mainclass>pt.ulisboa.tecnico.sdis.kerby.KerbyApp</mainclass>
         <passwordFile>/test-secrets.txt</passwordFile>
-        <wsdl.dir>${basedir}/../kerby-lib/src/main/resources</wsdl.dir>
+        <wsdl.dir>${basedir}/src/main/resources</wsdl.dir>
     </properties>
 
     <dependencies>

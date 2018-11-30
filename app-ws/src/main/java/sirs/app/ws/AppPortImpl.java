@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@HandlerChain(file = "/app-ws_handler-chain.xml")
+@HandlerChain(file = "/resources/app-ws_handler-chain.xml")
 @WebService(
         endpointInterface = "sirs.app.ws.AppPortType",
-        wsdlLocation = "app.wsdl",
+        wsdlLocation = "resources/app.wsdl",
         name ="AppWebService",
         portName = "AppPort",
         targetNamespace="http://ws.app.sirs/",

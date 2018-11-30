@@ -1,12 +1,21 @@
 package handlers;
 
 import pt.ulisboa.tecnico.sdis.kerby.*;
+import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
+import sirs.webinterface.domain.WebInterfaceManager;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -40,7 +49,99 @@ public class KerbistClientHandler implements SOAPHandler<SOAPMessageContext> {
     @Override
     public boolean handleMessage(SOAPMessageContext smc) {
         Boolean outbound = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+        String endpointAddress = (String) smc.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
+
+        if(WebInterfaceManager.PASSWORD == null){
+            // TODO perform diffie-helmman and exchange a password
+        }
+
+        if(outbound){
+            if(!isTicketValid(endpointAddress)){
+                System.out.println("Requesting new ticket and session key from Kerbi");
+                requestNewTicketAndSessionKey();
+            }
+
+            initCipheredTicketAndAuth();
+
+
+            return handleOutboundMessage(smc);
+        }else{
+            return handleInboundMessage(smc);
+        }
+    }
+
+    private void initCipheredTicketAndAuth(){
+    }
+
+    private void requestNewTicketAndSessionKey(String serverWsUrl){
+        try{
+            KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
+
+            // nonce to prevent replay attacks
+            long nonce = randomGenerator.nextLong();
+
+            // 1. authenticate user and get ticket and session key by requesting a ticket to kerby
+            SessionKeyAndTicketView sessionKeyAndTicketView = kerbyClient.requestTicket(WebInterfaceManager.WEB_SERVER_NAME, serverWsUrl, nonce, VALID_DURATION);
+
+            // add to TicketCollection
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.SECOND, VALID_DURATION);
+            long finalValidTime = calendar.getTimeInMillis();
+            WebInterfaceManager.ticketCollection.storeTicket(serverWsUrl, sessionKeyAndTicketView, finalValidTime );
+
+            // 2. generate a key from the webinterface's private password, to decipher and retrieve the session key
+            Key aliceKey = SecurityHelper.generateKeyFromPassword(WebInterfaceManager.PASSWORD);
+
+            // NOTE: SessionKey : {Kc.s , n}Kc
+            // to get the actual session key, we call getKeyXY
+            Key sessionKey = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), aliceKey).getKeyXY();
+            WebInterfaceManager.getInstance().addSessionKey(serverWsUrl, sessionKey);
+           // TODO MACHandler
+
+            // 3. save ticket for server
+            ticket = sessionKeyAndTicketView.getTicket();
+
+            // 4. create authenticator (Auth)
+            Auth authToBeCiphered = new Auth(WebInterfaceManager.WEB_SERVER_NAME, new Date());
+            // cipher the auth with the session key Kcs
+            auth = authToBeCiphered.cipher(WebInterfaceManager.getInstance().getSessionKey(serverWsUrl));
+
+            System.out.println("requested new ticket and session key");
+
+
+        } catch(KerbyClientException e){
+            e.printStackTrace();
+        } catch(BadTicketRequest_Exception e){
+            e.printStackTrace();
+        } catch(KerbyException e){
+            e.printStackTrace();
+        } catch(NoSuchAlgorithmException e){
+            e.printStackTrace();
+        } catch(InvalidKeySpecException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Check if ticket is valid, note, we use wsurl as the server name aswell
+     * @param wsUrl
+     * @return
+     */
+    private boolean isTicketValid(String wsUrl){
+        return WebInterfaceManager.ticketCollection.getTicket(wsUrl) != null;
+    }
+
+    private boolean handleInboundMessage(SOAPMessageContext smc){
         return true;
+    }
+
+    private boolean handleOutboundMessage(SOAPMessageContext smc){
+        addTicketAndAuthToMessage(smc);
+        
+        return true;
+    }
+
+    private void addTicketAndAuthToMessage(SOAPMessageContext smc){
     }
 
     @Override

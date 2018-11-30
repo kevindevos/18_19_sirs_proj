@@ -15,19 +15,10 @@
     <name>${project.artifactId}</name>
 
     <properties>
-        <wsdl.dir>${basedir}/src/main/resources</wsdl.dir>
-
         <!-- see parent POM -->
+        <wsdl.dir>${basedir}/src/main/resources</wsdl.dir>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
     <build>
         <resources>
             <resource>
@@ -94,4 +85,12 @@
         </plugins>
     </build>
 
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

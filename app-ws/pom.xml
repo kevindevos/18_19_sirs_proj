@@ -14,6 +14,7 @@
 
     <properties>
         <mainclass>sirs.app.ws.App</mainclass>
+        <wsdl.directory>${basedir}/src/main/resources</wsdl.directory>
 
         <ws.i>1</ws.i>
         <ws.host>localhost</ws.host>
@@ -62,7 +63,7 @@
                 </executions>
                 <configuration>
                     <!-- http://www.mojohaus.org/jaxws-maven-plugin/wsimport-mojo.html -->
-                    <wsdlDirectory>${basedir}/src/main/resources</wsdlDirectory>
+                    <wsdlDirectory>${wsdl.directory}</wsdlDirectory>
                 </configuration>
                 <dependencies>
                     <dependency>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://ws.app.sirs/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             targetNamespace="http://ws.app.sirs/" name="AppWebService">
+    <types>
+        <xs:schema targetNamespace="http://ws.app.sirs/" version="1.0" attributeFormDefault="qualified" elementFormDefault="qualified">
+
+            <xs:complexType name="noteView">
+                <xs:sequence>
+                    <xs:element name="name" type="xs:string"/>
+                    <xs:element name="content" type="xs:string" />
+                    <xs:element name="owner" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="noteView" type="tns:noteView" />
+
+            <xs:complexType name="userView">
+                <xs:sequence>
+                    <xs:element name="username" type="xs:string"/>
+                    <xs:element name="password" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="userView" type="tns:userView" />
+
+
+            <xs:complexType name="testPing">
+                <xs:sequence>
+                    <xs:element name="input_message" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="testPing" type="tns:testPing" />
+
+            <xs:complexType name="testPingResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="testPingResponse" type="tns:testPingResponse" />
+
+
+            <xs:complexType name="getNoteByName">
+                <xs:sequence>
+                    <xs:element name="noteName" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getNoteByName" type="tns:getNoteByName" />
+
+            <xs:complexType name="getNoteByNameResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="tns:noteView"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getNoteByNameResponse" type="tns:getNoteByNameResponse" />
+
+
+            <xs:complexType name="getNotesByUser">
+                <xs:sequence>
+                    <xs:element name="username" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getNotesByUser" type="tns:getNotesByUser" />
+
+            <xs:complexType name="getNotesByUserResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="tns:noteView" maxOccurs="unbounded" minOccurs="0"  nillable="true" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getNotesByUserResponse" type="tns:getNotesByUserResponse" />
+
+            <xs:complexType name="updateNote">
+                <xs:sequence>
+                    <xs:element name="noteView" type="tns:noteView"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="updateNote" type="tns:updateNote" />
+
+            <xs:complexType name="updateNoteResponse">
+            </xs:complexType>
+            <xs:element name="updateNoteResponse" type="tns:updateNoteResponse" />
+
+            <xs:complexType name="test_init">
+            </xs:complexType>
+            <xs:element name="test_init" type="tns:test_init" />
+
+            <xs:complexType name="test_initResponse">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_initResponse" type="tns:test_initResponse" />
+
+
+            <xs:complexType name="test_clear">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_clear" type="tns:test_clear" />
+
+            <xs:complexType name="test_clearResponse">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_clearResponse" type="tns:test_clearResponse" />
+
+
+            <xs:complexType name="NoteNotFound">
+                <xs:sequence>
+                    <xs:element name="message" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="NoteNotFound" type="tns:NoteNotFound" />
+
+            <xs:complexType name="NotAllowed">
+                <xs:sequence>
+                    <xs:element name="message" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="NotAllowed" type="tns:NotAllowed" />
+        </xs:schema>
+    </types>
+
+    <!-- Messages (use elements defined in the schema) -->
+    <message name="getNoteByName">
+        <part name="parameters" element="tns:getNoteByName" />
+    </message>
+    <message name="getNoteByNameResponse">
+        <part name="parameters" element="tns:getNoteByNameResponse" />
+    </message>
+
+    <message name="getNotesByUser">
+        <part name="parameters" element="tns:getNotesByUser" />
+    </message>
+    <message name="getNotesByUserResponse">
+        <part name="parameters" element="tns:getNotesByUserResponse" />
+    </message>
+
+
+    <message name="updateNote">
+        <part name="parameters" element="tns:updateNote" />
+    </message>
+    <message name="updateNoteResponse">
+        <part name="parameters" element="tns:updateNoteResponse" />
+    </message>
+
+    <message name="NoteNotFound">
+        <part name="fault" element="tns:NoteNotFound" />
+    </message>
+
+    <message name="NotAllowed">
+        <part name="fault" element="tns:NotAllowed" />
+    </message>
+
+    <message name="testPing">
+        <part name="parameters" element="tns:testPing" />
+    </message>
+    <message name="testPingResponse">
+        <part name="parameters" element="tns:testPingResponse" />
+    </message>
+
+    <message name="test_clear">
+        <part name="parameters" element="tns:test_clear"/>
+    </message>
+    <message name="test_clearResponse">
+        <part name="parameters" element="tns:test_clearResponse"/>
+    </message>
+
+    <message name="test_init">
+        <part name="parameters" element="tns:test_init"/>
+    </message>
+    <message name="test_initResponse">
+        <part name="parameters" element="tns:test_initResponse"/>
+    </message>
+
+
+    <!-- Port Type (Interface) -->
+    <portType name="AppPortType">
+        <operation name="testPing">
+            <input wsam:Action="http://ws.app.sirs/app-ws/testPingRequest"
+                   message="tns:testPing" />
+            <output wsam:Action="http://ws.app.sirs/app-ws/testPingResponse"
+                    message="tns:testPingResponse" />
+        </operation>
+
+
+        <operation name="getNoteByName">
+            <input wsam:Action="http://ws.app.sirs/app-ws/getNoteByNameRequest"
+                   message="tns:getNoteByName" />
+            <output wsam:Action="http://ws.app.sirs/app-ws/getNoteByNameResponse"
+                    message="tns:getNoteByNameResponse" />
+            <fault message="tns:NoteNotFound" name="NoteNotFound"
+                   wsam:Action="http://ws.app.sirs/app-ws/getNoteByName/Fault/NoteNotFound" />
+        </operation>
+
+        <operation name="getNotesByUser">
+            <input wsam:Action="http://ws.app.sirs/app-ws/getNotesByUserRequest"
+                   message="tns:getNotesByUser" />
+            <output wsam:Action="http://ws.app.sirs/app-ws/getNotesByUserResponse"
+                    message="tns:getNotesByUserResponse" />
+        </operation>
+
+
+        <operation name="updateNote">
+            <input wsam:Action="http://ws.app.sirs/app-ws/updateNote"
+                   message="tns:updateNote" />
+            <output wsam:Action="http://ws.app.sirs/app-ws/updateNoteResponse"
+                    message="tns:updateNoteResponse" />
+            <fault message="tns:NotAllowed" name="NotAllowed"
+                   wsam:Action="http://ws.app.sirs/app-ws/getNoteByName/Fault/NotAllowed" />
+        </operation>
+
+        <operation name="test_clear">
+            <input wsam:Action="http://ws.app.sirs/app-ws/test_clearRequest" message="tns:test_clear"/>
+            <output wsam:Action="http://ws.app.sirs/app-ws/test_clearResponse" message="tns:test_clearResponse"/>
+        </operation>
+
+        <operation name="test_init">
+            <input wsam:Action="http://ws.app.sirs/app-ws/test_initRequest" message="tns:test_init"/>
+            <output wsam:Action="http://ws.app.sirs/app-ws/test_initResponse" message="tns:test_initResponse"/>
+        </operation>
+
+
+
+    </portType>
+
+    <!-- SOAP/HTTP Binding -->
+    <binding name="AppPortBinding" type="tns:AppPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+                      style="document" />
+
+        <operation name="testPing">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+
+        <operation name="getNoteByName">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+            <fault name="NoteNotFound">
+                <soap:fault name="NoteNotFound" use="literal" />
+            </fault>
+        </operation>
+
+        <operation name="getNotesByUser">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+
+        <operation name="updateNote">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+            <fault name="NotAllowed">
+                <soap:fault name="NotAllowed" use="literal" />
+            </fault>
+        </operation>
+
+        <operation name="test_clear">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="test_init">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+
+    </binding>
+
+
+    <!-- Service -->
+    <service name="AppService">
+        <port name="AppPort" binding="tns:AppPortBinding">
+            <soap:address location="http://localhost:8081/app-ws/endpoint" />
+        </port>
+    </service>
+</definitions>

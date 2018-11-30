@@ -15,7 +15,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>app-ws-cli</groupId>
+            <groupId>sirs.g31</groupId>
             <artifactId>app-ws-cli</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>

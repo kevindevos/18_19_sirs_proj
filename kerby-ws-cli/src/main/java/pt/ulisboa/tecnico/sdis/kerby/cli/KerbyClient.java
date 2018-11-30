@@ -3,9 +3,9 @@ package pt.ulisboa.tecnico.sdis.kerby.cli;
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 import java.util.Map;
-import java.util.Random;
 
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Holder;
 
 import pt.ulisboa.tecnico.sdis.kerby.*;
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
@@ -114,8 +114,10 @@ public class KerbyClient implements KerbyPortType {
     }
 
     @Override
-    public DhView generateDHKey(Integer value, Integer g, Integer p){
-        return port.generateDHKey(value, g, p);
+    public int generateDHPassword(String client, Integer value, int g, int p){
+        int kerbyValue = port.generateDHPassword(client, value, g, p);
+
+        return ((int) Math.pow(kerbyValue, value)) % p;
     }
 
 }

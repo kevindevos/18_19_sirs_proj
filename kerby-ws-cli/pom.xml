@@ -17,7 +17,7 @@
     <properties>
         <!-- see parent POM-->
         <mainclass>pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientApp</mainclass>
-        <wsdl.dir>${basedir}/../kerby-contract/</wsdl.dir>
+        <wsdl.dir>${basedir}/../kerby-lib/src/main/resources</wsdl.dir>
     </properties>
 
     <dependencies>
