@@ -1,6 +1,11 @@
 package sirs.app.ws.cli;
 
 import sirs.app.ws.NoteView;
+import sirs.app.ws.cli.handlers.KerbistAppClientHandler;
+
+import javax.xml.ws.handler.Handler;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Client application. 
@@ -19,6 +24,8 @@ public class AppClientApp {
 		String wsName = null;
 		String wsURL = null;
 		wsURL = args[0];
+
+
 
 		// Create client.
 		AppClient client = null;

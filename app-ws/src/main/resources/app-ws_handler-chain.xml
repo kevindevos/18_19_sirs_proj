@@ -15,6 +15,9 @@
          to log the message at the beginning and at the end of the chain.
     -->
     <handler-chain>
+        <handler>
+            <handler-class>sirs.app.handlers.KerbistAppServerHandler</handler-class>
+        </handler>
 
 
 

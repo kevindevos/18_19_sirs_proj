@@ -6,7 +6,7 @@ import sirs.app.ws.cli.AppClient;
 public class KerbistAppClientHandler extends KerbistClientHandler {
     @Override
     protected void initHandlerVariables(){
-        kerbistClientName = AppClient.wsURL;
+        kerbistName = AppClient.APP_CLIENT_NAME;
         kerbistClientPassword = AppClient.privatePassword;
         ticketCollection = AppClient.ticketCollection;
         sessionKeyMap = AppClient.sessionKeyMap;

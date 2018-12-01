@@ -7,6 +7,6 @@ public class KerbistWebIntServerHandler extends KerbistServerHandler {
     @Override
     protected void initHandlerVariables(){
         serverPassword = WebInterfaceManager.privatePassword;
-        serverName = WebInterfaceManager.WEB_SERVER_NAME;
+        kerbistName = WebInterfaceManager.WEB_SERVER_NAME;
     }
 }

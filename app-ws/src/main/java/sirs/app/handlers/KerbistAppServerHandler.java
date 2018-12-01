@@ -8,6 +8,6 @@ public class KerbistAppServerHandler extends KerbistServerHandler {
     @Override
     protected void initHandlerVariables(){
         serverPassword = AppPortImpl.privatePassword;
-        serverName = AppEndpointManager.wsURL;
+        kerbistName = AppEndpointManager.wsURL;
     }
 }

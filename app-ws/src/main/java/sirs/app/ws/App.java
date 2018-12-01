@@ -1,7 +1,6 @@
 package sirs.app.ws;
 
 
-import sirs.app.ws.AppEndpointManager;
 
 import java.io.IOException;
 import java.io.InputStream;

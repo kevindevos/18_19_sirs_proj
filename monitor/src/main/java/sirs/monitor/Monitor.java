@@ -5,6 +5,7 @@ import sirs.app.ws.cli.AppClient;
 import sirs.app.ws.cli.AppClientConnectionManager;
 
 import java.security.Key;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public class Monitor {
 
     public Monitor(){
         appServerConnections = AppClientConnectionManager.getInstance().connectWithAllAppServers();
+        ticketCollection = new TicketCollection();
+        sessionKeyMap = new HashMap<>();
     }
 
     /**

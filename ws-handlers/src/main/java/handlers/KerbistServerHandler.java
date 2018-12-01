@@ -5,18 +5,14 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import pt.ulisboa.tecnico.sdis.kerby.*;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import java.io.IOException;
 import java.io.StringReader;
@@ -25,19 +21,16 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Iterator;
-import java.util.Random;
-import java.util.Set;
 
 /**
  *  This SOAP handler intecepts the remote calls done by binas-ws-cli for authentication,
  *  and creates a KerbyClient to authenticate with the kerby server in RNL
  */
-public abstract class KerbistServerHandler implements SOAPHandler<SOAPMessageContext> {
+public abstract class KerbistServerHandler extends KerbistHandler  {
     protected static final String KERBY_WS_URL = "http://localhost:8888/kerby";
     private static final String TICKET_ELEMENT_NAME = "ticket";
     protected static final String AUTH_ELEMENT_NAME = "auth";
 
-    protected String serverName;
     protected String serverPassword;
     protected Key serverKey;
     protected Key sessionKey;
@@ -45,20 +38,6 @@ public abstract class KerbistServerHandler implements SOAPHandler<SOAPMessageCon
     private CipheredView cipheredTicketView;
     private CipheredView cipheredAuthView;
 
-    /**
-     * Sets up variables required for the handler to work
-     */
-    protected abstract void initHandlerVariables();
-
-
-    /**
-     * Gets the header blocks that can be processed by this Handler instance. If
-     * null, processes all.
-     */
-    @Override
-    public Set<QName> getHeaders() {
-        return null;
-    }
 
     /**
      * The handleMessage method is invoked for normal processing of inbound and
@@ -197,42 +176,8 @@ public abstract class KerbistServerHandler implements SOAPHandler<SOAPMessageCon
         return true;
     }
 
-    /**
-     * Called at the conclusion of a message exchange pattern just prior to the
-     * JAX-WS runtime dispatching a message, fault or exception.
-     */
-    @Override
-    public void close(MessageContext messageContext) {
-    }
 
-    /**
-     * Perform a Diffie-Helmann exchange with the kerby server, resulting in a shared password secretly generated
-     * This password can then be used to generate a key with SecurityHelper.generateKeyFromPassword
-     * @return password string
-     */
-    private String generateSharedPassword(){
-        Random rand = new Random();
-        // generate public ints to be shared, base g, and modulus p
-        int g = rand.nextInt(1000);
-        int p = rand.nextInt(100);
 
-        // generate our secret value
-        int webPower = rand.nextInt(100);
-        int webValueToShare = ((int) Math.pow(g, webPower)) % p;
-
-        KerbyClient kerbyClient = null;
-        try{
-            kerbyClient = new KerbyClient(KERBY_WS_URL);
-            int finalValue = kerbyClient.generateDHPassword(serverName, webValueToShare, g, p);
-
-            // actual password in a string format
-            return Integer.toString(finalValue);
-        } catch(KerbyClientException e){
-            e.printStackTrace();
-        }
-        return null;
-
-    }
 
 
 }

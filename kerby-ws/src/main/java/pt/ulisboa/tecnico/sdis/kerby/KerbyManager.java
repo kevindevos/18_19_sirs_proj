@@ -23,9 +23,6 @@ public class KerbyManager {
 	private KerbyManager() {
 	}
 
-    public void setPasswordFilename(String pwFileName){
-	    passwordFilename = pwFileName;
-    }
 
     public void addKnownClientKey(String client, Key key){
 	    knownKeys.put(client, key);

@@ -59,6 +59,8 @@ public class KerbyPortImpl implements KerbyPortType {
         int finalValue = ((int) Math.pow(value, kerbyPower)) % p; // final int value
         String finalPassword = Integer.toString(finalValue);
 
+        System.err.println("kerby generated final value for " + client + " : " + finalValue);
+
         try{
             KerbyManager.getInstance().addKnownClientKey(client, SecurityHelper.generateKeyFromPassword(finalPassword));
         } catch(NoSuchAlgorithmException e){
