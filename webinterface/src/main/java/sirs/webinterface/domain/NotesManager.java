@@ -5,22 +5,24 @@ import sirs.app.ws.NotAllowed_Exception;
 import sirs.app.ws.NoteNotFound_Exception;
 import sirs.app.ws.NoteView;
 import sirs.app.ws.cli.AppClient;
-import sirs.app.ws.cli.AppClientConnectionManager;
 import sirs.webinterface.exception.NoteNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  *  Query the servers for specific notes
  */
 public class NotesManager {
-    private NotesManager(){ }
+    AppClientConnectionManager connectionManager;
+
+    private NotesManager(){
+        connectionManager = new AppClientConnectionManager();
+    }
 
     public NoteView askForNoteByName(String noteName, String username) throws NoteNotFoundException{
-        List<AppClient> connections = AppClientConnectionManager.getInstance().connectWithAllAppServers();
-
-        for(AppClient appClient : connections){
+        for(AppClient appClient : connectionManager.getAllConnections()){
             try{
                 NoteView noteView = appClient.getNoteByName(noteName);
                 if(noteView.getOwner().equals(username)){
@@ -35,10 +37,9 @@ public class NotesManager {
     }
 
     public List<NoteView> askForAllUserNotes(String username){
-        List<AppClient> connections = AppClientConnectionManager.getInstance().connectWithAllAppServers();
         List<NoteView> notes = new ArrayList<>();
 
-        for(AppClient appClient : connections){
+        for(AppClient appClient : connectionManager.getAllConnections()){
             notes.addAll(appClient.getNotesByUser(username));
         }
 
@@ -46,7 +47,8 @@ public class NotesManager {
     }
 
     public void updateNote(NoteView noteView){
-        AppClient appClient = AppClientConnectionManager.getInstance().connectToRandomAppServer();
+        AppClient appClient = connectionManager.getRandomConnection();
+
         try{
             appClient.updateNote(noteView);
         } catch(NotAllowed_Exception e){

@@ -1,25 +1,14 @@
 package sirs.webinterface.domain;
 
-import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
-
-import java.security.Key;
-import java.util.HashMap;
-import java.util.Map;
-
 public class WebInterfaceManager {
     // List of valid kerby tickets
-    public static TicketCollection ticketCollection;
+    public static final String KERBY_WS_URL = "http://localhost:8888/kerby";
 
-    public static final String WEB_SERVER_NAME = "WEB_SERVER";
-    public static String privatePassword;
-
-    // Store all session keys for each target server <targetServerName, sessionKey>
-    public static Map<String, Key> sessionKeyMap;
+    public final String WEB_SERVER_NAME = "WEB_SERVER";
+    public String privatePassword;
 
 
     private WebInterfaceManager(){
-        ticketCollection = new TicketCollection();
-        sessionKeyMap = new HashMap<>();
     }
 
     private static class SingletonHolder {
@@ -28,18 +17,6 @@ public class WebInterfaceManager {
 
     public static synchronized WebInterfaceManager getInstance(){
         return WebInterfaceManager.SingletonHolder.INSTANCE;
-    }
-
-    public Key getSessionKey(String targetServerWsURL){
-        return sessionKeyMap.get(targetServerWsURL);
-    }
-
-    public void addSessionKey(String targetServerWsURL, Key sessionKey){
-        sessionKeyMap.put(targetServerWsURL, sessionKey);
-    }
-
-    public boolean sessionKeyExists(String targetServerWsURL){
-        return sessionKeyMap.get(targetServerWsURL) != null;
     }
 
 }

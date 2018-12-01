@@ -164,8 +164,6 @@ public abstract class KerbistClientHandler extends KerbistHandler {
             auth = authToBeCiphered.cipher(sessionKeyMap.get(targetWsURL));
 
 
-        } catch(KerbyClientException e){
-            e.printStackTrace();
         } catch(BadTicketRequest_Exception e){
             e.printStackTrace();
         } catch(KerbyException e){

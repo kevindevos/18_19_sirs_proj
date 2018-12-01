@@ -13,14 +13,10 @@ public class KerbyClientApp {
 			System.err.println("Usage: java " + KerbyClientApp.class.getName() + " wsURL OR uddiURL wsName");
 			return;
 		}
-		String uddiURL = null;
 		String wsName = null;
 		String wsURL = null;
 		if (args.length == 1) {
 			wsURL = args[0];
-		} else if (args.length >= 2) {
-			uddiURL = args[0];
-			wsName = args[1];
 		}
 
 		// Create client
@@ -29,11 +25,7 @@ public class KerbyClientApp {
 		if (wsURL != null) {
 			System.out.printf("Creating client for server at %s%n", wsURL);
 			client = new KerbyClient(wsURL);
-		} else if (uddiURL != null) {
-			System.out.printf("Creating client using UDDI at %s for server with name %s%n", uddiURL, wsName);
-			client = new KerbyClient(uddiURL, wsName);
 		}
-
 		// the following remote invocations are just basic examples
 		// the actual tests are made using JUnit
 

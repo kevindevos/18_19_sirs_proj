@@ -37,15 +37,9 @@ public abstract class KerbistHandler implements SOAPHandler<SOAPMessageContext> 
      * @return password string
      */
     protected String generateSharedPassword(){
-        try{
-            KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
+        KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
 
-            return kerbyClient.generateDHPassword(kerbistName);
-        } catch(KerbyClientException e){
-            e.printStackTrace();
-        }
-
-        return null;
+        return kerbyClient.generateDHPassword(kerbistName);
     }
 
 
