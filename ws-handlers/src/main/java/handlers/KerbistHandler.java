@@ -40,32 +40,16 @@ public abstract class KerbistHandler implements SOAPHandler<SOAPMessageContext> 
      * @return password string
      */
     protected String generateSharedPassword(){
-        Random rand = new Random();
-        // generate public ints to be shared, base g, and modulus p
-        int g = rand.nextInt(10000) + 100;
-        int p = rand.nextInt(10000) + 10;
-
-        // generate our secret value
-        int myPower = rand.nextInt(10000);
-        int valueToShare = ((int) Math.pow(g, myPower)) % p;
-
-        KerbyClient kerbyClient = null;
         try{
-            kerbyClient = new KerbyClient(KERBY_WS_URL);
-            int serverValue = kerbyClient.generateDHPassword(kerbistName, valueToShare, g, p);
+            KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
 
-            int finalValue = ((int) Math.pow(g, myPower)) % p;
-            System.err.println(kerbistName + " : Generated DH number: " + finalValue);
-            // actual password in a string format
-            return Integer.toString(finalValue);
+            return kerbyClient.generateDHPassword(kerbistName);
         } catch(KerbyClientException e){
             e.printStackTrace();
         }
+
         return null;
-
     }
-
-
 
 
     /**

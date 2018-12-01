@@ -1,10 +1,13 @@
 package sirs.app.ws;
 
+import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
 
 /** End point manager */
 public class AppEndpointManager {
+    private final String KERBY_WS_URL = "http://localhost:8888/kerby";
 
     /** Web Service name */
     private String wsName = null;
@@ -65,6 +68,10 @@ public class AppEndpointManager {
             }
             throw e;
         }
+
+        // generate a password to use with kerby
+        KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
+        kerbyClient.generateDHPassword(wsURL);
     }
 
     public void awaitConnections() {
