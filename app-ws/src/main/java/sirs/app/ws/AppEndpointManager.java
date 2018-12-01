@@ -71,7 +71,7 @@ public class AppEndpointManager {
 
         // generate a password to use with kerby
         KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
-        kerbyClient.generateDHPassword(wsURL);
+        AppPortImpl.privatePassword = kerbyClient.generateDHPassword(wsURL);
     }
 
     public void awaitConnections() {

@@ -163,8 +163,6 @@ public abstract class KerbistClientHandler extends KerbistHandler {
             // cipher the auth with the session key Kcs
             auth = authToBeCiphered.cipher(sessionKeyMap.get(targetWsURL));
 
-            System.out.println("requested new ticket and session key");
-
 
         } catch(KerbyClientException e){
             e.printStackTrace();

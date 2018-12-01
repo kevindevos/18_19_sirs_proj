@@ -31,9 +31,9 @@ public abstract class KerbistServerHandler extends KerbistHandler  {
     private static final String TICKET_ELEMENT_NAME = "ticket";
     protected static final String AUTH_ELEMENT_NAME = "auth";
 
-    protected String serverPassword;
-    protected Key serverKey;
-    protected Key sessionKey;
+    protected static String serverPassword;
+    protected static Key serverKey;
+    protected static Key sessionKey;
 
     private CipheredView cipheredTicketView;
     private CipheredView cipheredAuthView;
