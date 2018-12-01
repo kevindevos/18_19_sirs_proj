@@ -54,7 +54,7 @@ public class KerbyPortImpl implements KerbyPortType {
     @Override
     public int generateDHPassword(String client, Integer value, int g, int p){
         Random rand = new Random();
-        int kerbyPower = rand.nextInt(100);
+        int kerbyPower = rand.nextInt(10000);
 
         int finalValue = ((int) Math.pow(value, kerbyPower)) % p; // final int value
         String finalPassword = Integer.toString(finalValue);

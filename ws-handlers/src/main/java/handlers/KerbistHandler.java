@@ -42,11 +42,11 @@ public abstract class KerbistHandler implements SOAPHandler<SOAPMessageContext> 
     protected String generateSharedPassword(){
         Random rand = new Random();
         // generate public ints to be shared, base g, and modulus p
-        int g = rand.nextInt(1000);
-        int p = rand.nextInt(100);
+        int g = rand.nextInt(10000) + 100;
+        int p = rand.nextInt(10000) + 10;
 
         // generate our secret value
-        int myPower = rand.nextInt(100);
+        int myPower = rand.nextInt(10000);
         int valueToShare = ((int) Math.pow(g, myPower)) % p;
 
         KerbyClient kerbyClient = null;

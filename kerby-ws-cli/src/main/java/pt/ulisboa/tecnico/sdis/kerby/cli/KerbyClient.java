@@ -115,9 +115,7 @@ public class KerbyClient implements KerbyPortType {
 
     @Override
     public int generateDHPassword(String client, Integer value, int g, int p){
-        int kerbyValue = port.generateDHPassword(client, value, g, p);
-
-        return ((int) Math.pow(kerbyValue, value)) % p;
+        return port.generateDHPassword(client, value, g, p);
     }
 
 }
