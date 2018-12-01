@@ -25,6 +25,10 @@ public class KerbyManager {
 
 
     public void addKnownClientKey(String client, Key key){
+	    if(knownKeys.get(client) != null){
+	        knownKeys.remove(client);
+        }
+
 	    knownKeys.put(client, key);
     }
 
@@ -90,15 +94,6 @@ public class KerbyManager {
 			throw new BadTicketRequestException("Error while ciphering.");
 		}
 	}
-
-	public void initSalt(String saltFilename) throws Exception {
-		InputStream inputStream = KerbyManager.class.getResourceAsStream(saltFilename);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-		String line = reader.readLine();
-		if(line != null && !line.trim().isEmpty())
-			salt = line;
-	}
-	
 	private Ticket createTicket(String client, String server, int ticketDuration, Key clientServerKey) {
 		final Calendar calendar = Calendar.getInstance();
 		final Date t1 = calendar.getTime();

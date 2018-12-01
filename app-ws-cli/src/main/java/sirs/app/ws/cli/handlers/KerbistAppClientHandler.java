@@ -13,11 +13,11 @@ public class KerbistAppClientHandler extends KerbistClientHandler {
     protected void initHandlerVariables(){
     }
 
-    public KerbistAppClientHandler(String clientPassword, TicketCollection clientTicketCollection, Map<String, Key> clientSessionKeyMap){
+    public KerbistAppClientHandler(String clientName, String clientPassword, TicketCollection clientTicketCollection, Map<String, Key> clientSessionKeyMap){
         kerbistClientPassword = clientPassword;
         ticketCollection = clientTicketCollection;
         sessionKeyMap = clientSessionKeyMap;
-        kerbistName = AppClient.APP_CLIENT_NAME;
+        kerbistName = clientName;
     }
 
 }

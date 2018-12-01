@@ -1,9 +1,11 @@
 package sirs.app.ws;
 
+import pt.ulisboa.tecnico.sdis.kerby.SecurityHelper;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
 
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
+import java.security.Key;
 
 /** End point manager */
 public class AppEndpointManager {
@@ -72,6 +74,8 @@ public class AppEndpointManager {
         // generate a password to use with kerby
         KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
         AppPortImpl.privatePassword = kerbyClient.generateDHPassword(wsURL);
+
+        return;
     }
 
     public void awaitConnections() {

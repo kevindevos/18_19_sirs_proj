@@ -25,8 +25,6 @@ public class AppClientApp {
 		String wsURL = null;
 		wsURL = args[0];
 
-
-
 		// Create client.
 		AppClient client = null;
 		System.out.printf("Creating client for server at %s%n", wsURL);

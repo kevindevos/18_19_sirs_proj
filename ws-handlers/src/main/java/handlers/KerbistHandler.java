@@ -2,7 +2,6 @@ package handlers;
 
 import pt.ulisboa.tecnico.sdis.kerby.*;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.handler.MessageContext;
@@ -29,7 +28,7 @@ public abstract class KerbistHandler implements SOAPHandler<SOAPMessageContext> 
 
     protected String targetWsURL;
 
-    protected static String kerbistName;
+    protected String kerbistName;
 
     /**
      * Perform a Diffie-Helmann exchange with the kerby server, resulting in a shared password secretly generated

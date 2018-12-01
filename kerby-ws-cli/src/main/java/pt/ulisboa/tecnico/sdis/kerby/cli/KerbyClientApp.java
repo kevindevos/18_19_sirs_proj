@@ -1,7 +1,11 @@
 package pt.ulisboa.tecnico.sdis.kerby.cli;
 
+import java.security.Key;
 import java.util.Random;
 
+import pt.ulisboa.tecnico.sdis.kerby.AuthView;
+import pt.ulisboa.tecnico.sdis.kerby.CipheredView;
+import pt.ulisboa.tecnico.sdis.kerby.SecurityHelper;
 import pt.ulisboa.tecnico.sdis.kerby.SessionKeyAndTicketView;
 
 public class KerbyClientApp {

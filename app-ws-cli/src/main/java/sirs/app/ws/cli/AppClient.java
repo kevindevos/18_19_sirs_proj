@@ -8,10 +8,7 @@ import sirs.app.ws.cli.handlers.KerbistAppClientHandler;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
@@ -23,14 +20,14 @@ import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
  */
 public class AppClient{
     // variables for secure channels
-    private String privatePassword;
-
+    private String privatePassword = null;
     private Map<String, Key> sessionKeyMap;
 
     // List of valid kerby tickets
     private TicketCollection ticketCollection;
 
-    public static final String APP_CLIENT_NAME = "APP_CLIENT";
+    public static final String DEFAULT_CLIENT_NAME = "APP_CLIENT";
+    public String appClientName;
 
     /** WS service */
 	AppService service = null;
@@ -51,9 +48,15 @@ public class AppClient{
 		this.wsURL = wsURL;
         ticketCollection = new TicketCollection();
         sessionKeyMap = new HashMap<>();
+        appClientName = DEFAULT_CLIENT_NAME + "_" + generateRandomString(64);
 
 		createStub();
 	}
+
+	public AppClient(String wsURL, String clientName){
+	    this(wsURL);
+	    appClientName = clientName;
+    }
 
 	/** Stub creation and configuration */
 	private void createStub() {
@@ -67,7 +70,7 @@ public class AppClient{
 
 			// Define a handler chain for the client
             List<Handler> handlerChain = new ArrayList<>();
-            KerbistAppClientHandler kerbistAppClientHandler = new KerbistAppClientHandler(privatePassword, ticketCollection, sessionKeyMap);
+            KerbistAppClientHandler kerbistAppClientHandler = new KerbistAppClientHandler(appClientName, privatePassword, ticketCollection, sessionKeyMap);
 
             handlerChain.add(kerbistAppClientHandler);
             bindingProvider.getBinding().setHandlerChain(handlerChain);
@@ -98,6 +101,18 @@ public class AppClient{
         port.testInit();
     }
 
+    private String generateRandomString(int size){
+        String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        Random rand = new Random(System.currentTimeMillis());
+        String newString = "";
+
+        for(int i = 0; i < size; i++){
+            newString += chars.charAt(rand.nextInt(chars.length()));
+        }
+
+        return newString;
+
+    }
 
 
 }
