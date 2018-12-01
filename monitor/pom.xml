@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>sirs.g31</groupId>
+        <groupId>sirs</groupId>
         <artifactId>project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -22,7 +22,7 @@
         </dependency>
 
         <dependency>
-            <groupId>sirs.g31</groupId>
+            <groupId>sirs</groupId>
             <artifactId>ws-handlers</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
