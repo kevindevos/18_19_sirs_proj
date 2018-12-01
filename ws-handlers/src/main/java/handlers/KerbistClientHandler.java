@@ -30,8 +30,8 @@ import java.util.*;
  *  and creates a KerbyClient to authenticate with the kerby server in RNL
  */
 public abstract class KerbistClientHandler extends KerbistHandler {
-    protected static CipheredView ticket;
-    protected static CipheredView auth;
+    protected CipheredView ticket;
+    protected CipheredView auth;
 
     private Key getKerbistClientKey(){
         try{
