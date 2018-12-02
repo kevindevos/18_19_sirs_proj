@@ -64,6 +64,7 @@ public abstract class KerbistServerHandler extends KerbistHandler  {
 
     /** Handles outbound messages */
     private boolean handleOutboundMessage(SOAPMessageContext smc){
+        cipherSoapBodyWithSessionKey(smc, sessionKey);
         return true;
     }
 
@@ -89,7 +90,8 @@ public abstract class KerbistServerHandler extends KerbistHandler  {
             throw new RuntimeException("InvalidTicket");
         }
 
-        // at this point both ticket and auth were valid, so we return true
+        // decipher the body
+        decipherSoapBodyWithSessionKey(smc, sessionKey);
         return true;
     }
 

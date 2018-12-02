@@ -2,7 +2,6 @@ package sirs.app.ws.cli.handlers;
 
 import handlers.KerbistClientHandler;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
-import sirs.app.ws.cli.AppClient;
 
 import java.security.Key;
 import java.util.Map;

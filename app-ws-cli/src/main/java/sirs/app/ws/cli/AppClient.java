@@ -1,9 +1,11 @@
 package sirs.app.ws.cli;
 
 
+import com.sun.tools.javac.tree.Pretty;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import sirs.app.ws.*;
 import sirs.app.ws.cli.handlers.KerbistAppClientHandler;
+import sirs.app.ws.cli.handlers.PrettyLogHandler;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
@@ -71,8 +73,8 @@ public class AppClient{
 			// Define a handler chain for the client
             List<Handler> handlerChain = new ArrayList<>();
             KerbistAppClientHandler kerbistAppClientHandler = new KerbistAppClientHandler(appClientName, privatePassword, ticketCollection, sessionKeyMap);
-
             handlerChain.add(kerbistAppClientHandler);
+            handlerChain.add(new PrettyLogHandler());
             bindingProvider.getBinding().setHandlerChain(handlerChain);
 		}
 	}

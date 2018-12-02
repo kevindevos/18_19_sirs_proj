@@ -5,6 +5,7 @@ import pt.ulisboa.tecnico.sdis.kerby.*;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
 
+import javax.crypto.Cipher;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
@@ -94,12 +95,20 @@ public abstract class KerbistClientHandler extends KerbistHandler {
 
 
     private boolean handleInboundMessage(SOAPMessageContext smc){
+        // EXPERIMENTAL
+        // decipherSoapBodyWithSessionKey(smc, getSessionKey());
+
         return true;
     }
+
+
 
     private boolean handleOutboundMessage(SOAPMessageContext smc){
         addTicketToMessage(smc, ticket);
         addAuthToMessage(smc, auth);
+
+        // EXPERIMENTAL
+        // cipherSoapBodyWithSessionKey(smc, getSessionKey());
 
         return true;
     }
@@ -254,6 +263,7 @@ public abstract class KerbistClientHandler extends KerbistHandler {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public boolean handleFault(SOAPMessageContext context){
