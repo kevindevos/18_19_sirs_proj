@@ -1,6 +1,7 @@
 package sirs.app.ws.cli;
 
 
+import com.sun.xml.ws.client.ClientTransportException;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import sirs.app.ws.*;
 import sirs.app.ws.cli.handlers.KerbistAppClientHandler;
@@ -8,6 +9,8 @@ import sirs.app.ws.cli.handlers.PrettyLogHandler;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.Key;
 import java.util.*;
 
@@ -20,9 +23,14 @@ import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
  * wsimport.
  */
 public class AppClient{
+    private static final int DEFAULT_RETRY_DELAY = 1000;
     // variables for secure channels
     private String privatePassword = null;
     private Map<String, Key> sessionKeyMap;
+
+
+    public static int DEFAULT_MAX_RETRIES = 5;
+    private int maxRetries = DEFAULT_MAX_RETRIES;
 
     // List of valid kerby tickets
     private TicketCollection ticketCollection;
@@ -43,13 +51,12 @@ public class AppClient{
 		return wsURL;
 	}
 
-
 	/** constructor with provided web service URL */
 	public AppClient(String wsURL){
 		this.wsURL = wsURL;
         ticketCollection = new TicketCollection();
         sessionKeyMap = new HashMap<>();
-        appClientName = DEFAULT_CLIENT_NAME + "_" + generateRandomString(64);
+        appClientName = DEFAULT_CLIENT_NAME + "_" + generateRandomString(32);
 
 		createStub();
 	}
@@ -78,28 +85,84 @@ public class AppClient{
 		}
 	}
 
-	public String testPing(String inputMessage) {
-		return port.testPing(inputMessage);
-	}
+    private Object runPortMethodMaxRetries(Method method, int maxRetries, Object... args){
+        for(int i = 0; i < maxRetries; i++){
+            try{
+                return method.invoke(port, args);
+            }catch(InvocationTargetException e){
+                System.err.println("caught invocation exception");
+                System.err.println("cause: " + e.getCause());
+                if(e.getCause() instanceof ClientTransportException){
+                    System.err.println("caught clienttransport exception");
+                    sleep(DEFAULT_RETRY_DELAY);
+                    printAppServerUnreacheableErrorMessageRetry(wsURL);
+                }
+            } catch(IllegalAccessException e){
+                e.printStackTrace();
+            }
+        }
+        System.err.println("Stopping...");
+        System.exit(-1);
+        return null;
+    }
+
 
     public NoteView getNoteByName(String noteName) throws NoteNotFound_Exception{
-	    return port.getNoteByName(noteName);
+        try{
+            Method method = AppPortType.class.getMethod("getNoteByName", String.class);
+            return (NoteView) runPortMethodMaxRetries(method, maxRetries, noteName);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<NoteView> getNotesByUser(String username){
-        return port.getNotesByUser(username);
+        try{
+            Method method = AppPortType.class.getMethod("getNotesByUser", String.class);
+            return (List<NoteView>) runPortMethodMaxRetries(method, maxRetries , username);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
+
     public void updateNote(NoteView noteView) throws NotAllowed_Exception{
-        port.updateNote(noteView);
+        try{
+            Method method = AppPortType.class.getMethod("updateNote", NoteView.class);
+            runPortMethodMaxRetries(method, maxRetries, noteView);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
+    }
+
+    public String testPing(String inputMessage) {
+        try{
+            Method method = AppPortType.class.getMethod("testPing", String.class);
+            return (String) runPortMethodMaxRetries(method,maxRetries, inputMessage);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void testClear(){
-        port.testClear();
+        try{
+            Method method = AppPortType.class.getMethod("testClear");
+            runPortMethodMaxRetries(method, maxRetries);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
     }
 
     public void testInit(){
-        port.testInit();
+        try{
+            Method method = AppPortType.class.getMethod("testInit");
+            runPortMethodMaxRetries(method, maxRetries);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
     }
 
     private String generateRandomString(int size){
@@ -114,6 +177,23 @@ public class AppClient{
         return newString;
 
     }
+    private void printAppServerUnreacheableErrorMessageRetry(String wsUrl){
+        System.err.println(wsUrl + " is unreachable, retrying...");
+    }
 
+    public void setMaxRetries(int maxRetries){
+	    this.maxRetries = maxRetries;
+    }
 
+    public int getMaxRetries(){
+        return maxRetries;
+    }
+
+    private void sleep(int duration){
+        try{
+            Thread.sleep(duration);
+        } catch(InterruptedException e1){
+            e1.printStackTrace();
+        }
+    }
 }

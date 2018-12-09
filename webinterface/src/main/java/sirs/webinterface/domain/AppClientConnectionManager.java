@@ -11,12 +11,13 @@ public class AppClientConnectionManager {
     private List<String> appServerWsUrls;
     private List<String> defaultPorts;
     private String defaultHost;
+    public int MAX_RETRIES = -1;
 
     private List<AppClient> connections;
 
     public AppClientConnectionManager(){
         appServerWsUrls = new ArrayList<>();
-        defaultPorts = new ArrayList<>(Arrays.asList("8081", "8082", "8083"));
+        defaultPorts = new ArrayList<>(Arrays.asList("8081")); // "8082", "8083"));
         defaultHost = "localhost";
 
         initAppServerWsUrls();
@@ -32,8 +33,11 @@ public class AppClientConnectionManager {
     private List<AppClient> createConnections(){
         List<AppClient> connections = new ArrayList<>();
 
+        AppClient appClient;
         for(String wsUrl : appServerWsUrls){
-            connections.add(new AppClient(wsUrl));
+            appClient = new AppClient(wsUrl);
+            appClient.setMaxRetries(Integer.MAX_VALUE);
+            connections.add(appClient);
         }
 
         return connections;

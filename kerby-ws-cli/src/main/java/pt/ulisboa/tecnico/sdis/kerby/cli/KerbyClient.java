@@ -2,6 +2,8 @@ package pt.ulisboa.tecnico.sdis.kerby.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Random;
 
@@ -17,6 +19,8 @@ import pt.ulisboa.tecnico.sdis.kerby.*;
  * wsimport.
  */
 public class KerbyClient{
+    public static int DEFAULT_MAX_RETRIES = 5;
+    private int maxRetries = DEFAULT_MAX_RETRIES;
 
 	/** WS service */
 	KerbyService service = null;
@@ -56,40 +60,51 @@ public class KerbyClient{
 		}
 	}
 
+    private Object runPortMethod(Method method, int maxRetries, int delayBetweenRetries, Object... args){
+        for(int i = 0; i < maxRetries; i++){
+            try{
+                return method.invoke(port, args);
+            } catch(IllegalAccessException e){
+                e.printStackTrace();
+            } catch(InvocationTargetException e){
+                if(e.getCause() instanceof ClientTransportException){
+                    try{
+                        printKerbyUnreacheableErrorMessageRetry();
+                        Thread.sleep(delayBetweenRetries);
+                    } catch(InterruptedException ie){
+                        ie.printStackTrace();
+                    }
+                }
+            }
+        }
+        System.err.println("Stopping...");
+        System.exit(-1);
+        return null;
+    }
+
+    private Object runPortMethod(Method method, Object... args){
+        return runPortMethod(method, maxRetries, 1000, args);
+    }
 
 	public SessionKeyAndTicketView requestTicket(String client, String server, long nounce, int ticketDuration)
 			throws BadTicketRequest_Exception{
-        while(true){
-            try{
-                return port.requestTicket(client, server, nounce, ticketDuration);
-            }catch(ClientTransportException cte){
-                try{
-                    printKerbyUnreacheableErrorMessage();
-                    Thread.sleep(1000);
-                } catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-                continue;
-            }
+        try{
+            Method method = KerbyPortType.class.getMethod("requestTicket", String.class, String.class, long.class, int.class);
+            return (SessionKeyAndTicketView) runPortMethod(method, client, server, nounce , ticketDuration);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
         }
+        return null;
 	}
 
-    public void revokeKey(String keyOwner) {
-        while(true){
-            try{
-                port.revokeKey(keyOwner);
-                break;
-            }catch(ClientTransportException cte){
-                try{
-                    printKerbyUnreacheableErrorMessage();
-                    Thread.sleep(1000);
-                } catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-                continue;
-            }
-        }
 
+    public void revokeKey(String keyOwner) {
+        try{
+            Method method = KerbyPortType.class.getMethod("revokeKey", String.class);
+            runPortMethod(method, keyOwner);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
     }
 
     public String generateDHPassword(String client){
@@ -102,20 +117,12 @@ public class KerbyClient{
         int myPower = rand.nextInt(10000);
         int valueToShare = ((int) Math.pow(g, myPower)) % p;
 
-        int serverValue;
-        while(true){
-            try{
-                serverValue = port.generateDHPassword(client, valueToShare, g, p);
-                break;
-            }catch(ClientTransportException cte){
-                try{
-                    printKerbyUnreacheableErrorMessage();
-                    Thread.sleep(1000);
-                } catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-                continue;
-            }
+        int serverValue = 0;
+        try{
+            Method method = KerbyPortType.class.getMethod("generateDHPassword", String.class, Integer.class, int.class, int.class);
+            serverValue = (Integer) runPortMethod(method, client, valueToShare, g, p);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
         }
 
         int finalValue = ((int) Math.pow(serverValue, myPower)) % p;
@@ -124,8 +131,16 @@ public class KerbyClient{
         return Integer.toString(finalValue);
     }
 
-    private void printKerbyUnreacheableErrorMessage(){
-	    System.err.println("Kerby-ws is unreacheable, retrying...");
+    private void printKerbyUnreacheableErrorMessageRetry(){
+	    System.err.println("Kerby-ws is unreachable, retrying...");
+    }
+
+    public int getMaxRetries(){
+        return maxRetries;
+    }
+
+    public void setMaxRetries(int aMaxRetries){
+        maxRetries = aMaxRetries;
     }
 
 }

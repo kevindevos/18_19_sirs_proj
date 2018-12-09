@@ -64,7 +64,7 @@ public abstract class KerbistServerHandler extends KerbistHandler  {
 
     /** Handles outbound messages */
     private boolean handleOutboundMessage(SOAPMessageContext smc){
-        cipherSoapBodyWithSessionKey(smc, sessionKey);
+       // cipherSoapBodyWithSessionKey(smc, sessionKey);
         return true;
     }
 
@@ -91,7 +91,7 @@ public abstract class KerbistServerHandler extends KerbistHandler  {
         }
 
         // decipher the body
-        decipherSoapBodyWithSessionKey(smc, sessionKey);
+       // decipherSoapBodyWithSessionKey(smc, sessionKey);
         return true;
     }
 

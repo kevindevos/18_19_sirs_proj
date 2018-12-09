@@ -96,7 +96,7 @@ public abstract class KerbistClientHandler extends KerbistHandler {
 
     private boolean handleInboundMessage(SOAPMessageContext smc){
         // EXPERIMENTAL
-        decipherSoapBodyWithSessionKey(smc, getSessionKey());
+       // decipherSoapBodyWithSessionKey(smc, getSessionKey());
 
         return true;
     }
@@ -108,7 +108,7 @@ public abstract class KerbistClientHandler extends KerbistHandler {
         addAuthToMessage(smc, auth);
 
         // EXPERIMENTAL
-        cipherSoapBodyWithSessionKey(smc, getSessionKey());
+       // cipherSoapBodyWithSessionKey(smc, getSessionKey());
 
         return true;
     }
