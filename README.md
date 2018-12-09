@@ -12,7 +12,14 @@ mvn clean install -DskipTests
 
 ### Running
 
-Running an application server:
+First run the kerby web server:
+
+```
+cd source/kerby-ws
+mvn exec:java
+```
+
+Run one or more application servers:
 
 ```
 cd source/app-ws-cli
