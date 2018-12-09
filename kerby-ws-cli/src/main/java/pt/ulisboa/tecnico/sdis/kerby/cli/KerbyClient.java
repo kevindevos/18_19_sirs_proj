@@ -2,11 +2,14 @@ package pt.ulisboa.tecnico.sdis.kerby.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
+import java.net.ConnectException;
 import java.util.Map;
 import java.util.Random;
 
 import javax.xml.ws.BindingProvider;
 
+import com.sun.security.ntlm.Client;
+import com.sun.xml.ws.client.ClientTransportException;
 import pt.ulisboa.tecnico.sdis.kerby.*;
 import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 
@@ -66,7 +69,7 @@ public class KerbyClient{
         port.revokeKey(keyOwner);
     }
 
-    public String generateDHPassword(String client){
+    public String generateDHPassword(String client) throws ClientTransportException{
         Random rand = new Random();
         // generate public ints to be shared, base g, and modulus p
         int g = rand.nextInt(10000) + 100;

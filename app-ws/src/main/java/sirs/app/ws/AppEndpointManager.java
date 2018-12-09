@@ -1,5 +1,6 @@
 package sirs.app.ws;
 
+import com.sun.xml.ws.client.ClientTransportException;
 import pt.ulisboa.tecnico.sdis.kerby.SecurityHelper;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
 
@@ -71,11 +72,29 @@ public class AppEndpointManager {
             throw e;
         }
 
-        // generate a password to use with kerby
-        KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
-        AppPortImpl.privatePassword = kerbyClient.generateDHPassword(wsURL);
+        setupKerbyConnection();
 
         return;
+    }
+
+    private void setupKerbyConnection(){
+        while(true){
+            try{
+                // generate a password to use with kerby
+                KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
+                AppPortImpl.privatePassword = kerbyClient.generateDHPassword(wsURL);
+                return;
+            }catch(ClientTransportException cte){
+                System.err.println("Unable to contact Kerbist, retrying...");
+
+                try{
+                    Thread.sleep(1000);
+                }catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     public void awaitConnections() {

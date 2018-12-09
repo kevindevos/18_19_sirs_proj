@@ -1,7 +1,6 @@
 package sirs.app.ws.cli;
 
 
-import com.sun.tools.javac.tree.Pretty;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import sirs.app.ws.*;
 import sirs.app.ws.cli.handlers.KerbistAppClientHandler;
