@@ -78,23 +78,9 @@ public class AppEndpointManager {
     }
 
     private void setupKerbyConnection(){
-        while(true){
-            try{
-                // generate a password to use with kerby
-                KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
-                AppPortImpl.privatePassword = kerbyClient.generateDHPassword(wsURL);
-                return;
-            }catch(ClientTransportException cte){
-                System.err.println("Unable to contact Kerbist, retrying...");
-
-                try{
-                    Thread.sleep(1000);
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        }
-
+        // generate a password to use with kerby
+        KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
+        AppPortImpl.privatePassword = kerbyClient.generateDHPassword(wsURL);
     }
 
     public void awaitConnections() {

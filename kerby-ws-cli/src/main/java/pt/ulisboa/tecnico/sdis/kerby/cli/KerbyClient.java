@@ -2,16 +2,13 @@ package pt.ulisboa.tecnico.sdis.kerby.cli;
 
 import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
-import java.net.ConnectException;
 import java.util.Map;
 import java.util.Random;
 
 import javax.xml.ws.BindingProvider;
 
-import com.sun.security.ntlm.Client;
 import com.sun.xml.ws.client.ClientTransportException;
 import pt.ulisboa.tecnico.sdis.kerby.*;
-import pt.ulisboa.tecnico.sdis.ws.uddi.UDDINaming;
 
 /**
  * Client port wrapper.
@@ -62,14 +59,40 @@ public class KerbyClient{
 
 	public SessionKeyAndTicketView requestTicket(String client, String server, long nounce, int ticketDuration)
 			throws BadTicketRequest_Exception{
-		return port.requestTicket(client, server, nounce, ticketDuration);
+        while(true){
+            try{
+                return port.requestTicket(client, server, nounce, ticketDuration);
+            }catch(ClientTransportException cte){
+                try{
+                    printKerbyUnreacheableErrorMessage();
+                    Thread.sleep(1000);
+                } catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+                continue;
+            }
+        }
 	}
 
-    public void revokeKey(String keyOwner){
-        port.revokeKey(keyOwner);
+    public void revokeKey(String keyOwner) {
+        while(true){
+            try{
+                port.revokeKey(keyOwner);
+                break;
+            }catch(ClientTransportException cte){
+                try{
+                    printKerbyUnreacheableErrorMessage();
+                    Thread.sleep(1000);
+                } catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+                continue;
+            }
+        }
+
     }
 
-    public String generateDHPassword(String client) throws ClientTransportException{
+    public String generateDHPassword(String client){
         Random rand = new Random();
         // generate public ints to be shared, base g, and modulus p
         int g = rand.nextInt(10000) + 100;
@@ -79,11 +102,30 @@ public class KerbyClient{
         int myPower = rand.nextInt(10000);
         int valueToShare = ((int) Math.pow(g, myPower)) % p;
 
-        int serverValue = port.generateDHPassword(client, valueToShare, g, p);
+        int serverValue;
+        while(true){
+            try{
+                serverValue = port.generateDHPassword(client, valueToShare, g, p);
+                break;
+            }catch(ClientTransportException cte){
+                try{
+                    printKerbyUnreacheableErrorMessage();
+                    Thread.sleep(1000);
+                } catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+                continue;
+            }
+        }
+
         int finalValue = ((int) Math.pow(serverValue, myPower)) % p;
         System.err.println(client + " : Generated DH number: " + finalValue);
 
         return Integer.toString(finalValue);
+    }
+
+    private void printKerbyUnreacheableErrorMessage(){
+	    System.err.println("Kerby-ws is unreacheable, retrying...");
     }
 
 }
