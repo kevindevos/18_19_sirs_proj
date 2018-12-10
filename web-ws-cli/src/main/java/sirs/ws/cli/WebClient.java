@@ -1,6 +1,7 @@
 package sirs.ws.cli;
 
 import com.sun.xml.ws.client.ClientTransportException;
+import common.sirs.ws.NoteView;
 import handlers.PrettyLogHandler;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
@@ -89,6 +90,16 @@ public class WebClient {
 		}
 	}
 
+	public List<NoteView> takeRecentlyChangedNotes(){
+        try{
+            Method method = WebPortType.class.getMethod("takeRecentlyChangedNotes");
+            return (List<NoteView>) runPortMethodMaxRetries(method,maxRetries);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     private Object runPortMethodMaxRetries(Method method, int maxRetries, Object... args){
         for(int i = 0; i < maxRetries; i++){
@@ -112,6 +123,7 @@ public class WebClient {
         System.exit(-1);
         return null;
     }
+
 
 
 

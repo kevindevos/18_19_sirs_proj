@@ -55,6 +55,11 @@ public class AppPortImpl implements AppPortType {
         return noteViews;
     }
 
+    @Override
+    public void getAllNoteDigests(String username){
+        // TODO
+    }
+
     /**
      * Add if not exist, update if exists and if has permissions, or throw exception if not allowed
      * @param noteView data object of the note to update

@@ -18,5 +18,14 @@
     </xs:complexType>
     <xs:element name="userView" type="tns:userView" />
 
+    <xs:complexType name="noteDigestView">
+        <xs:sequence>
+            <xs:element name="owner" type="xs:string"/>
+            <xs:element name="noteName" type="xs:string" />
+            <xs:element name="digest" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="noteDigestView" type="tns:noteDigestView" />
+
 
 </xs:schema>

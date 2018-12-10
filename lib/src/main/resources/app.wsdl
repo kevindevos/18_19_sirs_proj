@@ -54,6 +54,17 @@
             </xs:complexType>
             <xs:element name="getNotesByUserResponse" type="tns:getNotesByUserResponse" />
 
+            <xs:complexType name="getAllNoteDigests">
+                <xs:sequence>
+                    <xs:element name="username" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getAllNoteDigests" type="tns:getAllNoteDigests" />
+
+            <xs:complexType name="getAllNoteDigestsResponse">
+            </xs:complexType>
+            <xs:element name="getAllNoteDigestsResponse" type="tns:getAllNoteDigestsResponse" />
+
             <xs:complexType name="updateNote">
                 <xs:sequence>
                     <xs:element name="noteView" type="common:noteView"/>
@@ -115,6 +126,13 @@
     </message>
     <message name="getNotesByUserResponse">
         <part name="parameters" element="tns:getNotesByUserResponse" />
+    </message>
+
+    <message name="getAllNoteDigests">
+        <part name="parameters" element="tns:getAllNoteDigests" />
+    </message>
+    <message name="getAllNoteDigestsResponse">
+        <part name="parameters" element="tns:getAllNoteDigestsResponse" />
     </message>
 
 
@@ -181,7 +199,6 @@
                     message="tns:getNotesByUserResponse" />
         </operation>
 
-
         <operation name="updateNote">
             <input wsam:Action="http://ws.app.sirs/app-ws/updateNote"
                    message="tns:updateNote" />
@@ -189,6 +206,13 @@
                     message="tns:updateNoteResponse" />
             <fault message="tns:NotAllowed" name="NotAllowed"
                    wsam:Action="http://ws.app.sirs/app-ws/getNoteByName/Fault/NotAllowed" />
+        </operation>
+
+        <operation name="getAllNoteDigests">
+            <input wsam:Action="http://ws.app.sirs/app-ws/getAllNoteDigests"
+                   message="tns:getAllNoteDigests" />
+            <output wsam:Action="http://ws.app.sirs/app-ws/getAllNoteDigestsResponse"
+                    message="tns:getAllNoteDigestsResponse" />
         </operation>
 
         <operation name="test_clear">
@@ -234,6 +258,16 @@
         </operation>
 
         <operation name="getNotesByUser">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+
+        <operation name="getAllNoteDigests">
             <soap:operation soapAction="" />
             <input>
                 <soap:body use="literal" />

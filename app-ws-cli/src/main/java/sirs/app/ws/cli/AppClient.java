@@ -2,6 +2,7 @@ package sirs.app.ws.cli;
 
 
 import com.sun.xml.ws.client.ClientTransportException;
+import common.sirs.ws.NoteDigestView;
 import common.sirs.ws.NoteView;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import sirs.app.ws.*;
@@ -198,5 +199,15 @@ public class AppClient{
         } catch(InterruptedException e1){
             e1.printStackTrace();
         }
+    }
+
+    public List<NoteDigestView> getAllNoteDigests(){
+        try{
+            Method method = AppPortType.class.getMethod("getAllNoteDigests");
+            return (List<NoteDigestView>) runPortMethodMaxRetries(method, maxRetries);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
