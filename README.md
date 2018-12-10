@@ -1,14 +1,6 @@
 # SIRS Monitoring and Intrusion Recovery of Network Infrastructures
 
-### Prerequesites:
-
-KerbIST is required, run:
-
-```
-git clone https://github.com/tecnico-distsys/kerbist kerbist
-cd kerbist
-mvn clean install -DskipTests
-```
+### Installation:
 
 Install the application:
 
@@ -20,7 +12,14 @@ mvn clean install -DskipTests
 
 ### Running
 
-Running an application server:
+First run the kerby web server:
+
+```
+cd source/kerby-ws
+mvn exec:java
+```
+
+Run one or more application servers:
 
 ```
 cd source/app-ws-cli
