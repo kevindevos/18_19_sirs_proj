@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class KerbistHandler implements SOAPHandler<SOAPMessageContext> {
-    protected static final String KERBY_WS_URL = "http://localhost:8888/kerby";
     protected static SecureRandom randomGenerator = new SecureRandom();
     protected static final int VALID_DURATION = 30;
 
@@ -46,8 +45,7 @@ public abstract class KerbistHandler implements SOAPHandler<SOAPMessageContext> 
     protected TicketCollection ticketCollection;
     protected Map<String, Key> sessionKeyMap;
 
-    protected String targetWsURL;
-
+    protected String targetName;
     protected String kerbistName;
 
     /**
@@ -56,7 +54,7 @@ public abstract class KerbistHandler implements SOAPHandler<SOAPMessageContext> 
      * @return password string
      */
     protected String generateSharedPassword(){
-        KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
+        KerbyClient kerbyClient = new KerbyClient();
 
         return kerbyClient.generateDHPassword(kerbistName);
     }

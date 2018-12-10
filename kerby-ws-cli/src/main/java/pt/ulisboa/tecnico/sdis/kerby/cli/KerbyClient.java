@@ -21,6 +21,7 @@ import pt.ulisboa.tecnico.sdis.kerby.*;
 public class KerbyClient{
     public static int DEFAULT_MAX_RETRIES = 5;
     private int maxRetries = DEFAULT_MAX_RETRIES;
+    private static final String KERBY_WS_URL = "http://localhost:8888/kerby";
 
 	/** WS service */
 	KerbyService service = null;
@@ -43,8 +44,8 @@ public class KerbyClient{
 	private boolean verbose = false;
 
 	/** constructor with provided web service URL */
-	public KerbyClient(String wsURL) {
-		this.wsURL = wsURL;
+	public KerbyClient() {
+		this.wsURL = KERBY_WS_URL;
 		createStub();
 	}
 

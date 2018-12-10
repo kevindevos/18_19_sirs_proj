@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://ws.web.sirs/"
+             targetNamespace="http://ws.web.sirs/" name="WebService">
+    <types>
+        <xs:schema targetNamespace="http://ws.web.sirs/" version="1.0" attributeFormDefault="qualified" elementFormDefault="qualified">
+
+            <xs:complexType name="testPing">
+                <xs:sequence>
+                    <xs:element name="input_message" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="testPing" type="tns:testPing" />
+
+            <xs:complexType name="testPingResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="testPingResponse" type="tns:testPingResponse" />
+
+            <xs:complexType name="test_init">
+            </xs:complexType>
+            <xs:element name="test_init" type="tns:test_init" />
+
+            <xs:complexType name="test_initResponse">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_initResponse" type="tns:test_initResponse" />
+
+            <xs:complexType name="test_clear">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_clear" type="tns:test_clear" />
+
+            <xs:complexType name="test_clearResponse">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="test_clearResponse" type="tns:test_clearResponse" />
+        </xs:schema>
+    </types>
+
+
+    <message name="testPing">
+        <part name="parameters" element="tns:testPing" />
+    </message>
+    <message name="testPingResponse">
+        <part name="parameters" element="tns:testPingResponse" />
+    </message>
+
+    <message name="test_clear">
+        <part name="parameters" element="tns:test_clear"/>
+    </message>
+    <message name="test_clearResponse">
+        <part name="parameters" element="tns:test_clearResponse"/>
+    </message>
+
+    <message name="test_init">
+        <part name="parameters" element="tns:test_init"/>
+    </message>
+    <message name="test_initResponse">
+        <part name="parameters" element="tns:test_initResponse"/>
+    </message>
+
+    <!-- Port Type (Interface) -->
+    <portType name="WebPortType">
+        <operation name="testPing">
+            <input wsam:Action="http://ws.web.sirs/web-ws/testPingRequest"
+                   message="tns:testPing" />
+            <output wsam:Action="http://ws.web.sirs/web-ws/testPingResponse"
+                    message="tns:testPingResponse" />
+        </operation>
+
+        <operation name="test_clear">
+            <input wsam:Action="http://ws.web.sirs/web-ws/test_clearRequest" message="tns:test_clear"/>
+            <output wsam:Action="http://ws.web.sirs/web-ws/test_clearResponse" message="tns:test_clearResponse"/>
+        </operation>
+
+        <operation name="test_init">
+            <input wsam:Action="http://ws.web.sirs/web-ws/test_initRequest" message="tns:test_init"/>
+            <output wsam:Action="http://ws.web.sirs/web-ws/test_initResponse" message="tns:test_initResponse"/>
+        </operation>
+    </portType>
+
+    <!-- SOAP/HTTP Binding -->
+    <binding name="WebPortBinding" type="tns:WebPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+                      style="document" />
+
+        <operation name="testPing">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+        </operation>
+
+
+        <operation name="test_clear">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+
+        <operation name="test_init">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+
+    </binding>
+
+
+    <!-- Service -->
+    <service name="WebService">
+        <port name="WebPort" binding="tns:WebPortBinding">
+            <soap:address location="http://localhost:8185/web-ws/endpoint" />
+        </port>
+    </service>
+</definitions>

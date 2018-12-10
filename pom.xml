@@ -113,6 +113,8 @@
         <module>kerby-lib</module>
         <module>kerby-ws</module>
         <module>kerby-ws-cli</module>
+        <module>web-lib</module>
+        <module>web-ws-cli</module>
     </modules>
 
 </project>

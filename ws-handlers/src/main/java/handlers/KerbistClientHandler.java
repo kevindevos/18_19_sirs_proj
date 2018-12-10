@@ -3,11 +3,8 @@ package handlers;
 import org.w3c.dom.Node;
 import pt.ulisboa.tecnico.sdis.kerby.*;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
 
-import javax.crypto.Cipher;
 import javax.xml.bind.JAXBException;
-import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -17,12 +14,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import java.io.StringWriter;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
@@ -46,9 +41,9 @@ public abstract class KerbistClientHandler extends KerbistHandler {
     }
 
     private Key getSessionKey(){
-        SessionKeyAndTicketView sessionKeyAndTicketView = ticketCollection.getTicket(targetWsURL);
+        SessionKeyAndTicketView sessionKeyAndTicketView = ticketCollection.getTicket(targetName);
 
-        Key key = sessionKeyMap.get(targetWsURL);
+        Key key = sessionKeyMap.get(targetName);
         if(key == null){
             try{
                 key = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), kerbistClientKey).getKeyXY();
@@ -69,7 +64,10 @@ public abstract class KerbistClientHandler extends KerbistHandler {
         initHandlerVariables();
 
         Boolean outbound = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-        targetWsURL = (String) smc.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
+
+        if(targetName == null){
+            targetName = (String) smc.get(BindingProvider.ENDPOINT_ADDRESS_PROPERTY);
+        }
 
         if(kerbistClientPassword == null){
             kerbistClientPassword = generateSharedPassword();
@@ -104,6 +102,7 @@ public abstract class KerbistClientHandler extends KerbistHandler {
 
 
     private boolean handleOutboundMessage(SOAPMessageContext smc){
+        System.out.println("handling outbount message for " + kerbistName);
         addTicketToMessage(smc, ticket);
         addAuthToMessage(smc, auth);
 
@@ -115,7 +114,7 @@ public abstract class KerbistClientHandler extends KerbistHandler {
 
 
     private CipheredView getTicket(){
-        SessionKeyAndTicketView sessionKeyAndTicketView = ticketCollection.getTicket(targetWsURL);
+        SessionKeyAndTicketView sessionKeyAndTicketView = ticketCollection.getTicket(targetName);
         CipheredView ticket=null;
         if (sessionKeyAndTicketView != null){
             ticket = sessionKeyAndTicketView.getTicket();
@@ -137,23 +136,23 @@ public abstract class KerbistClientHandler extends KerbistHandler {
 
 
     /**
-     * Ask kerby for a new ticket and session key to establish a connection wth another server denoted by targetWsURL
+     * Ask kerby for a new ticket and session key to establish a connection wth another server denoted by targetName
      */
     private void requestNewTicketAndSessionKey(){
         try{
-            KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
+            KerbyClient kerbyClient = new KerbyClient();
 
             // nonce to prevent replay attacks
             long nonce = randomGenerator.nextLong();
 
             // 1. authenticate user and get ticket and session key by requesting a ticket to kerby
-            SessionKeyAndTicketView sessionKeyAndTicketView = kerbyClient.requestTicket(kerbistName, targetWsURL, nonce, VALID_DURATION);
+            SessionKeyAndTicketView sessionKeyAndTicketView = kerbyClient.requestTicket(kerbistName, targetName, nonce, VALID_DURATION);
 
             // add to TicketCollection
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.SECOND, VALID_DURATION);
             long finalValidTime = calendar.getTimeInMillis();
-            ticketCollection.storeTicket(targetWsURL, sessionKeyAndTicketView, finalValidTime );
+            ticketCollection.storeTicket(targetName, sessionKeyAndTicketView, finalValidTime );
 
             // 2. generate a key from the webinterface's private password, to decipher and retrieve the session key
             Key webServerKey = SecurityHelper.generateKeyFromPassword(kerbistClientPassword);
@@ -161,7 +160,7 @@ public abstract class KerbistClientHandler extends KerbistHandler {
             // NOTE: SessionKey : {Kc.s , n}Kc
             // to get the actual session key, we call getKeyXY
             Key sessionKey = SessionKey.makeSessionKeyFromCipheredView(sessionKeyAndTicketView.getSessionKey(), webServerKey).getKeyXY();
-            sessionKeyMap.put(targetWsURL, sessionKey);
+            sessionKeyMap.put(targetName, sessionKey);
             // TODO MACHandler
 
             // 3. save ticket for server
@@ -170,7 +169,7 @@ public abstract class KerbistClientHandler extends KerbistHandler {
             // 4. create authenticator (Auth)
             Auth authToBeCiphered = new Auth(kerbistName, new Date());
             // cipher the auth with the session key Kcs
-            auth = authToBeCiphered.cipher(sessionKeyMap.get(targetWsURL));
+            auth = authToBeCiphered.cipher(sessionKeyMap.get(targetName));
 
 
         } catch(BadTicketRequest_Exception e){

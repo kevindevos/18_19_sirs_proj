@@ -27,7 +27,6 @@ import java.util.Iterator;
  *  and creates a KerbyClient to authenticate with the kerby server in RNL
  */
 public abstract class KerbistServerHandler extends KerbistHandler  {
-    protected static final String KERBY_WS_URL = "http://localhost:8888/kerby";
     private static final String TICKET_ELEMENT_NAME = "ticket";
     protected static final String AUTH_ELEMENT_NAME = "auth";
 
@@ -70,6 +69,7 @@ public abstract class KerbistServerHandler extends KerbistHandler  {
 
     /** Handles inbound messages */
     private boolean handleInboundMessage(SOAPMessageContext smc) {
+        System.out.println("received a message");
         retrieveTicketAndAuthFromMessageHeaders(smc);
 
         try{

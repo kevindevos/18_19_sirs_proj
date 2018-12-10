@@ -1,39 +1,49 @@
 package sirs.webinterface;
 
-import com.sun.xml.ws.client.ClientTransportException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClientException;
 import sirs.webinterface.domain.WebInterfaceManager;
+import sirs.webinterface.ws.WebEndpointManager;
+
 
 @SpringBootApplication
 public class Application {
+    private static String WS_URL = "http://localhost:8185/web-ws/endpoint";
 
 	public static void main(String[] args) {
         // run springboot app
 		SpringApplication.run(Application.class, args);
 
         setupKerbyConnection();
+
+        // setup web service endpoint
+        Runnable runnable = Application::setupWebServiceEndpoint;
+        Thread thread = new Thread(runnable);
+        thread.start();
+
     }
 
     private static void setupKerbyConnection(){
-        while(true){
+        // generate a password to use with kerby
+        KerbyClient kerbyClient = new KerbyClient();
+        WebInterfaceManager.getInstance().privatePassword = kerbyClient.generateDHPassword(WebInterfaceManager.getInstance().WEB_SERVER_NAME);
+    }
+
+    private static void setupWebServiceEndpoint(){
+        // Create server implementation object, according to options
+        WebEndpointManager endpoint = new WebEndpointManager(WS_URL);
+
+        try {
+            endpoint.start();
+            endpoint.awaitConnections();
+        } catch(Exception e){
+            e.printStackTrace();
+        } finally {
             try{
-                // generate a password to use with kerby
-                KerbyClient kerbyClient = new KerbyClient(WebInterfaceManager.KERBY_WS_URL);
-                WebInterfaceManager.getInstance().privatePassword = kerbyClient.generateDHPassword(WebInterfaceManager.getInstance().WEB_SERVER_NAME);
-
-                return;
-            }catch(ClientTransportException cte){
-                System.err.println("Unable to contact Kerbist, retrying...");
-
-                try{
-                    Thread.sleep(1000);
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }
+                endpoint.stop();
+            } catch(Exception e){
+                e.printStackTrace();
             }
         }
     }

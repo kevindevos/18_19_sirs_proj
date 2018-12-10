@@ -2,23 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <groupId>sirs</groupId>
         <artifactId>project</artifactId>
+        <groupId>sirs</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>monitor</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>web-ws-cli</artifactId>
+
     <dependencies>
-
         <dependency>
-            <groupId>sirs.g31</groupId>
-            <artifactId>app-ws-cli</artifactId>
+            <groupId>sirs</groupId>
+            <artifactId>web-lib</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -26,18 +23,17 @@
             <artifactId>ws-handlers</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>sirs</groupId>
-            <artifactId>web-ws-cli</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <properties>
-        <mainclass>sirs.monitor.MonitorApp</mainclass>
-    </properties>
+        <wsdl.directory>${basedir}/../web-lib/src/main/resources</wsdl.directory>
+        <wsdl.filename>web.wsdl</wsdl.filename>
 
+        <mainclass>sirs.ws.cli.WebClientApp</mainclass>
+
+        <ws.url>http://localhost:8185/web-ws/endpoint</ws.url>
+
+    </properties>
 
     <build>
         <resources>
@@ -62,6 +58,32 @@
                         <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.4.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- http://www.mojohaus.org/jaxws-maven-plugin/wsimport-mojo.html -->
+                    <wsdlDirectory>${wsdl.directory}</wsdlDirectory>
+                    <wsdlFiles>
+                        <wsdlFile>${wsdl.filename}</wsdlFile>
+                    </wsdlFiles>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.sun.xml.ws</groupId>
+                        <artifactId>jaxws-tools</artifactId>
+                        <version>2.2.10</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -90,6 +112,9 @@
                     <!-- to prevent deprecation warning: -->
                     <killAfter>-1</killAfter>
                     <mainClass>${mainclass}</mainClass>
+                    <arguments>
+                        <argument>${ws.url}</argument>
+                    </arguments>
                 </configuration>
             </plugin>
             <plugin>

@@ -78,10 +78,12 @@ public class AppClient{
 
 			// Define a handler chain for the client
             List<Handler> handlerChain = new ArrayList<>();
+            System.out.println("defining kerbist client app handler");
             KerbistAppClientHandler kerbistAppClientHandler = new KerbistAppClientHandler(appClientName, privatePassword, ticketCollection, sessionKeyMap);
             handlerChain.add(kerbistAppClientHandler);
             handlerChain.add(new PrettyLogHandler());
             bindingProvider.getBinding().setHandlerChain(handlerChain);
+            System.out.println("set handler chain");
 		}
 	}
 
@@ -90,7 +92,7 @@ public class AppClient{
             try{
                 return method.invoke(port, args);
             }catch(InvocationTargetException e){
-                System.err.println("caught invocation exception");
+                System.err.println("AppClient: caught invocation exception");
                 System.err.println("cause: " + e.getCause());
                 if(e.getCause() instanceof ClientTransportException){
                     System.err.println("caught clienttransport exception");

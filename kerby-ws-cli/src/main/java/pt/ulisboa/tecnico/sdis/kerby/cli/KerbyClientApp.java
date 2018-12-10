@@ -1,11 +1,7 @@
 package pt.ulisboa.tecnico.sdis.kerby.cli;
 
-import java.security.Key;
 import java.util.Random;
 
-import pt.ulisboa.tecnico.sdis.kerby.AuthView;
-import pt.ulisboa.tecnico.sdis.kerby.CipheredView;
-import pt.ulisboa.tecnico.sdis.kerby.SecurityHelper;
 import pt.ulisboa.tecnico.sdis.kerby.SessionKeyAndTicketView;
 
 public class KerbyClientApp {
@@ -28,7 +24,7 @@ public class KerbyClientApp {
 
 		if (wsURL != null) {
 			System.out.printf("Creating client for server at %s%n", wsURL);
-			client = new KerbyClient(wsURL);
+			client = new KerbyClient();
 		}
 		// the following remote invocations are just basic examples
 		// the actual tests are made using JUnit

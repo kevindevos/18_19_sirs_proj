@@ -1,17 +1,12 @@
 package sirs.app.ws;
 
-import com.sun.xml.ws.client.ClientTransportException;
-import pt.ulisboa.tecnico.sdis.kerby.SecurityHelper;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
 
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
-import java.security.Key;
 
 /** End point manager */
 public class AppEndpointManager {
-    private final String KERBY_WS_URL = "http://localhost:8888/kerby";
-
     /** Web Service name */
     private String wsName = null;
 
@@ -79,7 +74,7 @@ public class AppEndpointManager {
 
     private void setupKerbyConnection(){
         // generate a password to use with kerby
-        KerbyClient kerbyClient = new KerbyClient(KERBY_WS_URL);
+        KerbyClient kerbyClient = new KerbyClient();
         AppPortImpl.privatePassword = kerbyClient.generateDHPassword(wsURL);
     }
 

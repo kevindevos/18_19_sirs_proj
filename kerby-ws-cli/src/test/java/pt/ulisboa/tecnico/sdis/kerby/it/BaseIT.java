@@ -29,7 +29,7 @@ public class BaseIT {
 		}
 
 		String wsURL = testProps.getProperty("ws.url");
-		client = new KerbyClient(wsURL);
+		client = new KerbyClient();
 		// CLIENT.setVerbose(true);
 	}
 
