@@ -1,6 +1,5 @@
 package sirs.app.ws.cli;
 
-import sirs.app.ws.NoteView;
 import sirs.app.ws.cli.handlers.KerbistAppClientHandler;
 
 import javax.xml.ws.handler.Handler;

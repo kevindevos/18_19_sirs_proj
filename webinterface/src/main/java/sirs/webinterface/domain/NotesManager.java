@@ -1,24 +1,29 @@
 package sirs.webinterface.domain;
 
 
+import common.sirs.ws.NoteView;
 import sirs.app.ws.NotAllowed_Exception;
 import sirs.app.ws.NoteNotFound_Exception;
-import sirs.app.ws.NoteView;
 import sirs.app.ws.cli.AppClient;
 import sirs.app.ws.cli.AppClientConnectionManager;
 import sirs.webinterface.exception.NoteNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  *  Query the servers for specific notes
  */
 public class NotesManager {
-    AppClientConnectionManager connectionManager;
+    private AppClientConnectionManager connectionManager;
+
+    // note name, noteview
+    private HashMap<String, NoteView> recentlyChangedNotes;
 
     private NotesManager(){
         connectionManager = AppClientConnectionManager.getInstance();
+        recentlyChangedNotes = new HashMap<>();
     }
 
     public NoteView askForNoteByName(String noteName, String username) throws NoteNotFoundException{
@@ -51,9 +56,26 @@ public class NotesManager {
 
         try{
             appClient.updateNote(noteView);
+            updateRecentlyChangedNote(noteView);
         } catch(NotAllowed_Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void updateRecentlyChangedNote(NoteView noteView){
+        NoteView existingNoteView = recentlyChangedNotes.get(noteView.getName());
+        if(existingNoteView != null){
+            recentlyChangedNotes.replace(noteView.getName(), noteView);
+        }else{
+            recentlyChangedNotes.put(noteView.getName(), noteView);
+        }
+    }
+
+    public List<NoteView> takeRecentlyChangedNotes(){
+        HashMap<String, NoteView> ref = recentlyChangedNotes;
+        recentlyChangedNotes = new HashMap<>();
+
+        return (List<NoteView>) ref.values();
     }
 
     private static class SingletonHolder {

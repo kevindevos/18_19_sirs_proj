@@ -106,14 +106,13 @@
 
 	<modules>
 		<module>webinterface</module>
-        <module>app-lib</module>
         <module>app-ws</module>
 		<module>app-ws-cli</module>
         <module>ws-handlers</module>
         <module>kerby-lib</module>
         <module>kerby-ws</module>
         <module>kerby-ws-cli</module>
-        <module>web-lib</module>
+        <module>lib</module>
         <module>web-ws-cli</module>
     </modules>
 

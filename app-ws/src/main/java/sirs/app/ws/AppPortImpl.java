@@ -1,6 +1,7 @@
 package sirs.app.ws;
 
 
+import common.sirs.ws.NoteView;
 import sirs.app.domain.Note;
 import sirs.app.domain.NotesManager;
 
@@ -54,7 +55,6 @@ public class AppPortImpl implements AppPortType {
         return noteViews;
     }
 
-
     /**
      * Add if not exist, update if exists and if has permissions, or throw exception if not allowed
      * @param noteView data object of the note to update
@@ -62,7 +62,6 @@ public class AppPortImpl implements AppPortType {
      */
     @Override
     public void updateNote(NoteView noteView) throws NotAllowed_Exception{
-        System.out.println("updateNote");
         Note note = NotesManager.getInstance().getNoteByName(noteView.getName());
         if(note != null ){
             // update contents if same owner

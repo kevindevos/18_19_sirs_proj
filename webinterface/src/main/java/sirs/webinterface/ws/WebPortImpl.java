@@ -1,9 +1,12 @@
 package sirs.webinterface.ws;
 
+import common.sirs.ws.NoteView;
 import sirs.web.ws.WebPortType;
+import sirs.webinterface.domain.NotesManager;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import java.util.List;
 
 @HandlerChain(file = "/web-ws_handler-chain.xml")
 @WebService(endpointInterface = "sirs.web.ws.WebPortType",
@@ -36,5 +39,11 @@ public class WebPortImpl implements WebPortType {
     public void testClear(){
 
     }
+
+    @Override
+    public List<NoteView> takeRecentlyChangedNotes(){
+        return NotesManager.getInstance().takeRecentlyChangedNotes();
+    }
+
 
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.sirs.common/" xmlns:tns="http://ws.sirs.common/">
+    <xs:complexType name="noteView">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="content" type="xs:string" />
+            <xs:element name="owner" type="xs:string"/>
+            <xs:element name="digest" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="noteView" type="tns:noteView" />
+
+    <xs:complexType name="userView">
+        <xs:sequence>
+            <xs:element name="username" type="xs:string"/>
+            <xs:element name="password" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="userView" type="tns:userView" />
+
+
+</xs:schema>

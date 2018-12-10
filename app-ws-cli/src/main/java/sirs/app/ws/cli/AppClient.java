@@ -2,6 +2,7 @@ package sirs.app.ws.cli;
 
 
 import com.sun.xml.ws.client.ClientTransportException;
+import common.sirs.ws.NoteView;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import sirs.app.ws.*;
 import sirs.app.ws.cli.handlers.KerbistAppClientHandler;

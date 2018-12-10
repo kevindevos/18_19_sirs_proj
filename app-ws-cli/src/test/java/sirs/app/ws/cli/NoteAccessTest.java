@@ -1,10 +1,10 @@
 package sirs.app.ws.cli;
 
+import common.sirs.ws.NoteView;
 import org.junit.Assert;
 import org.junit.Test;
 import sirs.app.ws.NotAllowed_Exception;
 import sirs.app.ws.NoteNotFound_Exception;
-import sirs.app.ws.NoteView;
 
 import static junit.framework.TestCase.fail;
 

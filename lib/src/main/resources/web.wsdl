@@ -3,9 +3,12 @@
 <definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
              xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://ws.web.sirs/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:common="http://ws.sirs.common/"
              targetNamespace="http://ws.web.sirs/" name="WebService">
     <types>
         <xs:schema targetNamespace="http://ws.web.sirs/" version="1.0" attributeFormDefault="qualified" elementFormDefault="qualified">
+            <xs:import namespace="http://ws.sirs.common/" schemaLocation="common.xsd"/>
 
             <xs:complexType name="testPing">
                 <xs:sequence>
@@ -21,15 +24,6 @@
             </xs:complexType>
             <xs:element name="testPingResponse" type="tns:testPingResponse" />
 
-            <xs:complexType name="test_init">
-            </xs:complexType>
-            <xs:element name="test_init" type="tns:test_init" />
-
-            <xs:complexType name="test_initResponse">
-                <xs:sequence />
-            </xs:complexType>
-            <xs:element name="test_initResponse" type="tns:test_initResponse" />
-
             <xs:complexType name="test_clear">
                 <xs:sequence />
             </xs:complexType>
@@ -39,9 +33,20 @@
                 <xs:sequence />
             </xs:complexType>
             <xs:element name="test_clearResponse" type="tns:test_clearResponse" />
+
+            <xs:complexType name="takeRecentlyChangedNotes">
+                <xs:sequence />
+            </xs:complexType>
+            <xs:element name="takeRecentlyChangedNotes" type="tns:takeRecentlyChangedNotes" />
+
+            <xs:complexType name="takeRecentlyChangedNotesResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="common:noteView" maxOccurs="unbounded" minOccurs="0"  nillable="true" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="takeRecentlyChangedNotesResponse" type="tns:takeRecentlyChangedNotesResponse" />
         </xs:schema>
     </types>
-
 
     <message name="testPing">
         <part name="parameters" element="tns:testPing" />
@@ -57,12 +62,13 @@
         <part name="parameters" element="tns:test_clearResponse"/>
     </message>
 
-    <message name="test_init">
-        <part name="parameters" element="tns:test_init"/>
+    <message name="takeRecentlyChangedNotes">
+        <part name="parameters" element="tns:takeRecentlyChangedNotes"/>
     </message>
-    <message name="test_initResponse">
-        <part name="parameters" element="tns:test_initResponse"/>
+    <message name="takeRecentlyChangedNotesResponse">
+        <part name="parameters" element="tns:takeRecentlyChangedNotesResponse"/>
     </message>
+
 
     <!-- Port Type (Interface) -->
     <portType name="WebPortType">
@@ -78,10 +84,11 @@
             <output wsam:Action="http://ws.web.sirs/web-ws/test_clearResponse" message="tns:test_clearResponse"/>
         </operation>
 
-        <operation name="test_init">
-            <input wsam:Action="http://ws.web.sirs/web-ws/test_initRequest" message="tns:test_init"/>
-            <output wsam:Action="http://ws.web.sirs/web-ws/test_initResponse" message="tns:test_initResponse"/>
+        <operation name="takeRecentlyChangedNotes">
+            <input wsam:Action="http://ws.web.sirs/web-ws/takeRecentlyChangedNotes" message="tns:takeRecentlyChangedNotes"/>
+            <output wsam:Action="http://ws.web.sirs/web-ws/takeRecentlyChangedNotesResponse" message="tns:takeRecentlyChangedNotesResponse"/>
         </operation>
+
     </portType>
 
     <!-- SOAP/HTTP Binding -->
@@ -99,7 +106,6 @@
             </output>
         </operation>
 
-
         <operation name="test_clear">
             <soap:operation soapAction=""/>
             <input>
@@ -110,7 +116,7 @@
             </output>
         </operation>
 
-        <operation name="test_init">
+        <operation name="takeRecentlyChangedNotes">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>
