@@ -9,8 +9,6 @@ import java.io.IOException;
 
 /** End point manager */
 public class WebEndpointManager {
-
-
     /** Web Service name */
 	private String wsName = null;
 

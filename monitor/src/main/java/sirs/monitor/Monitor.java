@@ -31,7 +31,7 @@ public class Monitor {
     private WebClient webClient;
 
     public Monitor(){
-        appServerConnections = AppClientConnectionManager.getInstance().connectWithAllAppServers();
+        appServerConnections = AppClientConnectionManager.getInstance().getAllConnections();
         ticketCollection = new TicketCollection();
         sessionKeyMap = new HashMap<>();
         webClient = new WebClient(WEB_WS_URL);

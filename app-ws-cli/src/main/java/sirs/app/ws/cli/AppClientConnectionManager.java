@@ -1,4 +1,4 @@
-package sirs.webinterface.domain;
+package sirs.app.ws.cli;
 
 import sirs.app.ws.cli.AppClient;
 
@@ -11,11 +11,10 @@ public class AppClientConnectionManager {
     private List<String> appServerWsUrls;
     private List<String> defaultPorts;
     private String defaultHost;
-    public int MAX_RETRIES = -1;
 
     private List<AppClient> connections;
 
-    public AppClientConnectionManager(){
+    private AppClientConnectionManager(){
         appServerWsUrls = new ArrayList<>();
         defaultPorts = new ArrayList<>(Arrays.asList("8081")); // "8082", "8083"));
         defaultHost = "localhost";
@@ -23,6 +22,15 @@ public class AppClientConnectionManager {
         initAppServerWsUrls();
         connections = createConnections();
     }
+
+    private static class SingletonHolder {
+        private static final AppClientConnectionManager INSTANCE = new AppClientConnectionManager();
+    }
+
+    public static synchronized AppClientConnectionManager getInstance(){
+        return SingletonHolder.INSTANCE;
+    }
+
 
     private void initAppServerWsUrls(){
         for(String port : defaultPorts){

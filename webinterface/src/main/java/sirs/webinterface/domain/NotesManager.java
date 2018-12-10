@@ -5,11 +5,11 @@ import sirs.app.ws.NotAllowed_Exception;
 import sirs.app.ws.NoteNotFound_Exception;
 import sirs.app.ws.NoteView;
 import sirs.app.ws.cli.AppClient;
+import sirs.app.ws.cli.AppClientConnectionManager;
 import sirs.webinterface.exception.NoteNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  *  Query the servers for specific notes
@@ -18,7 +18,7 @@ public class NotesManager {
     AppClientConnectionManager connectionManager;
 
     private NotesManager(){
-        connectionManager = new AppClientConnectionManager();
+        connectionManager = AppClientConnectionManager.getInstance();
     }
 
     public NoteView askForNoteByName(String noteName, String username) throws NoteNotFoundException{
