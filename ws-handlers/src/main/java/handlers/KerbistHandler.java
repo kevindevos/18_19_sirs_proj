@@ -5,7 +5,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import pt.ulisboa.tecnico.sdis.kerby.*;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+import sirs.kerby.cli.KerbyClient;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;

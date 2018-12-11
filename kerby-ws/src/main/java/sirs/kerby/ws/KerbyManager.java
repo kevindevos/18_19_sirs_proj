@@ -1,4 +1,6 @@
-package pt.ulisboa.tecnico.sdis.kerby;
+package sirs.kerby.ws;
+
+import pt.ulisboa.tecnico.sdis.kerby.*;
 
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -41,7 +43,7 @@ public class KerbyManager {
 		return SingletonHolder.INSTANCE;
 	}
 	
-	public SessionKeyAndTicketView requestTicket(String client, String server, long nonce, int ticketDuration) 
+	public SessionKeyAndTicketView requestTicket(String client, String server, long nonce, int ticketDuration)
 			throws BadTicketRequestException {
 		
 		/* Validate parameters */

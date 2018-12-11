@@ -2,7 +2,7 @@ package sirs.webinterface;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+import sirs.kerby.cli.KerbyClient;
 import sirs.webinterface.domain.WebInterfaceManager;
 import sirs.webinterface.ws.WebEndpointManager;
 

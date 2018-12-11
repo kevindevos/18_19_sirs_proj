@@ -2,7 +2,7 @@ package handlers;
 
 import org.w3c.dom.Node;
 import pt.ulisboa.tecnico.sdis.kerby.*;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+import sirs.kerby.cli.KerbyClient;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.soap.*;

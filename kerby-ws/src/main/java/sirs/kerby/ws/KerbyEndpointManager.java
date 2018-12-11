@@ -1,35 +1,31 @@
-package sirs.webinterface.ws;
+package sirs.kerby.ws;
 
-import sirs.kerby.cli.KerbyClient;
-import sirs.web.ws.WebPortType;
+import pt.ulisboa.tecnico.sdis.kerby.KerbyPortType;
 
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
 
 
 /** End point manager */
-public class WebEndpointManager {
-    /** Web Service name */
-	private String wsName = null;
+public class KerbyEndpointManager {
 
-	/** Get Web Service UDDI publication name */
-	public String getWsName() {
-		return wsName;
-	}
+	/** Web Service name */
+	private String wsName = null;
 
 	/** Web Service location to publish */
 	private String wsURL = null;
 
 	/** Port implementation */
-	private WebPortImpl portImpl = new WebPortImpl(this);
+	private KerbyPortImpl portImpl = new KerbyPortImpl(this);
 
 	/** Obtain Port implementation */
-	public WebPortType getPort() {
+	public KerbyPortType getPort() {
 		return portImpl;
 	}
 
 	/** Web Service end point */
 	private Endpoint endpoint = null;
+
 
 	/** output option **/
 	private boolean verbose = true;
@@ -43,7 +39,7 @@ public class WebEndpointManager {
 	}
 
 	/** constructor with provided web service URL */
-	public WebEndpointManager(String wsURL) {
+	public KerbyEndpointManager(String wsURL) {
 		if (wsURL == null)
 			throw new NullPointerException("Web Service URL cannot be null!");
 		this.wsURL = wsURL;
@@ -67,8 +63,6 @@ public class WebEndpointManager {
 			}
 			throw e;
 		}
-
-		setupKerbyConnection();
 	}
 
 	public void awaitConnections() {
@@ -84,12 +78,6 @@ public class WebEndpointManager {
 			}
 		}
 	}
-
-    private void setupKerbyConnection(){
-        // generate a password to use with kerby
-        KerbyClient kerbyClient = new KerbyClient();
-        WebPortImpl.privatePassword = kerbyClient.generateDHPassword(wsURL);
-    }
 
 	public void stop() throws Exception {
 		try {
@@ -107,6 +95,7 @@ public class WebEndpointManager {
 		}
 		this.portImpl = null;
 	}
+
 
 
 }

@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.sdis.kerby.util;
+package sirs.kerby.ws.util;
 
 
 import java.io.BufferedWriter;

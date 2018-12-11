@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.sdis.kerby;
+package sirs.kerby.ws;
 
 public class BadTicketRequestException extends Exception {
 	private static final long serialVersionUID = 1L;

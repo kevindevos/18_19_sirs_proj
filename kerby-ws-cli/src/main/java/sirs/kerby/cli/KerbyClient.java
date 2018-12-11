@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.sdis.kerby.cli;
+package sirs.kerby.cli;
 
 import com.sun.xml.ws.client.ClientTransportException;
 import pt.ulisboa.tecnico.sdis.kerby.BadTicketRequest_Exception;

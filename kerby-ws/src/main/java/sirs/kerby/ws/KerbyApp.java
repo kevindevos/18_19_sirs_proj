@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.sdis.kerby;
+package sirs.kerby.ws;
 
 /**
  * Kerby Web Service application.

@@ -2,7 +2,7 @@ package pt.ulisboa.tecnico.sdis.kerby.it;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+import sirs.kerby.cli.KerbyClient;
 
 import java.io.IOException;
 import java.util.Properties;

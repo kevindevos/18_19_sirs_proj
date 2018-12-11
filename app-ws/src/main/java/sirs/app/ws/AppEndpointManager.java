@@ -1,6 +1,6 @@
 package sirs.app.ws;
 
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+import sirs.kerby.cli.KerbyClient;
 
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
