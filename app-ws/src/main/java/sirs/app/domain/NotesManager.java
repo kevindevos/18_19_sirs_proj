@@ -1,6 +1,8 @@
 package sirs.app.domain;
 
 
+import common.sirs.ws.NoteView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,10 @@ public class NotesManager {
             }
         }
         return null;
+    }
+
+    public List<Note> getAllNotes(){
+        return notes;
     }
 
     /**

@@ -1,12 +1,17 @@
 package sirs.app.ws;
 
 
+import common.sirs.ws.NoteDigestView;
 import common.sirs.ws.NoteView;
+import sirs.Security;
 import sirs.app.domain.Note;
 import sirs.app.domain.NotesManager;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,9 +61,22 @@ public class AppPortImpl implements AppPortType {
     }
 
     @Override
-    public void getAllNoteDigests(String username){
-        // TODO
+    public List<NoteDigestView> getAllNoteDigests(String username){
+        List<Note> notes =  NotesManager.getInstance().getAllNotes();
+        List<NoteDigestView> digestViews = new ArrayList<>();
+
+        for(int i = 0; i < notes.size(); i++){
+            NoteDigestView noteDigestView = new NoteDigestView();
+
+            noteDigestView.setNoteView(notes.get(i).toView());
+            noteDigestView.setDigest(Security.buildDigestFrom(notes.get(i).getContent()));
+
+            digestViews.add(noteDigestView);
+        }
+
+        return digestViews;
     }
+
 
     /**
      * Add if not exist, update if exists and if has permissions, or throw exception if not allowed

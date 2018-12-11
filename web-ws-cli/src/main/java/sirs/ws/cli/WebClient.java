@@ -1,10 +1,12 @@
 package sirs.ws.cli;
 
 import com.sun.xml.ws.client.ClientTransportException;
+import common.sirs.ws.NoteDigestView;
 import common.sirs.ws.NoteView;
 import handlers.PrettyLogHandler;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+import sirs.Security;
 import sirs.web.ws.WebPortType;
 import sirs.web.ws.WebService;
 import sirs.ws.cli.handlers.KerbistWebClientHandler;
@@ -100,6 +102,17 @@ public class WebClient {
         return null;
     }
 
+    public List<NoteDigestView> takeRecentlyChangedNoteDigests(){
+        List<NoteView> noteViews  = takeRecentlyChangedNotes();
+        List<NoteDigestView> noteDigestViews = new ArrayList<>();
+
+        for(int i = 0; i < noteViews.size(); i++){
+            noteDigestViews.add(Security.buildNoteDigestView(noteViews.get(i)));
+        }
+
+        return noteDigestViews;
+    }
+
 
     private Object runPortMethodMaxRetries(Method method, int maxRetries, Object... args){
         for(int i = 0; i < maxRetries; i++){
@@ -123,8 +136,6 @@ public class WebClient {
         System.exit(-1);
         return null;
     }
-
-
 
 
     public String testPing(String inputMessage) {

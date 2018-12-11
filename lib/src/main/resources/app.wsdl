@@ -62,6 +62,9 @@
             <xs:element name="getAllNoteDigests" type="tns:getAllNoteDigests" />
 
             <xs:complexType name="getAllNoteDigestsResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="common:noteDigestView" maxOccurs="unbounded" minOccurs="0"  nillable="true" />
+                </xs:sequence>
             </xs:complexType>
             <xs:element name="getAllNoteDigestsResponse" type="tns:getAllNoteDigestsResponse" />
 
