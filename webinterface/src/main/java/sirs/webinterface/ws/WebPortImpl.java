@@ -1,6 +1,5 @@
 package sirs.webinterface.ws;
 
-import com.sun.tools.javac.util.ArrayUtils;
 import common.sirs.ws.NoteView;
 import sirs.Security;
 import sirs.web.ws.WebPortType;
