@@ -54,9 +54,6 @@
             <xs:element name="getNotesByUserResponse" type="tns:getNotesByUserResponse" />
 
             <xs:complexType name="getAllNoteDigests">
-                <xs:sequence>
-                    <xs:element name="username" type="xs:string"/>
-                </xs:sequence>
             </xs:complexType>
             <xs:element name="getAllNoteDigests" type="tns:getAllNoteDigests" />
 

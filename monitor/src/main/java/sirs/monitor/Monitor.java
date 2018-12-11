@@ -54,9 +54,9 @@ public class Monitor {
         updateMonitorWebpageDigestHistory(webClient.getWebpageDigests());
 
         // check status of the servers every second
-        Thread appServerUpThread = startAppServerUpCheckerThread();
-        Thread webServerUpThread = startWebServerUpCheckerThread();
-        Thread webServerIntegrityCheckerThread = startWebServerIntegrityChecker();
+      //  Thread appServerUpThread = startAppServerUpCheckerThread();
+      //  Thread webServerUpThread = startWebServerUpCheckerThread();
+    //    Thread webServerIntegrityCheckerThread = startWebServerIntegrityChecker();
         Thread noteIntegrityCheckerThread = startNoteIntegrityCheckerThread();
 
 

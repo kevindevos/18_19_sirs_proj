@@ -58,7 +58,7 @@ public class AppPortImpl implements AppPortType {
     }
 
     @Override
-    public List<NoteDigestView> getAllNoteDigests(String username){
+    public List<NoteDigestView> getAllNoteDigests(){
         List<Note> notes =  NotesManager.getInstance().getAllNotes();
         List<NoteDigestView> digestViews = new ArrayList<>();
 
@@ -73,7 +73,6 @@ public class AppPortImpl implements AppPortType {
 
         return digestViews;
     }
-
 
     /**
      * Add if not exist, update if exists and if has permissions, or throw exception if not allowed

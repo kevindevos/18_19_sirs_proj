@@ -10,24 +10,20 @@ import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Stream;
 
 @HandlerChain(file = "/web-ws_handler-chain.xml")
 @WebService(endpointInterface = "sirs.web.ws.WebPortType",
-wsdlLocation = "web.wsdl",
-name ="WebService",
-portName = "WebPort",
-targetNamespace="http://ws.web.sirs/",
-serviceName = "WebService"
+    wsdlLocation = "web.wsdl",
+    name ="WebService",
+    portName = "WebPort",
+    targetNamespace="http://ws.web.sirs/",
+    serviceName = "WebService"
 )
 public class WebPortImpl implements WebPortType {
 
@@ -50,7 +46,6 @@ public class WebPortImpl implements WebPortType {
 
     @Override
     public void testClear(){
-
     }
 
     @Override
@@ -99,6 +94,9 @@ public class WebPortImpl implements WebPortType {
 
     @Override
     public void recoverWebPages(List<WebpageDigestView> backup){
-        // TODO
+        for(WebpageDigestView webpageDigestView : backup){
+
+
+        }
     }
 }

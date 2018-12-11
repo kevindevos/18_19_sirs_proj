@@ -4,9 +4,9 @@
     <!-- http://maven.apache.org/pom.html#Quick_Overview -->
 
     <parent>
-        <groupId>pt.ulisboa.tecnico.sdis</groupId>
-        <artifactId>kerby</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <groupId>sirs</groupId>
+        <artifactId>project</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>kerby-ws</artifactId>
@@ -26,13 +26,13 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
-            <version>${version.jaxws-rt}</version>
+            <version>2.2.10</version>
         </dependency>
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${version.junit}</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <!-- kerby-lib -->
@@ -64,7 +64,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>${version.maven-resources-plugin}</version>
+                <version>2.6</version>
                 <configuration>
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>jks</nonFilteredFileExtension>
@@ -74,7 +74,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
-                <version>${version.jaxws-maven-plugin}</version>
+                <version>2.4.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -89,13 +89,13 @@
                     <dependency>
                         <groupId>com.sun.xml.ws</groupId>
                         <artifactId>jaxws-tools</artifactId>
-                        <version>${version.jaxws-tools}</version>
+                        <version>2.2.10</version>
                     </dependency>
                 </dependencies>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${version.maven-failsafe-plugin}</version>
+                <version>2.19.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -108,7 +108,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>${version.exec-maven-plugin}</version>
+                <version>1.5.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -120,15 +120,12 @@
                     <!-- to prevent deprecation warning: -->
                     <killAfter>-1</killAfter>
                     <mainClass>${mainclass}</mainClass>
-                    <arguments>
-                        <argument>${ws.url}</argument>
-                    </arguments>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
-                <version>${version.appassembler-maven-plugin}</version>
+                <version>1.10</version>
                 <executions>
                     <execution>
                         <phase>install</phase>

@@ -72,10 +72,10 @@ public class NotesManager {
     }
 
     public List<NoteView> takeRecentlyChangedNotes(){
-        HashMap<String, NoteView> ref = recentlyChangedNotes;
-        recentlyChangedNotes = new HashMap<>();
+        ArrayList<NoteView> notes = new ArrayList<>(recentlyChangedNotes.values());
+        recentlyChangedNotes.clear();
 
-        return (List<NoteView>) ref.values();
+        return notes;
     }
 
     private static class SingletonHolder {
