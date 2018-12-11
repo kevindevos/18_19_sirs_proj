@@ -1,16 +1,18 @@
 package pt.ulisboa.tecnico.sdis.kerby.cli;
 
-import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
+import com.sun.xml.ws.client.ClientTransportException;
+import pt.ulisboa.tecnico.sdis.kerby.BadTicketRequest_Exception;
+import pt.ulisboa.tecnico.sdis.kerby.KerbyPortType;
+import pt.ulisboa.tecnico.sdis.kerby.KerbyService;
+import pt.ulisboa.tecnico.sdis.kerby.SessionKeyAndTicketView;
 
+import javax.xml.ws.BindingProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Random;
 
-import javax.xml.ws.BindingProvider;
-
-import com.sun.xml.ws.client.ClientTransportException;
-import pt.ulisboa.tecnico.sdis.kerby.*;
+import static javax.xml.ws.BindingProvider.ENDPOINT_ADDRESS_PROPERTY;
 
 /**
  * Client port wrapper.

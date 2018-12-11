@@ -1,10 +1,10 @@
 package pt.ulisboa.tecnico.sdis.kerby.util;
 
 
-import java.security.SecureRandom;
 import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.security.SecureRandom;
 
 
 public class PasswordGenerator {

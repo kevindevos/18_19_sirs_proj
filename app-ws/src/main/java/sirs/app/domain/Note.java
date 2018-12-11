@@ -1,11 +1,7 @@
 package sirs.app.domain;
 
 import common.sirs.ws.NoteView;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * A note that a user can create, and it's owner can access

@@ -1,8 +1,8 @@
 package pt.ulisboa.tecnico.sdis.kerby.cli;
 
-import java.util.Random;
-
 import pt.ulisboa.tecnico.sdis.kerby.SessionKeyAndTicketView;
+
+import java.util.Random;
 
 public class KerbyClientApp {
 

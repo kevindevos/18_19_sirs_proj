@@ -5,7 +5,10 @@ import com.sun.xml.ws.client.ClientTransportException;
 import common.sirs.ws.NoteDigestView;
 import common.sirs.ws.NoteView;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
-import sirs.app.ws.*;
+import sirs.app.ws.AppPortType;
+import sirs.app.ws.AppService;
+import sirs.app.ws.NotAllowed_Exception;
+import sirs.app.ws.NoteNotFound_Exception;
 import sirs.app.ws.cli.handlers.KerbistAppClientHandler;
 import sirs.app.ws.cli.handlers.PrettyLogHandler;
 

@@ -1,8 +1,7 @@
 package pt.ulisboa.tecnico.sdis.kerby;
 
-import java.io.IOException;
-
 import javax.xml.ws.Endpoint;
+import java.io.IOException;
 
 
 /** End point manager */

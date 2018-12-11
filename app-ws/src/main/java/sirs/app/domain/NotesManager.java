@@ -1,8 +1,6 @@
 package sirs.app.domain;
 
 
-import common.sirs.ws.NoteView;
-
 import java.util.ArrayList;
 import java.util.List;
 

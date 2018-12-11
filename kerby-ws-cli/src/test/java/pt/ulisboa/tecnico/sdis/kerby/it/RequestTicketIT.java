@@ -1,8 +1,8 @@
 package pt.ulisboa.tecnico.sdis.kerby.it;
 
-import java.security.SecureRandom;
-
 import org.junit.Test;
+
+import java.security.SecureRandom;
 
 
 

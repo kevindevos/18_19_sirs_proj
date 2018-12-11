@@ -1,21 +1,16 @@
 package pt.ulisboa.tecnico.sdis.kerby;
 
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.viewToXMLBytes;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.xmlBytesToView;
-
+import javax.crypto.*;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.namespace.QName;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.namespace.QName;
+import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.viewToXMLBytes;
+import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.xmlBytesToView;
 
 /**
  * Class containing several Security related helper methods.

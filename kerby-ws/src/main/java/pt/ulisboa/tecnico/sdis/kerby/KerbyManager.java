@@ -1,8 +1,5 @@
 package pt.ulisboa.tecnico.sdis.kerby;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;

@@ -1,12 +1,11 @@
 package pt.ulisboa.tecnico.sdis.kerby.it;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-
 import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public class BaseIT {
 

@@ -19,7 +19,8 @@ import java.io.StringWriter;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *  This SOAP handler intecerpts the remote calls done by binas-ws-cli for authentication,

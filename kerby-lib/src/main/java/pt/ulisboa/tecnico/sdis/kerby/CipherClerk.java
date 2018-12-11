@@ -1,16 +1,12 @@
 package pt.ulisboa.tecnico.sdis.kerby;
 
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.viewToXML;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.viewToXMLBytes;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.xmlBytesToView;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.xmlNodeToView;
-
-import java.util.Arrays;
+import org.w3c.dom.Node;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
+import java.util.Arrays;
 
-import org.w3c.dom.Node;
+import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.*;
 
 /**
  * Class that handles ciphered views in different formats. Ciphered views are used

@@ -1,13 +1,10 @@
 package sirs.monitor;
 
 import common.sirs.ws.NoteDigestView;
-import common.sirs.ws.NoteView;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
-import sirs.Security;
 import sirs.app.ws.NotAllowed_Exception;
 import sirs.app.ws.cli.AppClient;
 import sirs.app.ws.cli.AppClientConnectionManager;
-import sirs.web.ws.TakeRecentlyChangedNotes;
 import sirs.ws.cli.WebClient;
 
 import java.security.Key;

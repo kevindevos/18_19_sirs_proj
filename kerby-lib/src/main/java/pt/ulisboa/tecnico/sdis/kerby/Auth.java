@@ -1,22 +1,16 @@
 package pt.ulisboa.tecnico.sdis.kerby;
 
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.dateToXML;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.viewToXML;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.viewToXMLBytes;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.xmlBytesToView;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.xmlNodeToView;
-import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.xmlToDate;
+import org.w3c.dom.Node;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 import java.security.Key;
 import java.util.Date;
 
 import static javax.xml.bind.DatatypeConverter.parseBase64Binary;
 import static javax.xml.bind.DatatypeConverter.printBase64Binary;
-import javax.xml.bind.JAXBException;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
-
-import org.w3c.dom.Node;
+import static pt.ulisboa.tecnico.sdis.kerby.XMLHelper.*;
 /**
  * Class that represents a Kerberos auth and can use different data formats.
  * 

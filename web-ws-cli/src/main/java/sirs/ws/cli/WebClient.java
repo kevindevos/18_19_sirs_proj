@@ -5,7 +5,6 @@ import common.sirs.ws.NoteDigestView;
 import common.sirs.ws.NoteView;
 import handlers.PrettyLogHandler;
 import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
-import pt.ulisboa.tecnico.sdis.kerby.cli.KerbyClient;
 import sirs.Security;
 import sirs.web.ws.WebPortType;
 import sirs.web.ws.WebService;

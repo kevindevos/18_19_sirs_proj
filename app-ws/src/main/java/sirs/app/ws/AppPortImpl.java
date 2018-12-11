@@ -9,9 +9,6 @@ import sirs.app.domain.NotesManager;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 

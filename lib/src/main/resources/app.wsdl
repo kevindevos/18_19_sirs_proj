@@ -3,7 +3,6 @@
 <definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
              xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://ws.app.sirs/"
-             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              xmlns:common="http://ws.sirs.common/"
              targetNamespace="http://ws.app.sirs/" name="AppWebService">
     <types>

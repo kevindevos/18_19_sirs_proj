@@ -1,7 +1,5 @@
 package sirs.app.ws.cli;
 
-import sirs.app.ws.cli.AppClient;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
