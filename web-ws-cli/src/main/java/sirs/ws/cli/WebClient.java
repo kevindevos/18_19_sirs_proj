@@ -8,6 +8,7 @@ import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import sirs.Security;
 import sirs.web.ws.WebPortType;
 import sirs.web.ws.WebService;
+import sirs.web.ws.WebpageDigestView;
 import sirs.ws.cli.handlers.KerbistWebClientHandler;
 
 import javax.xml.ws.BindingProvider;
@@ -170,6 +171,17 @@ public class WebClient {
 
     }
 
+    public List<WebpageDigestView> getWebpageDigests(){
+        try{
+            Method method = WebPortType.class.getMethod("getWebpageDigests");
+            return (List<WebpageDigestView>) runPortMethodMaxRetries(method,maxRetries);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public void setMaxRetries(int maxRetries){
 	    this.maxRetries = maxRetries;
     }
@@ -185,4 +197,14 @@ public class WebClient {
             e1.printStackTrace();
         }
     }
+
+    public void recoverWebPages(List<WebpageDigestView> pagesToRecover){
+        try{
+            Method method = WebPortType.class.getMethod("recoverWebPages", List.class);
+            runPortMethodMaxRetries(method,maxRetries, pagesToRecover);
+        } catch(NoSuchMethodException e){
+            e.printStackTrace();
+        }
+    }
+
 }

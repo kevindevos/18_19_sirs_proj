@@ -5,6 +5,7 @@ import pt.ulisboa.tecnico.sdis.kerby.TicketCollection;
 import sirs.app.ws.NotAllowed_Exception;
 import sirs.app.ws.cli.AppClient;
 import sirs.app.ws.cli.AppClientConnectionManager;
+import sirs.web.ws.WebpageDigestView;
 import sirs.ws.cli.WebClient;
 
 import java.security.Key;
@@ -18,7 +19,7 @@ public class Monitor {
 
     // time constants
     private static final int SERVER_UPTIME_PING_INTERVAL = 1000;
-    private static final int NOTE_INTEGRITY_CHECK_INTERVAL = 10 * 1000;
+    private static final int INTEGRITY_CHECK_INTERVAL = 10 * 1000;
 
     // List of valid kerby tickets
     public static TicketCollection ticketCollection;
@@ -30,39 +31,98 @@ public class Monitor {
     // instead of using the web page url's, due to security issues
     private WebClient webClient;
 
-    // monitor history of noteDigests seen so far from web interface
-    private List<NoteDigestView> history;
+    // monitor noteDigestHistory of noteDigests seen so far from web interface
+    private List<NoteDigestView> noteDigestHistory;
+
+    // monitor webpageDigestHistory of web pages seen from web interface
+    private List<WebpageDigestView> webpageDigestHistory;
 
     public Monitor(){
         appServerConnections = AppClientConnectionManager.getInstance().getAllConnections();
         ticketCollection = new TicketCollection();
         sessionKeyMap = new HashMap<>();
         webClient = new WebClient(WEB_WS_URL);
-
-
+        noteDigestHistory = new ArrayList<>();
+        webpageDigestHistory =  new ArrayList<>();
     }
 
     public void run(){
-        // update history from app server notedigestviews once as a starting history
+        // update noteDigestHistory from app server notedigestviews once as a starting noteDigestHistory
         updateMonitorNoteDigestHistory(getAllNoteDigestViewsAppServers());
+
+        // update noteDigestHistory of webpages once when starting
+        updateMonitorWebpageDigestHistory(webClient.getWebpageDigests());
 
         // check status of the servers every second
         Thread appServerUpThread = startAppServerUpCheckerThread();
         Thread webServerUpThread = startWebServerUpCheckerThread();
+        Thread webServerIntegrityCheckerThread = startWebServerIntegrityChecker();
         Thread noteIntegrityCheckerThread = startNoteIntegrityCheckerThread();
 
-        // TODO make main thread wait here, else it insta kills threads
-        appServerUpThread.interrupt();
-        webServerUpThread.interrupt();
-        noteIntegrityCheckerThread.interrupt();
+
+    }
+
+    private Thread startWebServerIntegrityChecker(){
+        // TODO review correctness
+        Runnable runnable = () -> {
+            List<WebpageDigestView> currentWebpageDigestViews;
+            List<WebpageDigestView> pagesToRecover = new ArrayList<>();
+
+            while(true){
+                // get current webpages and their digests
+                currentWebpageDigestViews = webClient.getWebpageDigests();
+
+                // compare digests , if any dont match, recover the page
+                for(WebpageDigestView historyDigestView : webpageDigestHistory){
+                    for(WebpageDigestView currentDigestView : currentWebpageDigestViews){
+                        if(historyDigestView.getPageName().equals(currentDigestView.getPageName())){
+                            if(historyDigestView.getDigest() != currentDigestView.getDigest()){
+                               pagesToRecover.add(historyDigestView);
+                            }
+                        }
+                    }
+                }
+
+                if(pagesToRecover.size() > 0 ){
+                    recoverWebPages(pagesToRecover);
+                }
+
+                sleep(INTEGRITY_CHECK_INTERVAL);
+            }
+
+
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+        return thread;
+    }
+
+    private void recoverWebPages(List<WebpageDigestView> pagesToRecover){
+        webClient.recoverWebPages(pagesToRecover);
     }
 
     /**
-     * Get all note digest views from web interface , update history in monitor
+     * update current history of web page states, only new ones can be added, to replace a existing page, the monitor needs to be restarted
+     * @param webpageDigestViews
+     */
+    private void updateMonitorWebpageDigestHistory(List<WebpageDigestView> webpageDigestViews){
+        for(WebpageDigestView historyDigestView : webpageDigestHistory){
+            for(WebpageDigestView webpageDigestView : webpageDigestViews){
+                if(!historyDigestView.getPageName().equals(webpageDigestView.getPageName())){
+                    webpageDigestHistory.add(webpageDigestView);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get all note digest views from web interface , update noteDigestHistory in monitor
      * Get all note digest views from the app servers, if any digest is diferent, then recovery is made, and keys are revoked for the affected app server
      * @return thread running the periodic integrity checks
      */
     private Thread startNoteIntegrityCheckerThread(){
+        // TODO review correctness
         Runnable runnable = () -> {
             List<NoteDigestView> noteDigestViewsAppSevers = null;
             List<NoteDigestView> notesToRecover = new ArrayList<>();
@@ -70,17 +130,19 @@ public class Monitor {
             while(true){
                 noteDigestViewsAppSevers = getAllNoteDigestViewsAppServers();
 
-                // update history from webinterface recently changed
+                // update noteDigestHistory from webinterface recently changed
                 updateMonitorNoteDigestHistory(webClient.takeRecentlyChangedNoteDigests());
 
-                // Compare note digests in the monitor's history with existing ones in app servers
+                // Compare note digests in the monitor's noteDigestHistory with existing ones in app servers
 
                 for(NoteDigestView appNoteDigestView : noteDigestViewsAppSevers){
-                    for(NoteDigestView historyNoteDigestView : history){
+                    for(NoteDigestView historyNoteDigestView : noteDigestHistory){
 
                         if(historyNoteDigestView.getNoteView().getName().equals(appNoteDigestView.getNoteView().getName())){
                             if(historyNoteDigestView.getDigest() != appNoteDigestView.getDigest()){
                                 notesToRecover.add(historyNoteDigestView);
+                                logErr("Compromised note : " + historyNoteDigestView.getNoteView().getName() + " with owner : " +
+                                        historyNoteDigestView.getNoteView().getOwner());
                             }
                         }
                     }
@@ -95,28 +157,72 @@ public class Monitor {
                 // clear lists for next round
                 noteDigestViewsAppSevers.clear();
 
-                sleep(NOTE_INTEGRITY_CHECK_INTERVAL);
+                sleep(INTEGRITY_CHECK_INTERVAL);
             }
         };
-        Thread upThread = new Thread(runnable);
-        upThread.start();
+        Thread thread = new Thread(runnable);
+        thread.start();
 
-        return upThread;
+        return thread;
+    }
+
+    private Thread startWebServerUpCheckerThread(){
+        Runnable runnable = () -> {
+            while(true){
+                if(isWebServerUp()){
+                    try{
+                        log("Web Server is up.");
+                        Thread.sleep(SERVER_UPTIME_PING_INTERVAL);
+                    } catch(InterruptedException e){
+                        System.exit(-1);
+                    }
+                }else{
+                    logErr("Web Server is unresponsive.");
+                }
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+        return thread;
+    }
+
+    private Thread startAppServerUpCheckerThread(){
+        Runnable runnable = () -> {
+            while(true){
+                if(areAppServersUp()){
+                    try{
+                        log("Web Server is up.");
+                        Thread.sleep(SERVER_UPTIME_PING_INTERVAL);
+                    } catch(InterruptedException e){
+                        System.exit(-1);
+                    }
+                }else{
+                    List<AppClient> unresponsiveConnections = getListOfUnresponsiveAppServers();
+                    for(AppClient appClient : unresponsiveConnections){
+                        logErr("App Server at " + appClient.getWsURL() + " is unresponsive.");
+                    }
+                }
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
+
+        return thread;
     }
 
     private void updateMonitorNoteDigestHistory(List<NoteDigestView> noteDigestViews){
         for(NoteDigestView noteDigestView : noteDigestViews){
-            for(NoteDigestView historyNoteDigestView : history){
+            for(NoteDigestView historyNoteDigestView : noteDigestHistory){
 
                 if(!noteDigestView.getNoteView().getName().equals(historyNoteDigestView.getNoteView().getName())){
-                    history.add(noteDigestView);
+                    noteDigestHistory.add(noteDigestView);
                 }else{
                     // update current digest view
-                    history.remove(historyNoteDigestView);
-                    history.add(historyNoteDigestView);
+                    noteDigestHistory.remove(historyNoteDigestView);
+                    noteDigestHistory.add(historyNoteDigestView);
                 }
             }
-
         }
     }
 
@@ -143,49 +249,23 @@ public class Monitor {
         return noteDigestViews;
     }
 
-
-    private Thread startWebServerUpCheckerThread(){
-        Runnable runnable = () -> {
-            while(isWebServerUp()){
-                try{
-                    System.out.println("Monitor: Web server is up.");
-                    Thread.sleep(SERVER_UPTIME_PING_INTERVAL);
-                } catch(InterruptedException e){
-                    System.exit(-1);
-                }
+    private List<AppClient> getListOfUnresponsiveAppServers(){
+        List<AppClient> unresponsive = new ArrayList<>();
+        for(AppClient appClient : appServerConnections){
+            String response = appClient.testPing("Monitor Ping");
+            if(response == null){
+                unresponsive.add(appClient);
             }
-            // TODO code when web server is down
-        };
-        Thread upThread = new Thread(runnable);
-        upThread.start();
+        }
 
-        return upThread;
+        return unresponsive;
     }
-
-    private Thread startAppServerUpCheckerThread(){
-        Runnable runnable = () -> {
-            while(areAppServersUp()){
-                try{
-                    System.out.println("Monitor: Servers are up.");
-                    Thread.sleep(SERVER_UPTIME_PING_INTERVAL);
-                } catch(InterruptedException e){
-                    System.exit(-1);
-                }
-            }
-            // TODO code when app server is down
-        };
-        Thread upThread = new Thread(runnable);
-        upThread.start();
-
-        return upThread;
-    }
-
 
     /**
      * Ping every server and check if they respond.
      * @return true if all servers responded, false otherwise
      */
-    public boolean areAppServersUp(){
+    private boolean areAppServersUp(){
         for(AppClient appClient : appServerConnections){
             String response = appClient.testPing("Monitor Ping");
             if(response == null){
@@ -195,13 +275,13 @@ public class Monitor {
         return true;
     }
 
-    public boolean isWebServerUp(){
+    private boolean isWebServerUp(){
         String response = webClient.testPing("Monitor Ping");
 
         return response != null;
     }
 
-    public void sleep(int duration){
+    private void sleep(int duration){
         try{
             System.out.println("Monitor: Web server is up.");
             Thread.sleep(duration);
@@ -209,5 +289,15 @@ public class Monitor {
             System.exit(-1);
         }
     }
+
+    private void log(String message){
+        System.out.println("[MONITOR]: " + message);
+    }
+
+    private void logErr(String errMessage){
+        System.err.println("[MONITOR]: " + errMessage);
+    }
+
+
 
 }
