@@ -53,13 +53,8 @@ public class NotesManager {
 
     public void updateNote(NoteView noteView){
         AppClient appClient = connectionManager.getRandomConnection();
-
-        try{
-            appClient.updateNote(noteView);
-            updateRecentlyChangedNote(noteView);
-        } catch(NotAllowed_Exception e){
-            e.printStackTrace();
-        }
+        appClient.updateNote(noteView);
+        updateRecentlyChangedNote(noteView);
     }
 
     private void updateRecentlyChangedNote(NoteView noteView){

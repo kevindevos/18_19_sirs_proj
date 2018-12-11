@@ -7,21 +7,12 @@ package pt.ulisboa.tecnico.sdis.kerby;
  *
  */
 public class KerbyApp {
+    private static final String KERBY_WS_URL = "http://localhost:8888/kerby";
 
-	public static void main(String[] args) throws Exception {
-		// Check arguments
-		if (args.length != 1) {
-			System.err.println("Invalid Args!");
-			System.err.println("Usage: java " + KerbyApp.class.getName() + " wsURL");
-			return;
-		}
-
-		String wsName = null;
-        String wsURL = args[0];
-
+    public static void main(String[] args) throws Exception {
         // Create server implementation object, according to options
 		KerbyEndpointManager endpoint = null;
-        endpoint = new KerbyEndpointManager(wsURL);
+        endpoint = new KerbyEndpointManager(KERBY_WS_URL);
 
 		try {
 			endpoint.start();

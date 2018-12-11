@@ -135,7 +135,7 @@ public class AppClient{
     }
 
 
-    public void updateNote(NoteView noteView) throws NotAllowed_Exception{
+    public void updateNote(NoteView noteView){
         try{
             Method method = AppPortType.class.getMethod("updateNote", NoteView.class);
             runPortMethodMaxRetries(method, maxRetries, noteView);

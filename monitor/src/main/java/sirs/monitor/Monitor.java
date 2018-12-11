@@ -60,6 +60,7 @@ public class Monitor {
         Thread noteIntegrityCheckerThread = startNoteIntegrityCheckerThread();
 
 
+
     }
 
     private Thread startWebServerIntegrityChecker(){
@@ -231,11 +232,9 @@ public class Monitor {
             int rand = (new Random(System.currentTimeMillis()).nextInt(appServerConnections.size()));
             AppClient appClient = appServerConnections.get(rand);
 
-            try{
-                appClient.updateNote(noteDigestView.getNoteView());
-            } catch(NotAllowed_Exception e){
-                e.printStackTrace();
-            }
+           // try{
+           //     appClient.updateNote(noteDigestView.getNoteView());
+           // }
         }
     }
 

@@ -37,9 +37,7 @@ public class NoteAccessTest extends BaseTest {
 
             Assert.assertTrue(retrievedNote.getName().equals(newNoteName));
             Assert.assertTrue(retrievedNote.getOwner().equals(newNote.getOwner()));
-        } catch(NotAllowed_Exception e){
-            fail();
-        } catch(NoteNotFound_Exception e){
+        }  catch(NoteNotFound_Exception e){
             fail();
         }
     }
@@ -54,8 +52,6 @@ public class NoteAccessTest extends BaseTest {
 
             Assert.assertTrue(retrievedNote.getContent().equals(testNoteContent));
         } catch(NoteNotFound_Exception e){
-            fail();
-        } catch(NotAllowed_Exception e){
             fail();
         }
 
