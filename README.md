@@ -22,7 +22,7 @@ mvn exec:java
 Run one or more application servers:
 
 ```
-cd source/app-ws-cli
+cd source/app-ws
 mvn exec:java
 ```
 To run multiple application servers, for each server, add -Dws.i=<number>
