@@ -84,6 +84,11 @@ public abstract class KerbistServerHandler extends KerbistHandler  {
             // get the auth and validate it
             Auth auth = Auth.makeAuthFromCipheredView(cipheredAuthView, sessionKey);
             auth.validate();
+            
+            if(auth.getTimeRequest().before(ticket.getTime1()) || auth.getTimeRequest().after(ticket.getTime2()) ) {
+            	throw new RuntimeException("InvalidTicket"); 
+            }
+            	
 
         } catch(KerbyException e){
             // Ticket is invalid! send back to client an exception
