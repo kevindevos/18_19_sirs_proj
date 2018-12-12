@@ -10,7 +10,7 @@ cd source
 mvn clean install -DskipTests
 ```
 
-### Running
+### Running 
 
 First run the kerby web server:
 
@@ -36,4 +36,16 @@ Running spring boot web server:
 ```
 cd source/webinterface
 mvn spring-boot:run
+```
+
+The web interface should now be available by accessing localhost:8184 providing a login and a register page. After login a dashboard page is displayed allowing the user to add, read and write text notes.
+
+### Monitoring and Recovery
+
+A monitoring and recovery server is used to detect intrusion, provide recovery of compromised and missing data and issue regeneration of communication encryption keys.
+To start the monitoring server run:
+
+```
+cd source/monitor
+mvn exec:java
 ```
