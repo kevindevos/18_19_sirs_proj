@@ -8,10 +8,8 @@ import sirs.webinterface.domain.NotesManager;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,38 +56,61 @@ public class WebPortImpl implements WebPortType {
 	    File staticFolder, templatesFolder;
 	    List<WebpageDigestView> webpageDigestViews = new ArrayList<>();
 
-        try {
-            URL staticFolderURL = WebPortType.class.getClassLoader().getResource("/static");
-            URL templatesFolderURL = WebPortType.class.getClassLoader().getResource("/templates");
+        URL staticFolderURL = WebPortType.class.getResource("/static");
+        URL templatesFolderURL = WebPortType.class.getResource("/templates");
 
-            if(staticFolderURL != null && templatesFolderURL != null){
-                staticFolder = new File(staticFolderURL.getPath());
-                templatesFolder = new File(templatesFolderURL.getPath());
 
-                File[] staticFiles = staticFolder.listFiles();
-                File[] templatesFiles = templatesFolder.listFiles();
-                File[] htmlFiles = Stream.concat(Arrays.stream(staticFiles), Arrays.stream(templatesFiles)).toArray(File[]::new);
+        if(staticFolderURL != null && templatesFolderURL != null){
+            staticFolder = new File(staticFolderURL.getPath());
+            templatesFolder = new File(templatesFolderURL.getPath());
 
-                WebpageDigestView webpageDigestView;
-                byte[] bytes;
-                for(File file : htmlFiles){
-                    // load contents of file
-                    bytes = Files.readAllBytes(file.toPath());
+            File[] staticFiles = staticFolder.listFiles();
+            File[] templatesFiles = templatesFolder.listFiles();
+            File[] htmlFiles = Stream.concat(Arrays.stream(staticFiles), Arrays.stream(templatesFiles)).toArray(File[]::new);
 
-                    webpageDigestView = new WebpageDigestView();
-                    webpageDigestView.setPageName(file.getPath());
-                    webpageDigestView.setHtml(bytes);
-                    webpageDigestView.setDigest(Security.buildDigestFrom(bytes));
+            System.err.println("htmlfiles " + htmlFiles);
 
-                    webpageDigestViews.add(webpageDigestView);
-                }
+            WebpageDigestView webpageDigestView;
+            for(File file : htmlFiles){
+                // load contents of file
+                String fileContents = readFile(file);
+                System.out.println("read file contents of: " + file.getName() + " : " + fileContents);
 
+                webpageDigestView = new WebpageDigestView();
+                webpageDigestView.setPageName(file.getPath());
+                webpageDigestView.setHtml(fileContents.getBytes());
+                webpageDigestView.setDigest(Security.buildDigestFrom(fileContents));
+
+                webpageDigestViews.add(webpageDigestView);
             }
-        } catch (IOException e) {
-            System.out.printf("Failed to load configuration: %s%n", e);
+
         }
 
         return webpageDigestViews;
+    }
+
+    private String readFile(File file){
+        try{
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String contents = "";
+            String line = null;
+
+            while(true){
+                line = bufferedReader.readLine();
+                if(line != null){
+                    contents+=line;
+                }else{
+                    break;
+                }
+            }
+            return contents;
+        } catch(FileNotFoundException e){
+            e.printStackTrace();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

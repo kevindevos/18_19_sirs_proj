@@ -18,8 +18,8 @@ public class Monitor {
     private static String WEB_WS_URL = "http://localhost:8185/web-ws/endpoint";
 
     // time constants
-    private static final int SERVER_UPTIME_PING_INTERVAL = 1000;
-    private static final int INTEGRITY_CHECK_INTERVAL = 10 * 1000;
+    private static final int SERVER_UPTIME_PING_INTERVAL = 5 * 1000;
+    private static final int INTEGRITY_CHECK_INTERVAL = 30 * 1000;
 
     // List of valid kerby tickets
     public static TicketCollection ticketCollection;
@@ -54,9 +54,9 @@ public class Monitor {
         updateMonitorWebpageDigestHistory(webClient.getWebpageDigests());
 
         // check status of the servers every second
-      //  Thread appServerUpThread = startAppServerUpCheckerThread();
-      //  Thread webServerUpThread = startWebServerUpCheckerThread();
-    //    Thread webServerIntegrityCheckerThread = startWebServerIntegrityChecker();
+        Thread appServerUpThread = startAppServerUpCheckerThread();
+        Thread webServerUpThread = startWebServerUpCheckerThread();
+        Thread webServerIntegrityCheckerThread = startWebServerIntegrityChecker();
         Thread noteIntegrityCheckerThread = startNoteIntegrityCheckerThread();
 
 
@@ -108,6 +108,11 @@ public class Monitor {
      * @param webpageDigestViews
      */
     private void updateMonitorWebpageDigestHistory(List<WebpageDigestView> webpageDigestViews){
+        // TODO
+        // any page with same name but diferent content
+        // any missing page from history
+        // any new page not in history
+
         for(WebpageDigestView historyDigestView : webpageDigestHistory){
             for(WebpageDigestView webpageDigestView : webpageDigestViews){
                 if(!historyDigestView.getPageName().equals(webpageDigestView.getPageName())){
@@ -282,7 +287,6 @@ public class Monitor {
 
     private void sleep(int duration){
         try{
-            System.out.println("Monitor: Web server is up.");
             Thread.sleep(duration);
         } catch(InterruptedException e){
             System.exit(-1);

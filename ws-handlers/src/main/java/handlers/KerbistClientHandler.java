@@ -134,8 +134,6 @@ public abstract class KerbistClientHandler extends KerbistHandler {
         return null;
     }
 
-
-
     /**
      * Ask kerby for a new ticket and session key to establish a connection wth another server denoted by targetName
      */
